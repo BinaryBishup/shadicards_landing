@@ -4,11 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
-  Calendar, MapPin, Users, Clock, Instagram, Camera, Heart, 
+  Calendar as CalendarIcon, MapPin, Users, Clock, Instagram, Camera, Heart, 
   Sparkles, MessageCircle, Smartphone, Zap, Shield, QrCode,
   Music, Gift, BarChart3, Phone, Settings, Eye, ChevronDown,
-  Link2, X
+  Link2, X, UserCheck, Timer, Wand2, Check, User, UserPlus, Crown
 } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 // Register GSAP plugins only on client side
 if (typeof window !== "undefined") {
@@ -23,11 +28,35 @@ export default function SmartCardSection() {
   const [showContent, setShowContent] = useState(false);
   const [viewMode, setViewMode] = useState<'preview' | 'settings'>('preview');
   const [selectedLinkType, setSelectedLinkType] = useState('location');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>(['all']);
+  const [automationEnabled, setAutomationEnabled] = useState(false);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>('');
+  const [currentGuest, setCurrentGuest] = useState(0);
   const animationCompleted = useRef(false);
+
+  const guests = [
+    {
+      name: "Priya Sharma",
+      type: "Bride's Friend",
+      avatar: "👩",
+      relation: "friend",
+      events: [0, 1, 3] // Mehendi, Instagram, Photos
+    },
+    {
+      name: "Raj Kumar", 
+      type: "Groom's Relative",
+      avatar: "👨",
+      relation: "family",
+      events: [2, 4, 5] // Venue, Sangeet, Registry
+    }
+  ];
 
   const features = [
     {
-      icon: <Calendar className="w-6 h-6" />,
+      icon: <CalendarIcon className="w-6 h-6" />,
       title: "Mehendi Ceremony",
       type: "event",
       content: {
@@ -103,14 +132,38 @@ export default function SmartCardSection() {
         color: "from-yellow-500 to-amber-500"
       },
       taps: 98
+    },
+    {
+      icon: <Link2 className="w-6 h-6" />,
+      title: "Custom Link",
+      type: "custom",
+      content: {
+        title: "Custom Content",
+        url: "Add your custom URL",
+        description: "Share any link you want",
+        buttonText: "Open Link",
+        color: "from-indigo-500 to-purple-500"
+      },
+      taps: 45
     }
   ];
 
-  const linkCategories = [
-    { title: "Event Details", types: ["Event Details & Schedule", "Location & Maps"] },
-    { title: "Social & Media", types: ["Wedding Instagram", "Event Photos", "Thank You Message"] },
-    { title: "Custom", types: ["Custom Link"] }
+  const timeSlots = [
+    "Morning (6AM - 12PM)",
+    "Afternoon (12PM - 6PM)", 
+    "Evening (6PM - 10PM)",
+    "Night (10PM - 6AM)"
   ];
+
+  const userGroups = [
+    { id: 'all', name: 'All Guests', icon: <Users className="w-5 h-5" /> },
+    { id: 'family', name: 'Family Only', icon: <Heart className="w-5 h-5" /> },
+    { id: 'friends', name: 'Friends Only', icon: <UserPlus className="w-5 h-5" /> },
+    { id: 'vip', name: 'VIP Guests', icon: <Crown className="w-5 h-5" /> },
+    { id: 'custom', name: 'Custom Group', icon: <User className="w-5 h-5" /> },
+    { id: 'bride', name: 'Bride Side', icon: <Heart className="w-5 h-5" /> }
+  ];
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -170,10 +223,19 @@ export default function SmartCardSection() {
 
   const startTapSequence = () => {
     let tapCount = 0;
+    let guestIndex = 0;
     
     const performTap = () => {
-      if (tapCount >= features.length) {
-        // Animation sequence complete
+      const currentGuestData = guests[guestIndex];
+      const eventIndex = tapCount % currentGuestData.events.length;
+      const featureIndex = currentGuestData.events[eventIndex];
+      
+      if (!currentGuestData.events[eventIndex]) {
+        // Switch to next guest
+        guestIndex = (guestIndex + 1) % guests.length;
+        tapCount = 0;
+        setCurrentGuest(guestIndex);
+        setTimeout(performTap, 1500);
         return;
       }
 
@@ -181,8 +243,15 @@ export default function SmartCardSection() {
       const tl = gsap.timeline({
         onComplete: () => {
           tapCount++;
-          if (tapCount < features.length) {
-            setTimeout(performTap, 2000); // Wait 2 seconds before next tap
+          // Continue with current guest or switch to next
+          if (tapCount < currentGuestData.events.length) {
+            setTimeout(performTap, 2500);
+          } else {
+            // Switch to next guest
+            guestIndex = (guestIndex + 1) % guests.length;
+            tapCount = 0;
+            setCurrentGuest(guestIndex);
+            setTimeout(performTap, 2000);
           }
         }
       });
@@ -202,7 +271,8 @@ export default function SmartCardSection() {
       }, "-=0.2")
       .call(() => {
         setShowContent(true);
-        setCurrentFeature(tapCount);
+        setCurrentFeature(featureIndex);
+        setCurrentGuest(guestIndex);
       })
       .to(phoneRef.current, {
         scale: 1,
@@ -236,18 +306,18 @@ export default function SmartCardSection() {
         <div className="smart-header text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
-            <span>NFC + QR Smart Cards</span>
+            <span>Smart Control Cards</span>
           </div>
           
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 mb-6">
-            <span className="font-normal">One Tap</span>
+            <span className="font-normal">Take Control</span>
             <br />
-            <span className="text-gray-600">Endless Connections</span>
+            <span className="text-gray-600">Of Your Digital Experience</span>
           </h2>
           
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Track every interaction, share dynamic content, and give your guests 
-            a personalized digital experience with smart wedding cards.
+            Control what content to show, choose who sees it, schedule when it appears, 
+            and automate your personalized digital experience with smart wedding cards.
           </p>
         </div>
 
@@ -255,7 +325,7 @@ export default function SmartCardSection() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Phone and Card Demo */}
-            <div className="relative order-2 lg:order-1">
+            <div className="relative order-1 lg:order-1">
               <div className="relative mx-auto w-[320px]">
                 {/* Phone */}
                 <div 
@@ -298,13 +368,27 @@ export default function SmartCardSection() {
                           ) : (
                             // Feature content
                             <div className="animate-fadeIn">
-                              <div className={`h-32 bg-gradient-to-br ${features[currentFeature].content.color} rounded-2xl mb-6 flex items-center justify-center text-white`}>
-                                <div className="scale-150">
+                              {/* Guest info banner */}
+                              <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-3 mb-4 -mx-2">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-2xl">{guests[currentGuest].avatar}</span>
+                                  <div className="flex-1">
+                                    <p className="text-sm font-semibold text-gray-900">{guests[currentGuest].name}</p>
+                                    <p className="text-xs text-gray-600">{guests[currentGuest].type} viewing</p>
+                                  </div>
+                                  <div className="px-2 py-1 bg-white rounded-full text-xs font-medium text-gray-700">
+                                    {guests[currentGuest].relation === 'friend' ? 'Bride Side' : 'Groom Side'}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className={`h-28 bg-gradient-to-br ${features[currentFeature].content.color} rounded-2xl mb-4 flex items-center justify-center text-white`}>
+                                <div className="scale-125">
                                   {features[currentFeature].icon}
                                 </div>
                               </div>
 
-                              <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                              <h3 className="text-xl font-semibold text-gray-900 mb-3">
                                 {features[currentFeature].title}
                               </h3>
 
@@ -370,6 +454,17 @@ export default function SmartCardSection() {
                                     <p className="text-center text-sm text-yellow-600 mt-2">{features[currentFeature].content.link}</p>
                                   </div>
                                 )}
+
+                                {features[currentFeature].type === 'custom' && (
+                                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+                                    <div className="flex items-center gap-3 mb-3">
+                                      <Link2 className="w-5 h-5 text-indigo-600" />
+                                      <p className="font-medium text-gray-900">{features[currentFeature].content.title}</p>
+                                    </div>
+                                    <p className="text-sm text-gray-600 mb-2">{features[currentFeature].content.description}</p>
+                                    <p className="text-xs text-indigo-600">{features[currentFeature].content.url}</p>
+                                  </div>
+                                )}
                               </div>
 
                               {/* Action button */}
@@ -395,6 +490,20 @@ export default function SmartCardSection() {
                       <div className="flex justify-between items-start h-full">
                         <div>
                           <p className="text-gray-400 text-xs font-medium tracking-wider">SMART WEDDING CARD</p>
+                        {showContent && (
+                          <div className="absolute -top-16 left-0 right-0">
+                            <div className="bg-white rounded-lg shadow-xl px-4 py-3 border-2 border-rose-500 animate-bounce">
+                              <div className="flex items-center gap-2">
+                                <span className="text-xl">{guests[currentGuest].avatar}</span>
+                                <div>
+                                  <p className="text-sm font-bold text-gray-900">{guests[currentGuest].name}</p>
+                                  <p className="text-xs text-gray-600">{guests[currentGuest].type}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-rose-500 border-r-[8px] border-r-transparent"></div>
+                          </div>
+                        )}
                           <p className="text-white font-bold text-lg mt-2">Priya & Arjun</p>
                           <p className="text-gray-500 text-sm">December 2024</p>
                         </div>
@@ -418,7 +527,7 @@ export default function SmartCardSection() {
             </div>
 
             {/* Features and Analytics */}
-            <div className="space-y-8 order-1 lg:order-2">
+            <div className="space-y-8 order-2 lg:order-2">
               {/* View Toggle */}
               <div className="flex justify-center mb-6">
                 <div className="bg-white rounded-full p-1 shadow-lg border border-gray-100 inline-flex">
@@ -451,69 +560,101 @@ export default function SmartCardSection() {
                 <>
                   <div>
                     <h3 className="text-3xl font-light text-gray-900 mb-6">
-                      Track Every 
-                      <span className="text-rose-600 font-normal"> Interaction</span>
+                      Control Every 
+                      <span className="text-rose-600 font-normal"> Experience</span>
                     </h3>
                     <p className="text-gray-600 mb-8">
-                      Know exactly who tapped, when they tapped, and what they viewed. 
-                      Get real-time analytics for every smart card interaction.
+                      Decide what content to display, target specific guests, schedule appearances, 
+                      and automate your card's behavior for the perfect personalized experience.
                     </p>
                   </div>
 
-                  {/* Analytics Dashboard */}
+                  {/* Control Dashboard */}
                   <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                     <div className="flex items-center justify-between mb-6">
-                      <h4 className="text-lg font-semibold text-gray-900">Live Analytics</h4>
+                      <h4 className="text-lg font-semibold text-gray-900">Guest-Based Content Control</h4>
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-sm text-gray-600">Real-time</span>
+                        <span className="text-sm text-gray-600">Active</span>
                       </div>
                     </div>
 
-                    <div className="space-y-3">
-                      {features.map((feature, index) => (
-                        <div 
-                          key={index} 
-                          className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 ${
-                            currentFeature === index && showContent
-                              ? 'bg-rose-50 border-2 border-rose-500' 
-                              : 'bg-gray-50 border-2 border-transparent'
-                          }`}
+                    {/* Guest Tabs */}
+                    <div className="flex gap-2 mb-4 p-1 bg-gray-100 rounded-lg">
+                      {guests.map((guest, idx) => (
+                        <button
+                          key={idx}
+                          className={cn(
+                            "flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all",
+                            currentGuest === idx 
+                              ? "bg-white shadow-sm text-gray-900" 
+                              : "text-gray-600 hover:text-gray-900"
+                          )}
                         >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                              currentFeature === index && showContent
-                                ? 'bg-rose-500 text-white'
-                                : 'bg-white text-gray-600'
-                            }`}>
-                              {feature.icon}
-                            </div>
-                            <div>
-                              <p className="font-medium text-gray-900 text-sm">{feature.title}</p>
-                              <p className="text-xs text-gray-500">{feature.type}</p>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-gray-900">{feature.taps}</p>
-                            <p className="text-xs text-gray-500">taps</p>
-                          </div>
-                        </div>
+                          <span className="mr-2">{guest.avatar}</span>
+                          {guest.name.split(' ')[0]}
+                        </button>
                       ))}
+                    </div>
+
+                    <div className="space-y-3">
+                      <p className="text-xs text-gray-500 mb-2">Content visible to {guests[currentGuest].name}:</p>
+                      {features.map((feature, index) => {
+                        const isAccessible = guests[currentGuest].events.includes(index);
+                        return (
+                          <div 
+                            key={index} 
+                            className={`flex items-center justify-between p-3 rounded-lg transition-all duration-300 ${
+                              currentFeature === index && showContent && isAccessible
+                                ? 'bg-rose-50 border-2 border-rose-500' 
+                                : isAccessible
+                                  ? 'bg-gray-50 border-2 border-transparent'
+                                  : 'bg-gray-100 border-2 border-transparent opacity-50'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                                currentFeature === index && showContent && isAccessible
+                                  ? 'bg-rose-500 text-white'
+                                  : isAccessible
+                                    ? 'bg-white text-gray-600'
+                                    : 'bg-gray-200 text-gray-400'
+                              }`}>
+                                {feature.icon}
+                              </div>
+                              <div>
+                                <p className={`font-medium text-sm ${isAccessible ? 'text-gray-900' : 'text-gray-500'}`}>
+                                  {feature.title}
+                                </p>
+                                <p className="text-xs text-gray-500">{feature.type}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {!isAccessible && (
+                                <span className="text-xs bg-gray-200 px-2 py-1 rounded-full text-gray-600">Hidden</span>
+                              )}
+                              {isAccessible && (
+                                <Check className="w-4 h-4 text-green-600" />
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
 
                     <div className="mt-6 pt-6 border-t border-gray-200">
                       <div className="grid grid-cols-3 gap-4 text-center">
                         <div>
-                          <p className="text-2xl font-bold text-gray-900">3,289</p>
-                          <p className="text-xs text-gray-500">Total Taps</p>
+                          <p className="text-2xl font-bold text-gray-900">6</p>
+                          <p className="text-xs text-gray-500">Active Links</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-rose-600">342</p>
-                          <p className="text-xs text-gray-500">Unique Guests</p>
+                          <p className="text-2xl font-bold text-rose-600">4</p>
+                          <p className="text-xs text-gray-500">User Groups</p>
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-gray-900">18</p>
-                          <p className="text-xs text-gray-500">Avg. Daily</p>
+                          <p className="text-2xl font-bold text-gray-900">24/7</p>
+                          <p className="text-xs text-gray-500">Automated</p>
                         </div>
                       </div>
                     </div>
@@ -523,89 +664,222 @@ export default function SmartCardSection() {
                 /* Settings View */
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-6">Link Configuration</h3>
-                    <p className="text-sm text-gray-600 mb-6">Configure your NFC/QR link settings</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-6">Content Control Center</h3>
+                    <p className="text-sm text-gray-600 mb-6">Control what content to show, who sees it, and when</p>
 
                     {/* Link Type Selection */}
                     <div className="mb-6">
-                      <label className="block text-sm font-medium text-gray-700 mb-3">Link Type</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-3">Content Type</label>
                       <div className="relative">
-                        <button className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:bg-gray-100 transition-colors">
+                        <button 
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                          className="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:bg-gray-100 transition-colors"
+                        >
                           <span className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-gray-600" />
-                            Location & Maps
+                            {selectedLinkType === 'location' && <MapPin className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'event' && <CalendarIcon className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'social' && <Instagram className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'photos' && <Camera className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'message' && <MessageCircle className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'registry' && <Gift className="w-4 h-4 text-gray-600" />}
+                            {selectedLinkType === 'custom' && <Link2 className="w-4 h-4 text-gray-600" />}
+                            {features.find(f => f.type === selectedLinkType)?.title || 'Select content type'}
                           </span>
-                          <ChevronDown className="w-4 h-4 text-gray-400" />
+                          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
+                        
+                        {dropdownOpen && (
+                          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                            {features.map((feature, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => {
+                                  setSelectedLinkType(feature.type);
+                                  setDropdownOpen(false);
+                                  if (viewMode === 'settings') {
+                                    setCurrentFeature(idx);
+                                    setShowContent(true);
+                                  }
+                                }}
+                                className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                              >
+                                <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                                  {feature.icon}
+                                </div>
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-gray-900">{feature.title}</p>
+                                  <p className="text-xs text-gray-500">{feature.type}</p>
+                                </div>
+                                {selectedLinkType === feature.type && (
+                                  <Check className="w-4 h-4 text-rose-500" />
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    {/* Link Categories */}
-                    <div className="space-y-4 mb-6">
-                      {linkCategories.map((category, idx) => (
-                        <div key={idx}>
-                          <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
-                            {category.title}
-                          </h5>
-                          <div className="space-y-2">
-                            {category.types.map((type, i) => (
-                              <label key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-colors">
-                                <input type="radio" name="linkType" className="text-rose-500" />
-                                <span className="flex items-center gap-2 text-sm text-gray-700">
-                                  {type === "Event Details & Schedule" && <Calendar className="w-4 h-4" />}
-                                  {type === "Location & Maps" && <MapPin className="w-4 h-4" />}
-                                  {type === "Wedding Instagram" && <Instagram className="w-4 h-4" />}
-                                  {type === "Event Photos" && <Camera className="w-4 h-4" />}
-                                  {type === "Thank You Message" && <MessageCircle className="w-4 h-4" />}
-                                  {type === "Custom Link" && <Link2 className="w-4 h-4" />}
-                                  {type}
-                                </span>
-                              </label>
+                    {/* User Targeting */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        <UserCheck className="w-4 h-4 inline mr-2" />
+                        Who Can See This
+                      </label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {userGroups.map((group) => (
+                          <button
+                            key={group.id}
+                            onClick={() => {
+                              if (selectedUsers.includes(group.id)) {
+                                setSelectedUsers(selectedUsers.filter(u => u !== group.id));
+                              } else {
+                                setSelectedUsers([...selectedUsers, group.id]);
+                              }
+                            }}
+                            className={cn(
+                              "flex flex-col items-center gap-2 p-4 rounded-lg transition-all",
+                              selectedUsers.includes(group.id)
+                                ? "bg-rose-500 text-white shadow-lg scale-105"
+                                : "bg-gray-50 hover:bg-gray-100 text-gray-700"
+                            )}
+                          >
+                            <div className={cn(
+                              "p-2 rounded-full",
+                              selectedUsers.includes(group.id)
+                                ? "bg-white/20"
+                                : "bg-gray-200"
+                            )}>
+                              {group.icon}
+                            </div>
+                            <span className="text-xs font-medium text-center">{group.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Schedule Settings */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        <Timer className="w-4 h-4 inline mr-2" />
+                        When to Show
+                      </label>
+                      <div className="space-y-4">
+                        {/* Date Selection */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">Start Date</label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !startDate && "text-muted-foreground"
+                                  )}
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {startDate ? format(startDate, "PPP") : "Pick a date"}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={startDate}
+                                  onSelect={setStartDate}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                          <div>
+                            <label className="block text-xs text-gray-500 mb-1">End Date</label>
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className={cn(
+                                    "w-full justify-start text-left font-normal",
+                                    !endDate && "text-muted-foreground"
+                                  )}
+                                >
+                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  {endDate ? format(endDate, "PPP") : "Pick a date"}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar
+                                  mode="single"
+                                  selected={endDate}
+                                  onSelect={setEndDate}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          </div>
+                        </div>
+
+                        {/* Time Slot Selection */}
+                        <div>
+                          <label className="block text-xs text-gray-500 mb-2">Time Slot</label>
+                          <div className="grid grid-cols-2 gap-2">
+                            {timeSlots.map((slot) => (
+                              <button
+                                key={slot}
+                                onClick={() => setSelectedTimeSlot(slot === selectedTimeSlot ? '' : slot)}
+                                className={cn(
+                                  "p-3 text-xs rounded-lg transition-all",
+                                  selectedTimeSlot === slot
+                                    ? "bg-rose-500 text-white shadow-md"
+                                    : "bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200"
+                                )}
+                              >
+                                {slot}
+                              </button>
                             ))}
                           </div>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Additional Settings */}
-                    <div className="space-y-4 border-t border-gray-200 pt-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-                        <input 
-                          type="text" 
-                          placeholder="Enter title for this link"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Link Owner</label>
-                        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
-                          <option>Mutual</option>
-                          <option>Bride</option>
-                          <option>Groom</option>
-                        </select>
-                        <p className="text-xs text-gray-500 mt-1">Who can share this link</p>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">End Time (Optional)</label>
-                        <input 
-                          type="time" 
-                          defaultValue="12:30"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
-                        />
                       </div>
                     </div>
 
-                    <div className="mt-6 flex gap-3">
-                      <button className="flex-1 bg-rose-500 text-white py-2 rounded-lg font-medium hover:bg-rose-600 transition-colors">
-                        Save Configuration
-                      </button>
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-                        Cancel
-                      </button>
+                    {/* Automation */}
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        <Wand2 className="w-4 h-4 inline mr-2" />
+                        Automation
+                      </label>
+                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4">
+                        <label className="flex items-center justify-between cursor-pointer">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                              <Zap className="w-5 h-5 text-purple-600" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Smart Automation</p>
+                              <p className="text-xs text-gray-600">Automatically change content based on event schedule</p>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setAutomationEnabled(!automationEnabled)}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                              automationEnabled ? 'bg-purple-600' : 'bg-gray-300'
+                            }`}
+                          >
+                            <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              automationEnabled ? 'translate-x-6' : 'translate-x-1'
+                            }`} />
+                          </button>
+                        </label>
+                        {automationEnabled && (
+                          <div className="mt-3 pt-3 border-t border-purple-200">
+                            <p className="text-xs text-gray-600">
+                              Content will automatically update based on your wedding timeline
+                            </p>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                   </div>
                 </div>
               )}
@@ -618,7 +892,7 @@ export default function SmartCardSection() {
           <button className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
             Order Smart Cards
           </button>
-          <p className="text-sm text-gray-500 mt-4">Starting at ₹99 per card • Analytics included</p>
+          <p className="text-sm text-gray-500 mt-4">Starting at ₹99 per card • Full control features included</p>
         </div>
       </div>
 
