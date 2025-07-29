@@ -373,6 +373,7 @@ export default function NewHeroSection() {
                 {/* Arrow Button */}
                 <button 
                   disabled={!phoneNumber || phoneNumber.length < 10}
+                  onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
                   className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-all transform hover:scale-105 disabled:scale-100"
                 >
                   <ArrowRight className="w-5 h-5" />

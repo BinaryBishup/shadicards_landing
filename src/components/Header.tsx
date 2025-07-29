@@ -208,7 +208,7 @@ export default function Header() {
               </NavigationMenu>
               
               <Link
-                href="/get-started"
+                href="https://dashboard.shadicards.in/auth/login"
                 className="px-6 py-2.5 rounded-full bg-rose-600 text-white hover:bg-rose-700 transition-all duration-300 font-medium text-sm shadow-md hover:shadow-lg"
               >
                 Create Your Card

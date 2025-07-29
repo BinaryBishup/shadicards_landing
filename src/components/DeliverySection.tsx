@@ -587,7 +587,9 @@ export default function DeliverySection() {
 
         {/* Common CTA Button */}
         <div className="text-center mt-12 mb-16">
-          <button className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
+          <button 
+            onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
+            className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
             {activeTab === 'delivery' ? 'Schedule Premium Delivery' : 'Plan My Route'}
           </button>
         </div>

@@ -629,7 +629,9 @@ export default function WebsiteControlSection() {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <button className="bg-rose-500 text-white py-3 px-8 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
+          <button 
+            onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
+            className="bg-rose-500 text-white py-3 px-8 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
             Start Your Free Website
           </button>
           <p className="text-sm text-gray-500 mt-4">Free forever — premium upgrades available</p>

@@ -889,7 +889,9 @@ export default function SmartCardSection() {
 
         {/* CTA */}
         <div className="text-center mt-20">
-          <button className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
+          <button 
+            onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
+            className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
             Order Smart Cards
           </button>
           <p className="text-sm text-gray-500 mt-4">Starting at ₹99 per card • Full control features included</p>

@@ -356,7 +356,9 @@ export default function HeroSection() {
                 ))}
               </div>
               
-              <button className="w-full bg-rose-500 text-white py-2.5 rounded-full font-medium text-sm md:text-base hover:bg-rose-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+              <button 
+                onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
+                className="w-full bg-rose-500 text-white py-2.5 rounded-full font-medium text-sm md:text-base hover:bg-rose-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                 Let's Get Started
               </button>
             </div>

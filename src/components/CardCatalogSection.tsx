@@ -310,6 +310,7 @@ export default function CardCatalogSection() {
           {/* CTA Button */}
           <div ref={ctaRef} className="text-center">
             <button 
+              onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
               className="bg-rose-500 hover:bg-rose-600 text-white px-8 py-4 rounded-full font-medium text-lg shadow-2xl transform hover:-translate-y-1 transition-all duration-300 inline-flex items-center gap-2"
               onMouseEnter={(e) => {
                 gsap.to(e.currentTarget, { scale: 1.05, y: -5, duration: 0.3 });
