@@ -33,8 +33,27 @@ export default function NewHeroSection() {
   const [verifiedGuests, setVerifiedGuests] = useState<number[]>([]);
   const [animationStarted, setAnimationStarted] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
+  const [selectedCountry, setSelectedCountry] = useState({ code: "+91", flag: "🇮🇳", name: "India" });
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  
+  const countries = [
+    { code: "+91", flag: "🇮🇳", name: "India" },
+    { code: "+1", flag: "🇺🇸", name: "USA" },
+    { code: "+1", flag: "🇨🇦", name: "Canada" },
+    { code: "+44", flag: "🇬🇧", name: "UK" },
+    { code: "+971", flag: "🇦🇪", name: "UAE" },
+    { code: "+61", flag: "🇦🇺", name: "Australia" },
+    { code: "+65", flag: "🇸🇬", name: "Singapore" },
+    { code: "+49", flag: "🇩🇪", name: "Germany" },
+    { code: "+33", flag: "🇫🇷", name: "France" },
+    { code: "+966", flag: "🇸🇦", name: "Saudi Arabia" },
+    { code: "+27", flag: "🇿🇦", name: "South Africa" },
+    { code: "+64", flag: "🇳🇿", name: "New Zealand" },
+    { code: "+60", flag: "🇲🇾", name: "Malaysia" },
+    { code: "+92", flag: "🇵🇰", name: "Pakistan" },
+    { code: "+94", flag: "🇱🇰", name: "Sri Lanka" },
+    { code: "+977", flag: "🇳🇵", name: "Nepal" },
+  ];
   const [verificationText, setVerificationText] = useState("Verifying...");
   
   const verificationTexts = [
@@ -337,24 +356,8 @@ export default function NewHeroSection() {
                   onClick={() => setShowCountryDropdown(!showCountryDropdown)}
                   className="flex items-center gap-2 px-4 h-full hover:bg-gray-50 transition-colors border-r border-gray-200"
                 >
-                  <span className="text-lg">
-                    {countryCode === '+91' && '🇮🇳'}
-                    {countryCode === '+1' && '🇺🇸'}
-                    {countryCode === '+44' && '🇬🇧'}
-                    {countryCode === '+971' && '🇦🇪'}
-                    {countryCode === '+61' && '🇦🇺'}
-                    {countryCode === '+65' && '🇸🇬'}
-                    {countryCode === '+49' && '🇩🇪'}
-                    {countryCode === '+33' && '🇫🇷'}
-                    {countryCode === '+966' && '🇸🇦'}
-                    {countryCode === '+27' && '🇿🇦'}
-                    {countryCode === '+64' && '🇳🇿'}
-                    {countryCode === '+60' && '🇲🇾'}
-                    {countryCode === '+92' && '🇵🇰'}
-                    {countryCode === '+94' && '🇱🇰'}
-                    {countryCode === '+977' && '🇳🇵'}
-                  </span>
-                  <span className="text-gray-900 font-medium">{countryCode}</span>
+                  <span className="text-lg">{selectedCountry.flag}</span>
+                  <span className="text-gray-900 font-medium">{selectedCountry.code}</span>
                   <ChevronDown className="w-4 h-4 text-gray-500" />
                 </button>
                 
@@ -379,118 +382,19 @@ export default function NewHeroSection() {
               {/* Country Dropdown */}
               {showCountryDropdown && (
                 <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 max-h-80 overflow-y-auto">
-                  <button
-                    onClick={() => { setCountryCode('+91'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇮🇳</span>
-                    <span className="text-gray-900">India (+91)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+1'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇺🇸</span>
-                    <span className="text-gray-900">USA (+1)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+1'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇨🇦</span>
-                    <span className="text-gray-900">Canada (+1)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+44'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇬🇧</span>
-                    <span className="text-gray-900">UK (+44)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+971'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇦🇪</span>
-                    <span className="text-gray-900">UAE (+971)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+61'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇦🇺</span>
-                    <span className="text-gray-900">Australia (+61)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+65'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇸🇬</span>
-                    <span className="text-gray-900">Singapore (+65)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+49'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇩🇪</span>
-                    <span className="text-gray-900">Germany (+49)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+33'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇫🇷</span>
-                    <span className="text-gray-900">France (+33)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+966'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇸🇦</span>
-                    <span className="text-gray-900">Saudi Arabia (+966)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+27'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇿🇦</span>
-                    <span className="text-gray-900">South Africa (+27)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+64'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇳🇿</span>
-                    <span className="text-gray-900">New Zealand (+64)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+60'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇲🇾</span>
-                    <span className="text-gray-900">Malaysia (+60)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+92'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇵🇰</span>
-                    <span className="text-gray-900">Pakistan (+92)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+94'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇱🇰</span>
-                    <span className="text-gray-900">Sri Lanka (+94)</span>
-                  </button>
-                  <button
-                    onClick={() => { setCountryCode('+977'); setShowCountryDropdown(false); }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
-                  >
-                    <span className="text-xl">🇳🇵</span>
-                    <span className="text-gray-900">Nepal (+977)</span>
-                  </button>
+                  {countries.map((country) => (
+                    <button
+                      key={`${country.code}-${country.name}`}
+                      onClick={() => { 
+                        setSelectedCountry(country); 
+                        setShowCountryDropdown(false); 
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                    >
+                      <span className="text-xl">{country.flag}</span>
+                      <span className="text-gray-900">{country.name} ({country.code})</span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
