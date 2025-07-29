@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { Sparkles, Calendar, Users, Heart, MapPin, Camera, Clock, Check, X, HelpCircle, UserCheck, QrCode, Shield, Zap, ChevronRight, ChevronDown } from 'lucide-react';
+import { Sparkles, Calendar, Users, Heart, MapPin, Camera, Clock, Check, X, HelpCircle, UserCheck, QrCode, Shield, Zap, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -204,13 +204,13 @@ export default function NewHeroSection() {
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-light text-gray-900 mb-6">
-            <span className="font-normal">Your Wedding,</span>
+            <span className="font-normal">One Card,</span>
             <br />
-            <span className="text-gray-600">Digitally Perfect</span>
+            <span className="text-gray-600">Infinite Memories</span>
           </h1>
           
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Smart cards that manage RSVPs, share live updates, and create unforgettable digital experiences for your guests
+            Track RSVPs in real-time • Share live wedding moments • Automated reminders • Digital guest management
           </p>
         </div>
 
@@ -329,9 +329,9 @@ export default function NewHeroSection() {
         {/* Phone CTA Section - Custom Combined Input */}
         <div className="max-w-md mx-auto">
           <div className="space-y-3">
-            {/* Combined Country & Phone Input */}
+            {/* Combined Country & Phone Input with Arrow Button */}
             <div className="relative bg-white rounded-full shadow-lg border border-gray-200 overflow-hidden">
-              <div className="flex items-center h-14">
+              <div className="flex items-center h-14 pr-2">
                 {/* Country Selector */}
                 <button
                   onClick={() => setShowCountryDropdown(!showCountryDropdown)}
@@ -342,6 +342,17 @@ export default function NewHeroSection() {
                     {countryCode === '+1' && '🇺🇸'}
                     {countryCode === '+44' && '🇬🇧'}
                     {countryCode === '+971' && '🇦🇪'}
+                    {countryCode === '+61' && '🇦🇺'}
+                    {countryCode === '+65' && '🇸🇬'}
+                    {countryCode === '+49' && '🇩🇪'}
+                    {countryCode === '+33' && '🇫🇷'}
+                    {countryCode === '+966' && '🇸🇦'}
+                    {countryCode === '+27' && '🇿🇦'}
+                    {countryCode === '+64' && '🇳🇿'}
+                    {countryCode === '+60' && '🇲🇾'}
+                    {countryCode === '+92' && '🇵🇰'}
+                    {countryCode === '+94' && '🇱🇰'}
+                    {countryCode === '+977' && '🇳🇵'}
                   </span>
                   <span className="text-gray-900 font-medium">{countryCode}</span>
                   <ChevronDown className="w-4 h-4 text-gray-500" />
@@ -355,11 +366,19 @@ export default function NewHeroSection() {
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="flex-1 px-4 h-full outline-none text-gray-900 placeholder:text-gray-400"
                 />
+                
+                {/* Arrow Button */}
+                <button 
+                  disabled={!phoneNumber || phoneNumber.length < 10}
+                  className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white rounded-full w-10 h-10 flex items-center justify-center transition-all transform hover:scale-105 disabled:scale-100"
+                >
+                  <ArrowRight className="w-5 h-5" />
+                </button>
               </div>
               
               {/* Country Dropdown */}
               {showCountryDropdown && (
-                <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50">
+                <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden z-50 max-h-80 overflow-y-auto">
                   <button
                     onClick={() => { setCountryCode('+91'); setShowCountryDropdown(false); }}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
@@ -375,6 +394,13 @@ export default function NewHeroSection() {
                     <span className="text-gray-900">USA (+1)</span>
                   </button>
                   <button
+                    onClick={() => { setCountryCode('+1'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇨🇦</span>
+                    <span className="text-gray-900">Canada (+1)</span>
+                  </button>
+                  <button
                     onClick={() => { setCountryCode('+44'); setShowCountryDropdown(false); }}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
                   >
@@ -388,18 +414,86 @@ export default function NewHeroSection() {
                     <span className="text-xl">🇦🇪</span>
                     <span className="text-gray-900">UAE (+971)</span>
                   </button>
+                  <button
+                    onClick={() => { setCountryCode('+61'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇦🇺</span>
+                    <span className="text-gray-900">Australia (+61)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+65'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇸🇬</span>
+                    <span className="text-gray-900">Singapore (+65)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+49'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇩🇪</span>
+                    <span className="text-gray-900">Germany (+49)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+33'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇫🇷</span>
+                    <span className="text-gray-900">France (+33)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+966'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇸🇦</span>
+                    <span className="text-gray-900">Saudi Arabia (+966)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+27'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇿🇦</span>
+                    <span className="text-gray-900">South Africa (+27)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+64'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇳🇿</span>
+                    <span className="text-gray-900">New Zealand (+64)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+60'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇲🇾</span>
+                    <span className="text-gray-900">Malaysia (+60)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+92'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇵🇰</span>
+                    <span className="text-gray-900">Pakistan (+92)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+94'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇱🇰</span>
+                    <span className="text-gray-900">Sri Lanka (+94)</span>
+                  </button>
+                  <button
+                    onClick={() => { setCountryCode('+977'); setShowCountryDropdown(false); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors w-full text-left"
+                  >
+                    <span className="text-xl">🇳🇵</span>
+                    <span className="text-gray-900">Nepal (+977)</span>
+                  </button>
                 </div>
               )}
             </div>
-            
-            {/* Submit Button */}
-            <button 
-              disabled={!phoneNumber || phoneNumber.length < 10}
-              className="w-full bg-rose-500 text-white py-4 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              Let's Get Started
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
