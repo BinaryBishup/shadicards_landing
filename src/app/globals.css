@@ -12,6 +12,13 @@ body {
   background: rgb(254.7, 255, 235);
   color: #1a1a1a;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-dancing: var(--font-dancing);
+  --font-playfair: var(--font-playfair);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes marquee {
@@ -169,24 +176,6 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-.font-dancing {
-  font-family: var(--font-dancing-script);
-}
-
-/* Slow rotation animation for floral backgrounds */
-@keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
 }
 
 /* Navigation menu dropdown fix */
