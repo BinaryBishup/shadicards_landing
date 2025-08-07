@@ -6,7 +6,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Types for the database schema
+// Types for the optimized database schema
 export interface WeddingWebsiteData {
   wedding_id: string
   template_id: string
@@ -17,36 +17,49 @@ export interface WeddingWebsiteData {
   venue_address: string
   city: string
   state: string
-  story: string
+  bride_whatsapp: string
+  groom_whatsapp: string
+  our_story: string
   how_we_met: string
   about_bride: string
   about_groom: string
-  bride_image: string
-  groom_image: string
-  couple_image: string
-  gallery: string[]
+  bride_photo_url: string
+  groom_photo_url: string
+  couple_picture: string
+  gallery: Array<{
+    id: string
+    image_url: string
+    caption?: string
+    is_featured?: boolean
+  }>
   wedding_party: {
-    bridesmaids: Array<{ name: string; role: string; image?: string }>
-    groomsmen: Array<{ name: string; role: string; image?: string }>
+    bridesmaids: Array<{ 
+      name: string
+      role: string
+      image?: string
+      description?: string 
+    }>
+    groomsmen: Array<{ 
+      name: string
+      role: string
+      image?: string
+      description?: string 
+    }>
   }
   families: {
-    bride: { father: string; mother: string }
-    groom: { father: string; mother: string }
+    bride: { 
+      father: string
+      mother: string
+      father_title?: string
+      mother_title?: string 
+    }
+    groom: { 
+      father: string
+      mother: string
+      father_title?: string
+      mother_title?: string 
+    }
   }
-  custom_sections: Record<string, any>
-  color_scheme: Record<string, string>
-  visibility_mode: string
-  password_protected: boolean
-  access_password: string | null
-  show_home: boolean
-  show_schedule: boolean
-  show_registry: boolean
-  show_wedding_party: boolean
-  show_gallery: boolean
-  show_rsvp: boolean
-  meta_title: string
-  meta_description: string
-  og_image: string
   events: Array<{
     id: string
     name: string
@@ -59,6 +72,18 @@ export interface WeddingWebsiteData {
     icon: string
     color: string
   }>
+  color_scheme: Record<string, string>
+  custom_sections: Record<string, any>
+  visibility_mode: string
+  password_protected: boolean
+  show_home: boolean
+  show_schedule: boolean
+  show_registry: boolean
+  show_wedding_party: boolean
+  show_gallery: boolean
+  show_rsvp: boolean
+  is_published: boolean
+  url_slug: string
 }
 
 export interface Wedding {

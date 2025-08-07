@@ -4,28 +4,20 @@ export interface WeddingWebsiteConfig {
   wedding_id: string
   template_id: string
   url_slug: string
-  story?: string
-  how_we_met?: string
-  about_bride?: string
-  about_groom?: string
-  bride_image?: string
-  groom_image?: string
-  couple_image?: string
-  gallery?: string[]
-  wedding_party?: {
-    bridesmaids: Array<{ name: string; role: string; image?: string }>
-    groomsmen: Array<{ name: string; role: string; image?: string }>
-  }
-  families?: {
-    bride: { father: string; mother: string }
-    groom: { father: string; mother: string }
-  }
   custom_sections?: Record<string, any>
   color_scheme?: Record<string, string>
-  meta_title?: string
-  meta_description?: string
-  og_image?: string
   is_published: boolean
+  visibility_mode?: string
+  password_protected?: boolean
+  access_password?: string
+  show_home?: boolean
+  show_schedule?: boolean
+  show_registry?: boolean
+  show_wedding_party?: boolean
+  show_gallery?: boolean
+  show_rsvp?: boolean
+  show_things_to_do?: boolean
+  show_faqs?: boolean
 }
 
 /**
@@ -142,24 +134,144 @@ export async function updateWeddingTemplate(weddingId: string, templateId: strin
 }
 
 /**
- * Updates wedding website content
+ * Updates wedding content in the main weddings table
  */
 export async function updateWeddingContent(
   weddingId: string, 
-  content: Partial<Pick<WeddingWebsiteConfig, 
-    'story' | 'how_we_met' | 'about_bride' | 'about_groom' | 
-    'bride_image' | 'groom_image' | 'couple_image' | 'gallery' | 
-    'wedding_party' | 'families' | 'custom_sections'>>
+  content: Partial<{
+    our_story: string
+    how_we_met: string
+    about_bride: string
+    about_groom: string
+    bride_photo_url: string
+    groom_photo_url: string
+    couple_picture: string
+  }>
 ) {
   const { data, error } = await supabase
-    .from('wedding_website_config')
+    .from('weddings')
     .update(content)
-    .eq('wedding_id', weddingId)
+    .eq('id', weddingId)
     .select()
     .single()
 
   if (error) {
     console.error('Error updating wedding content:', error)
+    throw error
+  }
+
+  return data
+}
+
+/**
+ * Updates wedding gallery
+ */
+export async function updateWeddingGallery(
+  weddingId: string,
+  images: Array<{ image_url: string; caption?: string; display_order?: number }>
+) {
+  // Clear existing gallery
+  await supabase
+    .from('wedding_gallery')
+    .delete()
+    .eq('wedding_id', weddingId)
+
+  // Insert new images
+  const { data, error } = await supabase
+    .from('wedding_gallery')
+    .insert(
+      images.map((img, idx) => ({
+        wedding_id: weddingId,
+        image_url: img.image_url,
+        caption: img.caption,
+        display_order: img.display_order ?? idx
+      }))
+    )
+    .select()
+
+  if (error) {
+    console.error('Error updating gallery:', error)
+    throw error
+  }
+
+  return data
+}
+
+/**
+ * Updates wedding party members
+ */
+export async function updateWeddingParty(
+  weddingId: string,
+  partyMembers: Array<{
+    name: string
+    role: string
+    side: 'bride' | 'groom'
+    image_url?: string
+    description?: string
+    display_order?: number
+  }>
+) {
+  // Clear existing party members
+  await supabase
+    .from('wedding_party')
+    .delete()
+    .eq('wedding_id', weddingId)
+
+  // Insert new party members
+  const { data, error } = await supabase
+    .from('wedding_party')
+    .insert(
+      partyMembers.map((member, idx) => ({
+        wedding_id: weddingId,
+        ...member,
+        display_order: member.display_order ?? idx
+      }))
+    )
+    .select()
+
+  if (error) {
+    console.error('Error updating wedding party:', error)
+    throw error
+  }
+
+  return data
+}
+
+/**
+ * Updates family information
+ */
+export async function updateWeddingFamilies(
+  weddingId: string,
+  families: {
+    bride: { father_name: string; mother_name: string; father_title?: string; mother_title?: string }
+    groom: { father_name: string; mother_name: string; father_title?: string; mother_title?: string }
+  }
+) {
+  // Clear existing families
+  await supabase
+    .from('wedding_families')
+    .delete()
+    .eq('wedding_id', weddingId)
+
+  // Insert new family data
+  const { data, error } = await supabase
+    .from('wedding_families')
+    .insert([
+      {
+        wedding_id: weddingId,
+        side: 'bride',
+        ...families.bride
+      },
+      {
+        wedding_id: weddingId,
+        side: 'groom',
+        ...families.groom
+      }
+    ])
+    .select()
+
+  if (error) {
+    console.error('Error updating families:', error)
     throw error
   }
 

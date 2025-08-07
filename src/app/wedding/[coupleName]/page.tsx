@@ -44,7 +44,7 @@ async function getWeddingData(slug: string): Promise<{ templateId: string; data:
         time: event.start_time,
         venue: event.venue || event.address
       })) || [],
-      story: weddingData.story || '',
+      story: weddingData.our_story || '',
       families: weddingData.families || {
         bride: { father: '', mother: '' },
         groom: { father: '', mother: '' }
@@ -52,10 +52,10 @@ async function getWeddingData(slug: string): Promise<{ templateId: string; data:
       howWeMet: weddingData.how_we_met,
       aboutBride: weddingData.about_bride,
       aboutGroom: weddingData.about_groom,
-      brideImage: weddingData.bride_image,
-      groomImage: weddingData.groom_image,
-      coupleImage: weddingData.couple_image,
-      gallery: Array.isArray(weddingData.gallery) ? weddingData.gallery : [],
+      brideImage: weddingData.bride_photo_url,
+      groomImage: weddingData.groom_photo_url,
+      coupleImage: weddingData.couple_picture,
+      gallery: weddingData.gallery?.map((g: any) => g.image_url) || [],
       bridesmaids: weddingData.wedding_party?.bridesmaids || [],
       groomsmen: weddingData.wedding_party?.groomsmen || []
     }
