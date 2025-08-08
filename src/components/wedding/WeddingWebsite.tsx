@@ -93,12 +93,12 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
         primaryColor={website.primary_color || "#ec4899"}
         secondaryColor={website.secondary_color || "#f97316"}
         visibility={{
-          show_hero: website.show_hero,
-          show_about: website.show_about,
-          show_story: website.show_story,
-          show_families: website.show_families,
-          show_gallery: website.show_gallery,
-          show_wedding_party: website.show_wedding_party
+          show_hero: website.show_hero ?? undefined,
+          show_about: website.show_about ?? undefined,
+          show_story: website.show_story ?? undefined,
+          show_families: website.show_families ?? undefined,
+          show_gallery: website.show_gallery ?? undefined,
+          show_wedding_party: website.show_wedding_party ?? undefined
         }}
       />
 
