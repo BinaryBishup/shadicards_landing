@@ -96,29 +96,23 @@ export default function UpcomingEventEnhanced({
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{ backgroundColor: colors.light }}>
-      {/* Subtle Mandala Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.05]">
-        <svg className="w-full h-full" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="mandala" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              <circle cx="100" cy="100" r="80" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
-              <circle cx="100" cy="100" r="60" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
-              <circle cx="100" cy="100" r="40" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
-              {[...Array(12)].map((_, i) => (
-                <line
-                  key={i}
-                  x1="100"
-                  y1="20"
-                  x2="100"
-                  y2="180"
-                  stroke={colors.primary}
-                  strokeWidth="0.3"
-                  transform={`rotate(${i * 30} 100 100)`}
-                />
-              ))}
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#mandala)"/>
+      {/* Subtle Corner Accent Pattern - Top Right */}
+      <div className="absolute top-0 right-0 w-32 h-32 opacity-[0.08] pointer-events-none">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="50" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="30" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="20" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+        </svg>
+      </div>
+      
+      {/* Subtle Corner Accent Pattern - Bottom Left */}
+      <div className="absolute bottom-0 left-0 w-32 h-32 opacity-[0.08] pointer-events-none">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="60" r="50" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="40" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="30" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
+          <circle cx="60" cy="60" r="20" fill="none" stroke={colors.primary} strokeWidth="0.5"/>
         </svg>
       </div>
 
@@ -163,8 +157,8 @@ export default function UpcomingEventEnhanced({
         </div>
       </div>
 
-      {/* Main Content - Centered Card */}
-      <div className="container mx-auto px-4 py-12 max-w-[600px] animate-in fade-in slide-in-from-bottom-4 duration-500">
+      {/* Main Content - Centered Card with proper gutters */}
+      <div className="container mx-auto px-8 py-16 max-w-[600px] animate-in fade-in slide-in-from-bottom-4 duration-500">
         <Card 
           className="overflow-hidden shadow-xl"
           style={{ 
@@ -172,31 +166,35 @@ export default function UpcomingEventEnhanced({
             borderRadius: '12px'
           }}
         >
-          {/* Event Header with Icon */}
+          {/* Event Header - Clean and Simple */}
           <div 
-            className="px-6 py-4 flex items-center gap-4"
+            className="px-8 py-6 relative overflow-hidden"
             style={{ 
-              backgroundColor: colors.primary,
-              borderBottom: `1px solid ${colors.primary}40`
+              backgroundColor: colors.primary
             }}
           >
-            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div className="flex-1">
+                <h1 className="text-2xl font-semibold text-white">{event.name}</h1>
+                {event.description && (
+                  <p className="text-white/90 text-sm mt-1">{event.description}</p>
+                )}
+              </div>
             </div>
-            <div className="flex-1">
-              <h1 className="text-2xl font-semibold text-white">{event.name}</h1>
-              <p className="text-white/80 text-sm">{event.description}</p>
+            {/* Small corner accent */}
+            <div className="absolute top-0 right-0 w-20 h-20 opacity-10">
+              <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="30" fill="none" stroke="white" strokeWidth="1"/>
+                <circle cx="40" cy="40" r="20" fill="none" stroke="white" strokeWidth="1"/>
+              </svg>
             </div>
-            {/* Decorative SVG Pattern */}
-            <svg width="60" height="60" viewBox="0 0 60 60" className="opacity-20">
-              <circle cx="30" cy="30" r="25" fill="none" stroke="white" strokeWidth="1"/>
-              <circle cx="30" cy="30" r="20" fill="none" stroke="white" strokeWidth="1"/>
-              <circle cx="30" cy="30" r="15" fill="none" stroke="white" strokeWidth="1"/>
-            </svg>
           </div>
 
-          {/* Event Details Section */}
-          <div className="p-6 space-y-6">
+          {/* Event Details Section with generous padding */}
+          <div className="p-8 space-y-8">
             {/* Date & Time */}
             <div className="flex items-start gap-4">
               <div 
@@ -356,48 +354,58 @@ export default function UpcomingEventEnhanced({
         </Card>
       </div>
 
-      {/* Floating Buttons */}
+      {/* Floating Buttons - Clean positioning */}
       <Link 
         href={`/website/${website.url_slug}?guest=${guest.id}`}
-        className="fixed bottom-6 right-6 z-30"
+        className="fixed bottom-8 right-8 z-30"
       >
         <Button 
-          className="rounded-full shadow-lg transition-all duration-150 hover:scale-105"
+          className="rounded-full shadow-lg transition-all duration-150 hover:scale-[1.02] px-6 py-3"
           style={{ 
-            backgroundColor: colors.secondary,
-            color: colors.white
+            backgroundColor: colors.accent,
+            color: colors.text.primary,
+            fontWeight: '500'
           }}
         >
-          <ArrowLeft className="w-5 h-5 mr-2" />
+          <ArrowLeft className="w-4 h-4 mr-2" />
           View Wedding
         </Button>
       </Link>
 
-      {/* Chat Button with Pulse Animation */}
+      {/* Chat Button - Subtle pulse */}
       <button
         onClick={() => setShowChat(!showChat)}
-        className="fixed bottom-6 left-6 z-30 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-150 hover:scale-105 animate-pulse"
+        className="fixed bottom-8 left-8 z-30 w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-150 hover:scale-[1.05]"
         style={{ 
-          backgroundColor: colors.accent,
-          color: colors.text.primary
+          backgroundColor: colors.primary,
+          color: colors.white
         }}
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-5 h-5" />
+        <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
       </button>
 
-      {/* Chat Interface */}
+      {/* Chat Interface - Simplified */}
       {showChat && (
-        <div className="fixed bottom-24 left-6 z-40 w-80 bg-white rounded-lg shadow-2xl animate-in fade-in slide-in-from-bottom-4">
+        <div className="fixed bottom-24 left-8 z-40 w-72 bg-white rounded-lg shadow-xl animate-in fade-in slide-in-from-bottom-2">
           <div className="p-4 border-b" style={{ borderColor: colors.light }}>
-            <h3 className="font-medium">Need Help?</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-medium text-sm">Need Help?</h3>
+              <button 
+                onClick={() => setShowChat(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ×
+              </button>
+            </div>
           </div>
           <div className="p-4">
             <p className="text-sm" style={{ color: colors.text.secondary }}>
-              Have questions about the event? We're here to help!
+              Questions about the event? Contact us!
             </p>
             {website.wedding.rsvp_contact && (
-              <p className="text-sm mt-2" style={{ color: colors.text.muted }}>
-                Contact: {website.wedding.rsvp_contact}
+              <p className="text-xs mt-2 font-medium" style={{ color: colors.primary }}>
+                {website.wedding.rsvp_contact}
               </p>
             )}
           </div>
