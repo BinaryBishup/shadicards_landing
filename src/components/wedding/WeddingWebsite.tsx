@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, User, Edit } from "lucide-react";
+import { Heart, User, Edit, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ChatBar from "./ChatBar";
+import Link from "next/link";
 import { getTemplate } from "@/lib/template-registry";
 import { mapDatabaseToTemplateData, getTemplateIdFromDatabase } from "@/lib/wedding-data-mapper";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event } from "@/lib/supabase";
@@ -14,9 +15,10 @@ interface WeddingWebsiteProps {
   guest: Guest;
   events?: Event[];
   onEditProfile?: () => void;
+  urlSlug: string;
 }
 
-export default function WeddingWebsite({ website, guest, events = [], onEditProfile }: WeddingWebsiteProps) {
+export default function WeddingWebsite({ website, guest, events = [], onEditProfile, urlSlug }: WeddingWebsiteProps) {
   // Get the template ID from the database
   const templateId = getTemplateIdFromDatabase(website.template_id);
   const templateConfig = getTemplate(templateId);
@@ -99,6 +101,19 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
           show_wedding_party: website.show_wedding_party
         }}
       />
+
+      {/* Floating Upcoming Event Button */}
+      {events && events.length > 0 && (
+        <Link 
+          href={`/website/${urlSlug}/upcoming_event?guest=${guest.id}`}
+          className="fixed bottom-32 right-6 z-30"
+        >
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg rounded-full px-6 py-3 flex items-center gap-2">
+            <Calendar className="w-5 h-5" />
+            View Upcoming Event
+          </Button>
+        </Link>
+      )}
 
       {/* Enhanced Footer with Logo - Add margin bottom for chat bar */}
       <div className={`mt-16 ${showChat ? 'mb-20' : 'mb-0'} py-8 border-t border-gray-200 bg-white`}>

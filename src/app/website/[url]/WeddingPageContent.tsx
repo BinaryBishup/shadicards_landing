@@ -247,6 +247,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
         guest={guest}
         events={events}
         onEditProfile={() => setShowProfileEdit(true)}
+        urlSlug={url}
       />
     );
   }
