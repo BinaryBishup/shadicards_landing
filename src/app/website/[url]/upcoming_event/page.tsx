@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
-import UpcomingEventRevamped from "@/components/wedding/UpcomingEventRevamped";
+import UpcomingEventMinimal from "@/components/wedding/UpcomingEventMinimal";
 
 export const dynamic = 'force-dynamic';
 
@@ -166,12 +166,21 @@ export default async function UpcomingEventPage({ params, searchParams }: PagePr
     );
   }
 
+  // Get all events for navigation
+  const { data: allEvents } = await supabase
+    .from('events')
+    .select('*')
+    .eq('wedding_id', website.wedding_id)
+    .order('event_date', { ascending: true })
+    .order('start_time', { ascending: true });
+
   return (
-    <UpcomingEventRevamped
+    <UpcomingEventMinimal
       website={website}
       guest={guest}
       event={event}
       invitation={invitation}
+      allEvents={allEvents || []}
     />
   );
 }
