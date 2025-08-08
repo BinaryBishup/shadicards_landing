@@ -137,7 +137,8 @@ export function checkWebsiteAccess(
  * Verifies password for protected websites
  */
 export function verifyWebsitePassword(website: WeddingWebsite, inputPassword: string): boolean {
-  if (!website.is_password_protected || !website.password) {
+  // If password exists in DB, check it (regardless of is_password_protected flag)
+  if (!website.password) {
     return true;
   }
   return website.password === inputPassword;
@@ -242,22 +243,23 @@ export async function updateRSVP(
  */
 export async function incrementViewCount(websiteId: string) {
   try {
-    const { error } = await supabase.rpc('increment', {
-      table_name: 'wedding_website',
-      row_id: websiteId,
-      column_name: 'view_count'
-    });
-
-    if (error) {
-      // If RPC doesn't exist, use regular update
-      await supabase
-        .from('wedding_website')
-        .update({
-          view_count: supabase.raw('view_count + 1'),
-          last_viewed_at: new Date().toISOString()
-        })
-        .eq('id', websiteId);
-    }
+    // First get current count
+    const { data: currentData } = await supabase
+      .from('wedding_website')
+      .select('view_count')
+      .eq('id', websiteId)
+      .single();
+    
+    const currentCount = currentData?.view_count || 0;
+    
+    // Then update with incremented value
+    await supabase
+      .from('wedding_website')
+      .update({
+        view_count: currentCount + 1,
+        last_viewed_at: new Date().toISOString()
+      })
+      .eq('id', websiteId);
   } catch (error) {
     console.error('Error incrementing view count:', error);
   }

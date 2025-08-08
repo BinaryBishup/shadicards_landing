@@ -2,19 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Calendar, MapPin, Clock, Users, Heart, Sparkles, User, LogOut } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, Heart, Sparkles, User, Edit } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import ChatBar from "./ChatBar";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event } from "@/lib/supabase";
 
 interface WeddingWebsiteProps {
   website: WeddingWebsiteType & { wedding: Wedding };
   guest: Guest;
   events?: Event[];
+  onEditProfile?: () => void;
 }
 
-export default function WeddingWebsite({ website, guest, events = [] }: WeddingWebsiteProps) {
+export default function WeddingWebsite({ website, guest, events = [], onEditProfile }: WeddingWebsiteProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   
   useEffect(() => {
@@ -48,14 +50,15 @@ export default function WeddingWebsite({ website, guest, events = [] }: WeddingW
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[rgb(254.7,255,235)] to-[rgb(252,250,230)]">
-      {/* Guest Welcome Bar */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="container mx-auto px-6 py-4 max-w-7xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3">
+      {/* Enhanced Guest Welcome Header - Mobile Optimized */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+        <div className="container mx-auto px-4 md:px-6 py-3 md:py-4 max-w-7xl">
+          <div className="flex items-center justify-between gap-2">
+            {/* Left: Profile Info */}
+            <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+              <div className="flex items-center gap-2 md:gap-3">
                 {guest.profile_image ? (
-                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-rose-200">
+                  <div className="w-10 md:w-12 h-10 md:h-12 rounded-full overflow-hidden border-2 md:border-3 border-rose-300 shadow-md flex-shrink-0">
                     <img 
                       src={guest.profile_image} 
                       alt={guest.name}
@@ -63,32 +66,41 @@ export default function WeddingWebsite({ website, guest, events = [] }: WeddingW
                     />
                   </div>
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-100 flex items-center justify-center">
-                    <User className="w-5 h-5 text-rose-600" />
+                  <div className="w-10 md:w-12 h-10 md:h-12 rounded-full bg-gradient-to-br from-rose-200 to-pink-200 flex items-center justify-center shadow-md flex-shrink-0">
+                    <User className="w-5 md:w-6 h-5 md:h-6 text-rose-700" />
                   </div>
                 )}
-                <div>
-                  <p className="text-sm text-gray-600">Welcome back,</p>
-                  <p className="font-semibold text-gray-900">{guest.title} {guest.name}</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Welcome</p>
+                  <p className="font-semibold text-gray-900 text-sm md:text-lg truncate">
+                    <span className="hidden sm:inline">{guest.title || ''} </span>
+                    {guest.name}
+                  </p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 border-rose-200">
-                {guest.side === 'bride' ? "Bride's Side" : guest.side === 'groom' ? "Groom's Side" : "Friend"}
+              
+              <div className="hidden md:block h-10 w-px bg-gray-200" />
+              
+              <Badge className="hidden sm:flex bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 border-rose-300 px-2 md:px-3 py-1 text-xs">
+                <Heart className="w-3 h-3 mr-1" />
+                <span className="hidden md:inline">
+                  {guest.side === 'bride' ? "Bride's Side" : guest.side === 'groom' ? "Groom's Side" : "Friend"}
+                </span>
+                <span className="md:hidden">
+                  {guest.side === 'bride' ? "Bride's" : guest.side === 'groom' ? "Groom's" : "Friend"}
+                </span>
               </Badge>
             </div>
             
-            <div className="flex items-center gap-4">
-              {daysUntil !== null && (
-                <div className="text-right">
-                  <p className="text-sm text-gray-600">Days until wedding</p>
-                  <p className="text-2xl font-bold text-rose-600">{daysUntil}</p>
-                </div>
-              )}
-              <Button variant="outline" size="sm" className="gap-2">
-                <LogOut className="w-4 h-4" />
-                Exit
-              </Button>
-            </div>
+            {/* Right: Edit Profile Button */}
+            <Button 
+              onClick={onEditProfile}
+              className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
+            >
+              <Edit className="w-3 md:w-4 h-3 md:h-4" />
+              <span className="hidden sm:inline">Edit Profile</span>
+              <span className="sm:hidden">Edit</span>
+            </Button>
           </div>
         </div>
       </div>
@@ -136,6 +148,13 @@ export default function WeddingWebsite({ website, guest, events = [] }: WeddingW
               <p className="text-2xl text-rose-600 font-medium">
                 {formatDate(website.wedding.wedding_date)}
               </p>
+            )}
+
+            {daysUntil !== null && (
+              <div className="mt-4 inline-flex items-center gap-2 bg-white/80 backdrop-blur px-6 py-3 rounded-full shadow-lg">
+                <span className="text-3xl font-bold text-rose-600">{daysUntil}</span>
+                <span className="text-gray-600">days to go!</span>
+              </div>
             )}
           </div>
         </div>
@@ -268,10 +287,6 @@ export default function WeddingWebsite({ website, guest, events = [] }: WeddingW
                     </p>
                   )}
                 </div>
-
-                <Button className="w-full mt-4" variant="outline">
-                  Edit Profile
-                </Button>
               </CardContent>
             </Card>
 
@@ -320,15 +335,31 @@ export default function WeddingWebsite({ website, guest, events = [] }: WeddingW
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="mt-16 py-8 border-t border-gray-200 bg-white">
+      {/* Enhanced Footer with Logo - Add margin bottom for chat bar */}
+      <div className="mt-16 mb-20 py-8 border-t border-gray-200 bg-white">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-sm text-gray-500">
-            Powered by{" "}
-            <span className="font-medium text-gray-700">ShadiCards</span>
-          </p>
+          <div className="flex items-center justify-center gap-2 text-gray-600">
+            <span className="text-sm">Made with</span>
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+            <span className="text-sm">by</span>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/Shadiards_logo.svg"
+                alt="ShadiCards"
+                width={100}
+                height={30}
+                className="object-contain"
+              />
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Chat Bar Interface */}
+      <ChatBar 
+        weddingName={`${website.wedding.bride_name} & ${website.wedding.groom_name}'s wedding`}
+        guestName={guest.first_name || guest.name.split(' ')[0]}
+      />
     </div>
   );
 }

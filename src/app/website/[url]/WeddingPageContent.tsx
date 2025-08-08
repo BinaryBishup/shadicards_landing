@@ -6,6 +6,7 @@ import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
 import GuestProfileEdit from "@/components/wedding/GuestProfileEdit";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
+import LoadingScreen from "@/components/wedding/LoadingScreen";
 import { 
   getWeddingWebsiteByUrl, 
   validateGuestAccess, 
@@ -54,7 +55,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
       setWebsite(websiteData);
 
       // Check website access permissions
-      const access = checkWebsiteAccess(websiteData, guestId);
+      const access = checkWebsiteAccess(websiteData, guestId, passwordVerified);
       setAccessStatus(access);
 
       // If guest ID is provided, validate guest access
@@ -145,16 +146,9 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
     }
   };
 
-  // Loading state
+  // Loading state with improved experience
   if (loading) {
-    return (
-      <div className="min-h-screen bg-[rgb(254.7,255,235)] flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-rose-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading wedding page...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen guestName={guest?.first_name || guest?.name} />;
   }
 
   // Error state
@@ -252,6 +246,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
         website={website}
         guest={guest}
         events={events}
+        onEditProfile={() => setShowProfileEdit(true)}
       />
     );
   }
