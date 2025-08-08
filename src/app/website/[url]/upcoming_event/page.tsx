@@ -14,17 +14,31 @@ async function getWeddingWebsite(urlSlug: string) {
   console.log('Fetching wedding website for URL:', urlSlug);
   
   const { data, error } = await supabase
-    .from('wedding_websites')
+    .from('wedding_website')
     .select(`
       *,
-      wedding:weddings(*)
+      wedding:wedding_id (
+        id,
+        bride_name,
+        groom_name,
+        wedding_date,
+        couple_picture,
+        bride_photo_url,
+        groom_photo_url,
+        about_bride,
+        about_groom,
+        venue_name,
+        venue_address,
+        rsvp_contact,
+        is_active
+      )
     `)
     .eq('url_slug', urlSlug)
     .eq('status', 'active')
     .single();
 
   if (error) {
-    console.error('Error fetching wedding website:', error);
+    console.error('Error fetching wedding website:', JSON.stringify(error, null, 2));
     return null;
   }
 
@@ -47,7 +61,7 @@ async function getGuest(guestId: string, weddingId: string) {
     .single();
 
   if (error) {
-    console.error('Error fetching guest:', error);
+    console.error('Error fetching guest:', JSON.stringify(error, null, 2));
     return null;
   }
 
@@ -72,7 +86,7 @@ async function getUpcomingEvent(weddingId: string, guestId: string) {
     .order('start_time', { ascending: true });
 
   if (eventsError) {
-    console.error('Error fetching events:', eventsError);
+    console.error('Error fetching events:', JSON.stringify(eventsError, null, 2));
     return { event: null, invitation: null };
   }
 
@@ -92,7 +106,7 @@ async function getUpcomingEvent(weddingId: string, guestId: string) {
     .in('event_id', eventIds);
 
   if (invitationsError) {
-    console.error('Error fetching invitations:', invitationsError);
+    console.error('Error fetching invitations:', JSON.stringify(invitationsError, null, 2));
     return { event: null, invitation: null };
   }
 
