@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import ChatBar from "./ChatBar";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
 
 interface UpcomingEventProps {
@@ -17,7 +18,6 @@ interface UpcomingEventProps {
   event: Event;
   invitation: EventInvitation;
   onEditProfile?: () => void;
-  onUpdateRSVP?: (status: 'yes' | 'no' | 'maybe', plusOnes?: number, message?: string) => Promise<void>;
 }
 
 export default function UpcomingEvent({ 
@@ -25,8 +25,7 @@ export default function UpcomingEvent({
   guest, 
   event, 
   invitation,
-  onEditProfile,
-  onUpdateRSVP 
+  onEditProfile
 }: UpcomingEventProps) {
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 0);
@@ -39,13 +38,27 @@ export default function UpcomingEvent({
   const handleRSVPUpdate = async (status: 'yes' | 'no' | 'maybe') => {
     setIsUpdating(true);
     try {
-      if (onUpdateRSVP) {
-        await onUpdateRSVP(status, plusOnes, message);
+      const { error } = await supabase
+        .from('event_invitations')
+        .update({
+          rsvp_status: status,
+          rsvp_date: new Date().toISOString(),
+          plus_ones: plusOnes || 0,
+          message: message || null,
+          invitation_status: 'responded'
+        })
+        .eq('id', invitation.id);
+
+      if (error) {
+        console.error('Error updating RSVP:', error);
+        throw error;
       }
+      
       setRsvpStatus(status);
       setShowRSVPForm(false);
     } catch (error) {
       console.error('Error updating RSVP:', error);
+      alert('Failed to update RSVP. Please try again.');
     } finally {
       setIsUpdating(false);
     }

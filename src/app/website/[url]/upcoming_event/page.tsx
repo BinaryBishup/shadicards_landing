@@ -3,12 +3,16 @@ import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
 import UpcomingEvent from "@/components/wedding/UpcomingEvent";
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ url: string }>;
   searchParams: Promise<{ guest?: string }>;
 }
 
 async function getWeddingWebsite(urlSlug: string) {
+  console.log('Fetching wedding website for URL:', urlSlug);
+  
   const { data, error } = await supabase
     .from('wedding_websites')
     .select(`
@@ -19,7 +23,13 @@ async function getWeddingWebsite(urlSlug: string) {
     .eq('status', 'active')
     .single();
 
-  if (error || !data) {
+  if (error) {
+    console.error('Error fetching wedding website:', error);
+    return null;
+  }
+
+  if (!data) {
+    console.log('No wedding website found for URL:', urlSlug);
     return null;
   }
 
@@ -27,6 +37,8 @@ async function getWeddingWebsite(urlSlug: string) {
 }
 
 async function getGuest(guestId: string, weddingId: string) {
+  console.log('Fetching guest:', guestId, 'for wedding:', weddingId);
+  
   const { data, error } = await supabase
     .from('guests')
     .select('*')
@@ -34,7 +46,13 @@ async function getGuest(guestId: string, weddingId: string) {
     .eq('wedding_id', weddingId)
     .single();
 
-  if (error || !data) {
+  if (error) {
+    console.error('Error fetching guest:', error);
+    return null;
+  }
+
+  if (!data) {
+    console.log('No guest found');
     return null;
   }
 
@@ -42,6 +60,8 @@ async function getGuest(guestId: string, weddingId: string) {
 }
 
 async function getUpcomingEvent(weddingId: string, guestId: string) {
+  console.log('Fetching upcoming events for wedding:', weddingId, 'guest:', guestId);
+  
   // First get all events for this wedding
   const { data: events, error: eventsError } = await supabase
     .from('events')
@@ -51,9 +71,17 @@ async function getUpcomingEvent(weddingId: string, guestId: string) {
     .order('event_date', { ascending: true })
     .order('start_time', { ascending: true });
 
-  if (eventsError || !events || events.length === 0) {
+  if (eventsError) {
+    console.error('Error fetching events:', eventsError);
     return { event: null, invitation: null };
   }
+
+  if (!events || events.length === 0) {
+    console.log('No events found for wedding');
+    return { event: null, invitation: null };
+  }
+
+  console.log('Found events:', events.length);
 
   // Get invitations for this guest
   const eventIds = events.map(e => e.id);
@@ -64,13 +92,17 @@ async function getUpcomingEvent(weddingId: string, guestId: string) {
     .in('event_id', eventIds);
 
   if (invitationsError) {
+    console.error('Error fetching invitations:', invitationsError);
     return { event: null, invitation: null };
   }
+
+  console.log('Found invitations:', invitations?.length || 0);
 
   // Find the first event this guest is invited to
   for (const event of events) {
     const invitation = invitations?.find(inv => inv.event_id === event.id);
     if (invitation) {
+      console.log('Found matching event and invitation');
       return { 
         event: event as Event, 
         invitation: invitation as EventInvitation 
@@ -78,29 +110,8 @@ async function getUpcomingEvent(weddingId: string, guestId: string) {
     }
   }
 
+  console.log('No matching invitation found for any event');
   return { event: null, invitation: null };
-}
-
-async function updateRSVP(
-  invitationId: string, 
-  status: 'yes' | 'no' | 'maybe', 
-  plusOnes?: number, 
-  message?: string
-) {
-  const { error } = await supabase
-    .from('event_invitations')
-    .update({
-      rsvp_status: status,
-      rsvp_date: new Date().toISOString(),
-      plus_ones: plusOnes || 0,
-      message: message || null,
-      invitation_status: 'responded'
-    })
-    .eq('id', invitationId);
-
-  if (error) {
-    throw error;
-  }
 }
 
 export default async function UpcomingEventPage({ params, searchParams }: PageProps) {
@@ -147,10 +158,6 @@ export default async function UpcomingEventPage({ params, searchParams }: PagePr
       guest={guest}
       event={event}
       invitation={invitation}
-      onUpdateRSVP={async (status, plusOnes, message) => {
-        'use server';
-        await updateRSVP(invitation.id, status, plusOnes, message);
-      }}
     />
   );
 }
