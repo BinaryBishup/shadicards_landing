@@ -30,7 +30,7 @@ export function mapDatabaseToTemplateData(
     about: {
       bride: {
         name: wedding.bride_name,
-        image: wedding.bride_photo_url || wedding.bride_photo || undefined,
+        image: wedding.bride_photo_url || undefined,
         description: wedding.about_bride || undefined,
         profession: undefined, // Could be added to wedding table
         education: undefined, // Could be added to wedding table
@@ -40,7 +40,7 @@ export function mapDatabaseToTemplateData(
       },
       groom: {
         name: wedding.groom_name,
-        image: wedding.groom_photo_url || wedding.groom_photo || undefined,
+        image: wedding.groom_photo_url || undefined,
         description: wedding.about_groom || undefined,
         profession: undefined, // Could be added to wedding table
         education: undefined, // Could be added to wedding table
