@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
-import UpcomingEventEnhanced from "@/components/wedding/UpcomingEventEnhanced";
+import UpcomingEventRevamped from "@/components/wedding/UpcomingEventRevamped";
 
 export const dynamic = 'force-dynamic';
 
@@ -167,7 +167,7 @@ export default async function UpcomingEventPage({ params, searchParams }: PagePr
   }
 
   return (
-    <UpcomingEventEnhanced
+    <UpcomingEventRevamped
       website={website}
       guest={guest}
       event={event}

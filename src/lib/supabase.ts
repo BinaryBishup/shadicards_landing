@@ -102,6 +102,7 @@ export interface Event {
   guest_relationships: string[] | null;
   icon: string | null;
   color: string | null;
+  event_type: string | null;
 }
 
 export interface EventInvitation {
