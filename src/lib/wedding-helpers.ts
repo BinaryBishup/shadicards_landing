@@ -19,8 +19,6 @@ export async function getWeddingWebsiteByUrl(url: string) {
           groom_photo_url,
           about_bride,
           about_groom,
-          our_story,
-          how_we_met,
           venue_name,
           venue_address,
           is_active
