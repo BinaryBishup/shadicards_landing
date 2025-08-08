@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
-import Template001 from '@/components/templates/Template001'
+import Template001 from '@/components/wedding/templates/Template001'
 import PasswordProtection from '@/components/PasswordProtection'
 import RestrictedAccess from '@/components/RestrictedAccess'
 
@@ -179,10 +179,10 @@ export default async function WeddingWebsitePage({
     aboutBride: wedding.about_bride || '',
     aboutGroom: wedding.about_groom || '',
     
-    // Image URLs - Use placeholder images as defaults
-    coupleImage: wedding.couple_picture || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo',
-    brideImage: wedding.bride_photo_url || 'https://placehold.co/320x320/fce7f3/831843?text=Bride+Photo',
-    groomImage: wedding.groom_photo_url || 'https://placehold.co/320x320/ddd6fe/5b21b6?text=Groom+Photo',
+    // Image URLs - Use inline SVG placeholders as defaults
+    coupleImage: wedding.couple_picture || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y5YThkNCIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjI1MCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojODMxODQzO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjMwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkNvdXBsZSBQaG90bzwvdGV4dD48L3N2Zz4=',
+    brideImage: wedding.bride_photo_url || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI2ZjZTdmMyIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE2MCIgeT0iMTYwIiBzdHlsZT0iZmlsbDojODMxODQzO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkJyaWRlPC90ZXh0Pjwvc3ZnPg==',
+    groomImage: wedding.groom_photo_url || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI2RkZDZmZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE2MCIgeT0iMTYwIiBzdHlsZT0iZmlsbDojNWIyMWI2O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkdyb29tPC90ZXh0Pjwvc3ZnPg==',
     
     // Events from events table
     events: events?.map(event => ({

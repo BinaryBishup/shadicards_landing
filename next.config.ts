@@ -38,13 +38,6 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
-      // Placeholder images
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
     ],
     // Image formats for better compression
     formats: ['image/webp', 'image/avif'],

@@ -574,7 +574,7 @@ export default function Template001({ data }: Template001Props) {
               <div className="relative z-20 w-[500px] h-[500px]">
                 <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
                   <Image
-                    src={data.coupleImage || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo'}
+                    src={data.coupleImage || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y5YThkNCIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjI1MCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojODMxODQzO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjMwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkNvdXBsZSBQaG90bzwvdGV4dD48L3N2Zz4='}
                     alt={coupleNames}
                     width={500}
                     height={500}
@@ -617,7 +617,7 @@ export default function Template001({ data }: Template001Props) {
               <div className="relative z-20 w-[240px] h-[240px]">
                 <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
                   <Image
-                    src={data.coupleImage || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo'}
+                    src={data.coupleImage || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2Y5YThkNCIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjI1MCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojODMxODQzO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjMwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkNvdXBsZSBQaG90bzwvdGV4dD48L3N2Zz4='}
                     alt={coupleNames}
                     width={500}
                     height={500}
@@ -733,7 +733,7 @@ export default function Template001({ data }: Template001Props) {
                 <div className="relative w-48 h-48 lg:w-80 lg:h-80 mx-auto mb-6">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
                     <Image
-                      src={data.brideImage || 'https://placehold.co/320x320/fce7f3/831843?text=Bride+Photo'}
+                      src={data.brideImage || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI2ZjZTdmMyIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE2MCIgeT0iMTYwIiBzdHlsZT0iZmlsbDojODMxODQzO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkJyaWRlPC90ZXh0Pjwvc3ZnPg=='}
                       alt={data.brideName}
                       width={320}
                       height={320}
@@ -766,7 +766,7 @@ export default function Template001({ data }: Template001Props) {
                 <div className="relative w-48 h-48 lg:w-80 lg:h-80 mx-auto mb-6">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
                     <Image
-                      src={data.groomImage || 'https://placehold.co/320x320/ddd6fe/5b21b6?text=Groom+Photo'}
+                      src={data.groomImage || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzIwIiBoZWlnaHQ9IjMyMCIgZmlsbD0iI2RkZDZmZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE2MCIgeT0iMTYwIiBzdHlsZT0iZmlsbDojNWIyMWI2O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkdyb29tPC90ZXh0Pjwvc3ZnPg=='}
                       alt={data.groomName}
                       width={320}
                       height={320}
@@ -814,7 +814,7 @@ export default function Template001({ data }: Template001Props) {
                   <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                     <div className="aspect-[3/4] bg-gray-200">
                       <Image
-                        src={item.image || `https://placehold.co/400x500/f3e8ff/7c3aed?text=Story+${index + 1}`}
+                        src={item.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2YzZThmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjUwIiBzdHlsZT0iZmlsbDojN2MzYWVkO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPlN0b3J5PC90ZXh0Pjwvc3ZnPg=='}
                         alt={item.title}
                         width={400}
                         height={533}
@@ -877,7 +877,7 @@ export default function Template001({ data }: Template001Props) {
                   <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                     <div className="aspect-square bg-gray-200">
                       <Image
-                        src={image || `https://placehold.co/400x400/fdf4ff/a78bfa?text=Gallery+${index + 1}`}
+                        src={image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZkZjRmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojYTc4YmZhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjI0cHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkdhbGxlcnk8L3RleHQ+PC9zdmc+'}
                         alt={`Wedding Memory ${index + 1}`}
                         width={400}
                         height={400}
@@ -898,15 +898,15 @@ export default function Template001({ data }: Template001Props) {
               /* Default gallery images */
               <>
                 {[
-                  { src: "", title: "First Meet" },
-                  { src: "", title: "First Date" },
-                  { src: "", title: "Proposal" },
-                  { src: "", title: "Engagement" }
+                  { src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZjZTdmMyIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojZWM0ODk5O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkZpcnN0IE1lZXQ8L3RleHQ+PC9zdmc+", title: "First Meet" },
+                  { src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2YzZThmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojYTg1NWY3O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkZpcnN0IERhdGU8L3RleHQ+PC9zdmc+", title: "First Date" },
+                  { src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U5ZDVmZiIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojOTMzM2VhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPlByb3Bvc2FsPC90ZXh0Pjwvc3ZnPg==", title: "Proposal" },
+                  { src: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2RkZDZmZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjIwMCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojN2MzYWVkO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkVuZ2FnZW1lbnQ8L3RleHQ+PC9zdmc+", title: "Engagement" }
                 ].map((item, index) => (
                   <div 
                     key={index} 
                     className="gallery-item group cursor-pointer"
-                    onClick={() => setSelectedImage(item.src || `https://placehold.co/800x800/fdf4ff/a78bfa?text=${item.title}`)}
+                    onClick={() => setSelectedImage(item.src)}
                   >
                     <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                       <div className="aspect-square bg-gray-200">
@@ -971,7 +971,7 @@ export default function Template001({ data }: Template001Props) {
                         <div className="aspect-[3/4] bg-gradient-to-br from-pink-100 to-purple-100">
                           {member.image ? (
                             <Image 
-                              src={member.image || `https://placehold.co/300x400/fce7f3/ec4899?text=Bridesmaid`} 
+                              src={member.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2ZjZTdmMyIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojZWM0ODk5O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkJyaWRlc21haWQ8L3RleHQ+PC9zdmc+'} 
                               alt={member.name}
                               width={300}
                               height={400}
@@ -1015,7 +1015,7 @@ export default function Template001({ data }: Template001Props) {
                         <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-green-100">
                           {member.image ? (
                             <Image 
-                              src={member.image || `https://placehold.co/300x400/dbeafe/3b82f6?text=Groomsman`} 
+                              src={member.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMzAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2RiZWFmZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjE1MCIgeT0iMjAwIiBzdHlsZT0iZmlsbDojM2I4MmY2O2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjIwcHg7Zm9udC1mYW1pbHk6QXJpYWwsc2Fucy1zZXJpZjsiPkdyb29tc21hbjwvdGV4dD48L3N2Zz4='} 
                               alt={member.name}
                               width={300}
                               height={400}
