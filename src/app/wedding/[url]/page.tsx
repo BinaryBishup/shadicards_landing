@@ -1,68 +1,12 @@
 import { notFound, redirect } from 'next/navigation'
-import { headers } from 'next/headers'
 import { createClient } from '@/utils/supabase/server'
 import Template001 from '@/components/templates/Template001'
 import PasswordProtection from '@/components/PasswordProtection'
 import RestrictedAccess from '@/components/RestrictedAccess'
 
-interface WeddingWebsiteData {
-  id: string
-  wedding_id: string
-  url_slug: string
-  status: string
-  visibility: string | null
-  is_password_protected: boolean
-  password: string | null
-  template_id: string
-  primary_color: string
-  secondary_color: string
-  show_hero: boolean
-  show_couple_profiles: boolean
-  show_story: boolean
-  show_gallery: boolean
-  show_events: boolean
-  show_chat: boolean
-  show_families: boolean
-  show_wedding_party: boolean
-  story_items: any[]
-  gallery_images: any[]
-  bride_families: any
-  groom_families: any
-  bridesmaids: any[]
-  groomsmen: any[]
-  meta_title: string | null
-  meta_description: string | null
-  og_image: string | null
-  view_count: number
-  last_viewed_at: string | null
-  weddings: {
-    id: string
-    bride_name: string
-    groom_name: string
-    wedding_date: string
-    venue_name: string
-    venue_address: string
-    phone_number: string
-    email: string
-    couple_picture: string
-    bride_photo_url: string
-    groom_photo_url: string
-    about_bride: string
-    about_groom: string
-    our_story: string
-    how_we_met: string
-  }
-  events: Array<{
-    id: string
-    name: string
-    description: string
-    event_date: string
-    start_time: string
-    end_time: string
-    venue: string
-    address: string
-  }>
-}
+// Enable dynamic rendering due to guest parameter in searchParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600 // Revalidate every hour
 
 export default async function WeddingWebsitePage({
   params,
@@ -75,12 +19,40 @@ export default async function WeddingWebsitePage({
   const { guest: guestId } = await searchParams
   const supabase = await createClient()
   
-  // Fetch wedding website data along with wedding details
+  // Optimized query with specific field selection for better performance
   const { data: websiteData, error } = await supabase
     .from('wedding_website')
     .select(`
-      *,
-      weddings (
+      id,
+      wedding_id,
+      url_slug,
+      status,
+      visibility,
+      is_password_protected,
+      password,
+      template_id,
+      primary_color,
+      secondary_color,
+      show_hero,
+      show_couple_profiles,
+      show_story,
+      show_gallery,
+      show_events,
+      show_chat,
+      show_families,
+      show_wedding_party,
+      story_items,
+      gallery_images,
+      bride_families,
+      groom_families,
+      bridesmaids,
+      groomsmen,
+      meta_title,
+      meta_description,
+      og_image,
+      view_count,
+      last_viewed_at,
+      weddings!inner (
         id,
         bride_name,
         groom_name,
@@ -114,13 +86,14 @@ export default async function WeddingWebsitePage({
 
   // If no guest parameter, show restricted access
   if (!guestId) {
+    const wedding = Array.isArray(websiteData.weddings) ? websiteData.weddings[0] : websiteData.weddings
     return (
       <RestrictedAccess 
-        brideName={websiteData.weddings.bride_name}
-        groomName={websiteData.weddings.groom_name}
-        weddingDate={websiteData.weddings.wedding_date}
-        coupleImage={websiteData.weddings.couple_picture}
-        rsvpContact={websiteData.weddings.rsvp_contact}
+        brideName={wedding.bride_name}
+        groomName={wedding.groom_name}
+        weddingDate={wedding.wedding_date}
+        coupleImage={wedding.couple_picture}
+        rsvpContact={wedding.rsvp_contact}
       />
     )
   }
@@ -135,24 +108,25 @@ export default async function WeddingWebsitePage({
 
   // If guest not found or not part of this wedding, show restricted access
   if (!guestData) {
+    const wedding = Array.isArray(websiteData.weddings) ? websiteData.weddings[0] : websiteData.weddings
     return (
       <RestrictedAccess 
-        brideName={websiteData.weddings.bride_name}
-        groomName={websiteData.weddings.groom_name}
-        weddingDate={websiteData.weddings.wedding_date}
-        coupleImage={websiteData.weddings.couple_picture}
-        rsvpContact={websiteData.weddings.rsvp_contact}
+        brideName={wedding.bride_name}
+        groomName={wedding.groom_name}
+        weddingDate={wedding.wedding_date}
+        coupleImage={wedding.couple_picture}
+        rsvpContact={wedding.rsvp_contact}
       />
     )
   }
 
-  // Fetch only the events this guest is invited to
+  // Optimized events query with specific field selection
   const { data: invitedEvents } = await supabase
     .from('event_invitations')
     .select(`
       event_id,
       rsvp_status,
-      events (
+      events!inner (
         id,
         name,
         description,
@@ -181,6 +155,7 @@ export default async function WeddingWebsitePage({
     .eq('id', websiteData.id)
 
   // Transform data for Template001
+  const wedding = Array.isArray(websiteData.weddings) ? websiteData.weddings[0] : websiteData.weddings
   const weddingData = {
     // Guest Information
     guestName: `${guestData.first_name} ${guestData.last_name}`,
@@ -190,24 +165,24 @@ export default async function WeddingWebsitePage({
     weddingUrl: url,
     
     // Basic Information from weddings table
-    brideName: websiteData.weddings.bride_name,
-    groomName: websiteData.weddings.groom_name,
-    weddingDate: websiteData.weddings.wedding_date,
-    venue: websiteData.weddings.venue_name || '',
+    brideName: wedding.bride_name,
+    groomName: wedding.groom_name,
+    weddingDate: wedding.wedding_date,
+    venue: wedding.venue_name || '',
     
     // Story Section
-    story: websiteData.weddings.our_story || '',
-    howWeMet: websiteData.weddings.how_we_met || '',
+    story: wedding.our_story || '',
+    howWeMet: wedding.how_we_met || '',
     storyItems: websiteData.story_items || [],
     
     // Profile Information
-    aboutBride: websiteData.weddings.about_bride || '',
-    aboutGroom: websiteData.weddings.about_groom || '',
+    aboutBride: wedding.about_bride || '',
+    aboutGroom: wedding.about_groom || '',
     
-    // Image URLs
-    coupleImage: websiteData.weddings.couple_picture || '/couple_image.jpg',
-    brideImage: websiteData.weddings.bride_photo_url || '',
-    groomImage: websiteData.weddings.groom_photo_url || '',
+    // Image URLs - Use placeholder images as defaults
+    coupleImage: wedding.couple_picture || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo',
+    brideImage: wedding.bride_photo_url || 'https://placehold.co/320x320/fce7f3/831843?text=Bride+Photo',
+    groomImage: wedding.groom_photo_url || 'https://placehold.co/320x320/ddd6fe/5b21b6?text=Groom+Photo',
     
     // Events from events table
     events: events?.map(event => ({
@@ -256,8 +231,8 @@ export default async function WeddingWebsitePage({
     return (
       <PasswordProtection
         correctPassword={websiteData.password}
-        brideName={websiteData.weddings.bride_name}
-        groomName={websiteData.weddings.groom_name}
+        brideName={wedding.bride_name}
+        groomName={wedding.groom_name}
       >
         <Template001 data={weddingData} />
       </PasswordProtection>
@@ -272,46 +247,67 @@ export async function generateMetadata({
 }: {
   params: Promise<{ url: string }>
 }) {
-  const { url } = await params
-  const supabase = await createClient()
-  
-  const { data: websiteData } = await supabase
-    .from('wedding_website')
-    .select(`
-      meta_title,
-      meta_description,
-      og_image,
-      weddings!inner (
-        bride_name,
-        groom_name,
-        wedding_date
-      )
-    `)
-    .eq('url_slug', url)
-    .eq('status', 'active')
-    .single()
+  try {
+    const { url } = await params
+    const supabase = await createClient()
+    
+    // Optimized metadata query - only fetch essential fields
+    const { data: websiteData } = await supabase
+      .from('wedding_website')
+      .select(`
+        meta_title,
+        meta_description,
+        og_image,
+        weddings!inner (
+          bride_name,
+          groom_name,
+          wedding_date
+        )
+      `)
+      .eq('url_slug', url)
+      .eq('status', 'active')
+      .single()
 
-  if (!websiteData || !websiteData.weddings) {
+    if (!websiteData || !websiteData.weddings) {
+      return {
+        title: 'Wedding Website',
+        description: 'Celebrate our special day with us'
+      }
+    }
+
+    const wedding = websiteData.weddings as any
+    const title = websiteData.meta_title || 
+      `${wedding.bride_name} & ${wedding.groom_name}'s Wedding`
+    
+    const description = websiteData.meta_description || 
+      `Join us as we celebrate the wedding of ${wedding.bride_name} and ${wedding.groom_name}`
+
+    return {
+      title,
+      description,
+      keywords: `wedding, ${wedding.bride_name}, ${wedding.groom_name}, celebration, invitation`,
+      openGraph: {
+        title,
+        description,
+        images: websiteData.og_image ? [websiteData.og_image] : [],
+        type: 'website',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: websiteData.og_image ? [websiteData.og_image] : [],
+      },
+      robots: {
+        index: false, // Private wedding websites shouldn't be indexed
+        follow: false,
+      }
+    }
+  } catch (error) {
+    console.error('Error generating metadata:', error)
     return {
       title: 'Wedding Website',
       description: 'Celebrate our special day with us'
     }
-  }
-
-  const wedding = websiteData.weddings as any
-  const title = websiteData.meta_title || 
-    `${wedding.bride_name} & ${wedding.groom_name}'s Wedding`
-  
-  const description = websiteData.meta_description || 
-    `Join us as we celebrate the wedding of ${wedding.bride_name} and ${wedding.groom_name}`
-
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      images: websiteData.og_image ? [websiteData.og_image] : [],
-    },
   }
 }

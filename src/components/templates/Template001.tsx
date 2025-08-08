@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import { Calendar, MapPin, Clock, ChevronDown, MessageCircle, X, Send, Heart, User, Edit, CalendarDays } from 'lucide-react'
 import Link from 'next/link'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { 
   faGlassCheers, faRing, faCamera, faUtensils, faCake, 
@@ -12,8 +11,18 @@ import {
   faUsers, faDrum, faHandHoldingHeart, IconDefinition
 } from '@fortawesome/free-solid-svg-icons'
 
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
+// Dynamic import for GSAP to reduce initial bundle size
+const loadGSAP = async () => {
+  const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+    import('gsap'),
+    import('gsap/dist/ScrollTrigger')
+  ])
+  
+  if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger)
+  }
+  
+  return { gsap, ScrollTrigger }
 }
 
 interface EventDetail {
@@ -122,10 +131,14 @@ function MobileCalendarWidget({ targetDate, coupleNames }: { targetDate: string;
     <div className="relative flex flex-col items-center">
       {/* Top floral decoration */}
       <div className="w-[450px] h-[150px] -mb-12">
-        <img 
+        <Image
           src="/templates/assets/flower_calendar_top.png" 
-          alt="" 
+          alt="Decorative floral element"
+          width={450}
+          height={150}
           className="w-full h-full object-contain"
+          priority={false}
+          quality={85}
         />
       </div>
       
@@ -173,10 +186,14 @@ function MobileCalendarWidget({ targetDate, coupleNames }: { targetDate: string;
       
       {/* Bottom floral decoration */}
       <div className="w-[450px] h-[150px] -mt-12">
-        <img 
+        <Image
           src="/templates/assets/flower_calendar_down.png" 
-          alt="" 
+          alt="Decorative floral element"
+          width={450}
+          height={150}
           className="w-full h-full object-contain"
+          priority={false}
+          quality={85}
         />
       </div>
     </div>
@@ -216,10 +233,14 @@ function DesktopCalendarWidget({ targetDate, coupleNames }: { targetDate: string
     <div className="relative flex flex-col items-center w-[700px]">
       {/* Top floral decoration - larger size for desktop */}
       <div className="w-[750px] h-[200px] -mb-20">
-        <img 
+        <Image
           src="/templates/assets/flower_calendar_top.png" 
-          alt="" 
+          alt="Decorative floral element"
+          width={450}
+          height={150}
           className="w-full h-full object-contain"
+          priority={false}
+          quality={85}
         />
       </div>
       
@@ -267,10 +288,14 @@ function DesktopCalendarWidget({ targetDate, coupleNames }: { targetDate: string
       
       {/* Bottom floral decoration - larger size for desktop */}
       <div className="w-[750px] h-[200px] -mt-20">
-        <img 
+        <Image
           src="/templates/assets/flower_calendar_down.png" 
-          alt="" 
+          alt="Decorative floral element"
+          width={450}
+          height={150}
           className="w-full h-full object-contain"
+          priority={false}
+          quality={85}
         />
       </div>
     </div>
@@ -290,12 +315,18 @@ export default function Template001({ data }: Template001Props) {
   const [inputMessage, setInputMessage] = useState('')
   const [messages, setMessages] = useState<Array<{text: string, isUser: boolean}>>([])
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   
   const coupleNames = `${data.brideName} & ${data.groomName}`
 
-  // Handle client-side hydration
+  // Handle client-side hydration and loading
   useEffect(() => {
     setIsClient(true)
+    // Simulate minimum loading time for smoother experience
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 800)
+    return () => clearTimeout(timer)
   }, [])
 
   // Calculate countdown
@@ -322,39 +353,51 @@ export default function Template001({ data }: Template001Props) {
     return () => clearInterval(timer)
   }, [data.weddingDate, isClient])
 
-  // GSAP Animations
+  // GSAP Animations - Dynamically loaded for performance
   useEffect(() => {
-    if (!isClient) return
+    if (!isClient || isLoading) return
 
-    // Hero animations
-    const heroTimeline = gsap.timeline()
-    heroTimeline
-      .fromTo('.hero-couple-image', 
-        { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1.2, ease: 'power3.out' }
-      )
-      .fromTo('.hero-calendar',
-        { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 1, ease: 'power3.out' },
-        '-=0.8'
-      )
-      
-    // Countdown animations
-    gsap.fromTo('.countdown-item',
-      { scale: 0, opacity: 0 },
-      { 
-        scale: 1, 
-        opacity: 1, 
-        duration: 0.8,
-        stagger: 0.2,
-        ease: 'back.out(1.7)',
-        scrollTrigger: {
-          trigger: '.countdown-section',
-          start: 'top 80%',
-          once: true
-        }
+    const initAnimations = async () => {
+      try {
+        const { gsap, ScrollTrigger } = await loadGSAP()
+
+        // Hero animations
+        const heroTimeline = gsap.timeline()
+        heroTimeline
+          .fromTo('.hero-couple-image', 
+            { scale: 0.8, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1.2, ease: 'power3.out' }
+          )
+          .fromTo('.hero-calendar',
+            { scale: 0.8, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 1, ease: 'power3.out' },
+            '-=0.8'
+          )
+          
+        // Countdown animations
+        gsap.fromTo('.countdown-item',
+          { scale: 0, opacity: 0 },
+          { 
+            scale: 1, 
+            opacity: 1, 
+            duration: 0.8,
+            stagger: 0.2,
+            ease: 'back.out(1.7)',
+            scrollTrigger: {
+              trigger: '.countdown-section',
+              start: 'top 80%',
+              once: true
+            }
+          }
+        )
+      } catch (error) {
+        console.error('Failed to load GSAP animations:', error)
       }
-    )
+    }
+
+    // Delay animation initialization to prioritize main content loading
+    const timer = setTimeout(initAnimations, 100)
+    return () => clearTimeout(timer)
   }, [isClient])
 
   const sendMessage = () => {
@@ -377,6 +420,28 @@ export default function Template001({ data }: Template001Props) {
     setInputMessage('')
   }
 
+  // Preloader Component
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-gradient-to-br from-pink-50 via-white to-purple-50 flex items-center justify-center z-50">
+        <div className="text-center">
+          <div className="relative">
+            {/* Animated hearts */}
+            <div className="flex justify-center space-x-4 mb-8">
+              <Heart className="w-12 h-12 text-pink-400 animate-pulse" style={{ animationDelay: '0ms' }} />
+              <Heart className="w-12 h-12 text-purple-400 animate-pulse" style={{ animationDelay: '200ms' }} />
+              <Heart className="w-12 h-12 text-pink-400 animate-pulse" style={{ animationDelay: '400ms' }} />
+            </div>
+            <h2 className="text-4xl font-dancing text-gray-700 mb-2">
+              {data.brideName} & {data.groomName}
+            </h2>
+            <p className="text-gray-500 animate-pulse">Preparing your special invitation...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       {/* Guest Profile Header */}
@@ -389,10 +454,14 @@ export default function Template001({ data }: Template001Props) {
               <div className="relative">
                 <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center ring-2 ring-white shadow-md">
                   {data.guestProfileImage ? (
-                    <img 
+                    <Image 
                       src={data.guestProfileImage} 
                       alt={data.guestName}
+                      width={56}
+                      height={56}
                       className="w-full h-full object-cover"
+                      priority={true}
+                      quality={85}
                     />
                   ) : (
                     <User className="w-6 h-6 lg:w-7 lg:h-7 text-purple-400" />
@@ -490,20 +559,30 @@ export default function Template001({ data }: Template001Props) {
             {/* Couple Image with Floral Frame - Larger Size */}
             <div className="hero-couple-image relative flex-shrink-0 flex items-center justify-center w-[750px] h-[750px]">
               {/* Floral decorations positioned around the couple image */}
-              <img 
+              <Image 
                 src="/templates/assets/flower_couple_background.png" 
-                alt="" 
+                alt="Decorative rotating floral background"
+                width={750}
+                height={750}
                 className="absolute top-0 left-0 w-full h-full object-contain z-0"
                 style={{ animation: 'spin 30s linear infinite' }}
+                priority={true}
+                quality={90}
               />
               
               {/* Couple photo in circle - centered and elevated */}
               <div className="relative z-20 w-[500px] h-[500px]">
                 <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                  <img
-                    src={data.coupleImage || '/couple_image.jpg'}
+                  <Image
+                    src={data.coupleImage || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo'}
                     alt={coupleNames}
+                    width={500}
+                    height={500}
                     className="w-full h-full object-cover"
+                    priority={true}
+                    quality={95}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -523,20 +602,30 @@ export default function Template001({ data }: Template001Props) {
             {/* Couple Image with Floral Frame - Mobile */}
             <div className="hero-couple-image relative flex-shrink-0 flex items-center justify-center w-[400px] h-[400px]">
               {/* Floral decorations positioned around the couple image */}
-              <img 
+              <Image 
                 src="/templates/assets/flower_couple_background.png" 
-                alt="" 
+                alt="Decorative rotating floral background"
+                width={750}
+                height={750}
                 className="absolute top-0 left-0 w-full h-full object-contain z-0"
                 style={{ animation: 'spin 30s linear infinite' }}
+                priority={true}
+                quality={90}
               />
               
               {/* Couple photo in circle - centered and elevated */}
               <div className="relative z-20 w-[240px] h-[240px]">
                 <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                  <img
-                    src={data.coupleImage || '/couple_image.jpg'}
+                  <Image
+                    src={data.coupleImage || 'https://placehold.co/500x500/f9a8d4/831843?text=Couple+Photo'}
                     alt={coupleNames}
+                    width={500}
+                    height={500}
                     className="w-full h-full object-cover"
+                    priority={true}
+                    quality={95}
+                    placeholder="blur"
+                    blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                   />
                 </div>
               </div>
@@ -558,19 +647,27 @@ export default function Template001({ data }: Template001Props) {
       <section className="py-16 lg:py-32 bg-white relative overflow-hidden">
         {/* Left decorative element - hidden on mobile */}
         <div className="hidden lg:block absolute -left-10 top-1/2 -translate-y-1/2 w-96 h-[550px]">
-          <img 
+          <Image 
             src="/templates/assets/flower_left_shape.png" 
-            alt="" 
+            alt="Decorative floral element"
+            width={384}
+            height={550}
             className="w-full h-full object-contain object-left"
+            priority={false}
+            quality={80}
           />
         </div>
         
         {/* Right decorative element - hidden on mobile */}
         <div className="hidden lg:block absolute -right-10 top-1/2 -translate-y-1/2 w-96 h-[550px]">
-          <img 
+          <Image 
             src="/templates/assets/flower_right_shape.png" 
-            alt="" 
+            alt="Decorative floral element"
+            width={384}
+            height={550}
             className="w-full h-full object-contain object-right"
+            priority={false}
+            quality={80}
           />
         </div>
 
@@ -596,10 +693,14 @@ export default function Template001({ data }: Template001Props) {
                       item.position === 'bottom-left' ? '-bottom-4 -left-4' :
                       '-bottom-4 -right-4'
                     }`}>
-                      <img 
+                      <Image 
                         src="/templates/assets/flower_countdown.png" 
-                        alt="" 
+                        alt="Decorative floral countdown element"
+                        width={96}
+                        height={96}
                         className="w-full h-full object-contain"
+                        priority={false}
+                        quality={75}
                       />
                     </div>
                     
@@ -631,10 +732,16 @@ export default function Template001({ data }: Template001Props) {
                 
                 <div className="relative w-48 h-48 lg:w-80 lg:h-80 mx-auto mb-6">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img
-                      src={data.brideImage || '/couple_image.jpg'}
+                    <Image
+                      src={data.brideImage || 'https://placehold.co/320x320/fce7f3/831843?text=Bride+Photo'}
                       alt={data.brideName}
+                      width={320}
+                      height={320}
                       className="w-full h-full object-cover"
+                      priority={false}
+                      quality={90}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                   </div>
                 </div>
@@ -658,10 +765,16 @@ export default function Template001({ data }: Template001Props) {
                 
                 <div className="relative w-48 h-48 lg:w-80 lg:h-80 mx-auto mb-6">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                    <img
-                      src={data.groomImage || '/couple_image.jpg'}
+                    <Image
+                      src={data.groomImage || 'https://placehold.co/320x320/ddd6fe/5b21b6?text=Groom+Photo'}
                       alt={data.groomName}
+                      width={320}
+                      height={320}
                       className="w-full h-full object-cover"
+                      priority={false}
+                      quality={90}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                   </div>
                 </div>
@@ -700,10 +813,16 @@ export default function Template001({ data }: Template001Props) {
                 >
                   <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                     <div className="aspect-[3/4] bg-gray-200">
-                      <img
-                        src={item.image}
+                      <Image
+                        src={item.image || `https://placehold.co/400x500/f3e8ff/7c3aed?text=Story+${index + 1}`}
                         alt={item.title}
+                        width={400}
+                        height={533}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        quality={85}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
@@ -757,10 +876,16 @@ export default function Template001({ data }: Template001Props) {
                 >
                   <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                     <div className="aspect-square bg-gray-200">
-                      <img
-                        src={image}
-                        alt={`Memory ${index + 1}`}
+                      <Image
+                        src={image || `https://placehold.co/400x400/fdf4ff/a78bfa?text=Gallery+${index + 1}`}
+                        alt={`Wedding Memory ${index + 1}`}
+                        width={400}
+                        height={400}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                        quality={85}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <Heart className="w-8 h-8 text-white" />
@@ -773,22 +898,28 @@ export default function Template001({ data }: Template001Props) {
               /* Default gallery images */
               <>
                 {[
-                  { src: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=400&h=400&fit=crop", title: "First Meet" },
-                  { src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=400&h=400&fit=crop", title: "First Date" },
-                  { src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=400&h=400&fit=crop", title: "Proposal" },
-                  { src: "https://images.unsplash.com/photo-1587271407850-8d438ca9fdf2?w=400&h=400&fit=crop", title: "Engagement" }
+                  { src: "", title: "First Meet" },
+                  { src: "", title: "First Date" },
+                  { src: "", title: "Proposal" },
+                  { src: "", title: "Engagement" }
                 ].map((item, index) => (
                   <div 
                     key={index} 
                     className="gallery-item group cursor-pointer"
-                    onClick={() => setSelectedImage(item.src.replace('w=400&h=400', 'w=800&h=800'))}
+                    onClick={() => setSelectedImage(item.src || `https://placehold.co/800x800/fdf4ff/a78bfa?text=${item.title}`)}
                   >
                     <div className="relative overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
                       <div className="aspect-square bg-gray-200">
-                        <img
+                        <Image
                           src={item.src}
                           alt={item.title}
+                          width={400}
+                          height={400}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                          quality={85}
+                          placeholder="blur"
+                          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <Heart className="w-8 h-8 text-white" />
@@ -839,10 +970,16 @@ export default function Template001({ data }: Template001Props) {
                       <div className="relative mb-4 overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
                         <div className="aspect-[3/4] bg-gradient-to-br from-pink-100 to-purple-100">
                           {member.image ? (
-                            <img 
-                              src={member.image} 
+                            <Image 
+                              src={member.image || `https://placehold.co/300x400/fce7f3/ec4899?text=Bridesmaid`} 
                               alt={member.name}
+                              width={300}
+                              height={400}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
+                              quality={85}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
@@ -877,10 +1014,16 @@ export default function Template001({ data }: Template001Props) {
                       <div className="relative mb-4 overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
                         <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-green-100">
                           {member.image ? (
-                            <img 
-                              src={member.image} 
+                            <Image 
+                              src={member.image || `https://placehold.co/300x400/dbeafe/3b82f6?text=Groomsman`} 
                               alt={member.name}
+                              width={300}
+                              height={400}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
+                              quality={85}
+                              placeholder="blur"
+                              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
@@ -1198,11 +1341,15 @@ export default function Template001({ data }: Template001Props) {
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-4xl max-h-full">
-            <img
+            <Image
               src={selectedImage}
               alt="Preview"
+              width={800}
+              height={800}
               className="max-w-full max-h-full object-contain rounded-lg"
               onClick={(e) => e.stopPropagation()}
+              quality={95}
+              priority={true}
             />
             <button
               onClick={() => setSelectedImage(null)}
