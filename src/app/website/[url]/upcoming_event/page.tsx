@@ -166,13 +166,30 @@ export default async function UpcomingEventPage({ params, searchParams }: PagePr
     );
   }
 
-  // Get all events for navigation
+  // Get all events the guest is invited to for navigation
   const { data: allEvents } = await supabase
     .from('events')
     .select('*')
     .eq('wedding_id', website.wedding_id)
+    .gte('event_date', new Date().toISOString().split('T')[0])
     .order('event_date', { ascending: true })
     .order('start_time', { ascending: true });
+
+  // Get invitations for this guest
+  const guestEvents: Event[] = [];
+  if (allEvents) {
+    const eventIds = allEvents.map(e => e.id);
+    const { data: invitations } = await supabase
+      .from('event_invitations')
+      .select('event_id')
+      .eq('guest_id', guestId)
+      .in('event_id', eventIds);
+    
+    if (invitations) {
+      const invitedEventIds = invitations.map(inv => inv.event_id);
+      guestEvents.push(...allEvents.filter(e => invitedEventIds.includes(e.id)));
+    }
+  }
 
   return (
     <UpcomingEventMinimal
@@ -180,7 +197,7 @@ export default async function UpcomingEventPage({ params, searchParams }: PagePr
       guest={guest}
       event={event}
       invitation={invitation}
-      allEvents={allEvents || []}
+      allEvents={guestEvents}
     />
   );
 }
