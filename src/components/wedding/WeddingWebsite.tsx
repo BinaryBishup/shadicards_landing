@@ -105,7 +105,7 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
       {/* Floating Upcoming Event Button */}
       {events && events.length > 0 && (
         <Link 
-          href={`/website/${urlSlug}/upcoming_event?guest=${guest.id}`}
+          href={`/wedding/${urlSlug}/event?guest=${guest.id}`}
           className="fixed bottom-32 right-6 z-30"
         >
           <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg rounded-full px-6 py-3 flex items-center gap-2">

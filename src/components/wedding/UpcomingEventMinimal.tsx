@@ -149,8 +149,10 @@ export default function UpcomingEventMinimal({
 
   // Find current event index
   const currentEventIndex = allEvents.findIndex(e => e.id === event.id);
-  const prevEvent = currentEventIndex > 0 ? allEvents[currentEventIndex - 1] : null;
-  const nextEvent = currentEventIndex < allEvents.length - 1 ? allEvents[currentEventIndex + 1] : null;
+  const hasPrevEvent = currentEventIndex > 0;
+  const hasNextEvent = currentEventIndex < allEvents.length - 1;
+  const prevEventName = hasPrevEvent ? allEvents[currentEventIndex - 1].name : null;
+  const nextEventName = hasNextEvent ? allEvents[currentEventIndex + 1].name : null;
 
   return (
     <div className="min-h-screen relative">
@@ -181,19 +183,19 @@ export default function UpcomingEventMinimal({
             <div className="flex items-center justify-between gap-2">
               {/* Previous Event */}
               <Link 
-                href={prevEvent ? `/website/${website.url_slug}/upcoming_event?guest=${guest.id}` : '#'}
+                href={hasPrevEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex - 1}` : '#'}
                 className={cn(
                   "flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10",
-                  !prevEvent && "opacity-50 pointer-events-none"
+                  !hasPrevEvent && "opacity-50 pointer-events-none"
                 )}
               >
                 <ChevronLeft className="w-5 h-5" />
                 <span className="text-xs sm:text-sm">
                   <span className="sm:hidden">Prev</span>
                   <span className="hidden sm:inline">Previous</span>
-                  {prevEvent && (
+                  {prevEventName && (
                     <span className="block sm:hidden text-[10px] mt-0.5 text-white/60">
-                      {prevEvent.name.split(' ')[0]}
+                      {prevEventName.split(' ')[0]}
                     </span>
                   )}
                 </span>
@@ -201,7 +203,7 @@ export default function UpcomingEventMinimal({
 
               {/* Center - View Wedding */}
               <Link 
-                href={`/website/${website.url_slug}?guest=${guest.id}`}
+                href={`/wedding/${website.url_slug}?guest=${guest.id}`}
                 className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg"
               >
                 <Home className="w-4 h-4" />
@@ -210,18 +212,18 @@ export default function UpcomingEventMinimal({
 
               {/* Next Event */}
               <Link 
-                href={nextEvent ? `/website/${website.url_slug}/upcoming_event?guest=${guest.id}` : '#'}
+                href={hasNextEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex + 1}` : '#'}
                 className={cn(
                   "flex flex-col-reverse sm:flex-row items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10",
-                  !nextEvent && "opacity-50 pointer-events-none"
+                  !hasNextEvent && "opacity-50 pointer-events-none"
                 )}
               >
                 <span className="text-xs sm:text-sm">
                   <span className="sm:hidden">Next</span>
                   <span className="hidden sm:inline">Next</span>
-                  {nextEvent && (
+                  {nextEventName && (
                     <span className="block sm:hidden text-[10px] mt-0.5 text-white/60">
-                      {nextEvent.name.split(' ')[0]}
+                      {nextEventName.split(' ')[0]}
                     </span>
                   )}
                 </span>

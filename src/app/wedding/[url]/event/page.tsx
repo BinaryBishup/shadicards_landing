@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
-import EventCarousel from "@/components/wedding/EventCarousel";
+import UpcomingEventMinimal from "@/components/wedding/UpcomingEventMinimal";
 
 export const dynamic = 'force-dynamic';
 
@@ -88,19 +88,18 @@ async function getGuestEvents(weddingId: string, guestId: string) {
     return [];
   }
 
-  // Combine events with invitations
-  const guestEvents = events
-    .map(event => {
-      const invitation = invitations?.find(inv => inv.event_id === event.id);
-      if (invitation) {
-        return {
-          event: event as Event,
-          invitation: invitation as EventInvitation
-        };
-      }
-      return null;
-    })
-    .filter((item): item is { event: Event; invitation: EventInvitation } => item !== null);
+  // Combine events with invitations - only return events guest is invited to
+  const guestEvents: { event: Event; invitation: EventInvitation }[] = [];
+  
+  for (const event of events) {
+    const invitation = invitations?.find(inv => inv.event_id === event.id);
+    if (invitation) {
+      guestEvents.push({
+        event: event as Event,
+        invitation: invitation as EventInvitation
+      });
+    }
+  }
 
   return guestEvents;
 }
@@ -126,6 +125,7 @@ export default async function EventPage({ params, searchParams }: PageProps) {
     notFound();
   }
 
+  // Get all events the guest is invited to
   const guestEvents = await getGuestEvents(website.wedding_id, guestId);
   
   if (!guestEvents || guestEvents.length === 0) {
@@ -135,7 +135,7 @@ export default async function EventPage({ params, searchParams }: PageProps) {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">No Upcoming Events</h1>
           <p className="text-gray-600 mb-8">You don't have any upcoming events at this time.</p>
           <a 
-            href={`/website/${resolvedParams.url}?guest=${guestId}`}
+            href={`/wedding/${resolvedParams.url}?guest=${guestId}`}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white px-6 py-3 rounded-lg font-medium"
           >
             View Wedding Website
@@ -145,13 +145,20 @@ export default async function EventPage({ params, searchParams }: PageProps) {
     );
   }
 
+  // Get the specific event based on index (default to first event if index is 0 or not provided)
+  const currentIndex = Math.min(Math.max(0, eventIndex), guestEvents.length - 1);
+  const currentEventData = guestEvents[currentIndex];
+
+  // Create array of just events for navigation in UpcomingEventMinimal
+  const allInvitedEvents = guestEvents.map(ge => ge.event);
+
   return (
-    <EventCarousel
+    <UpcomingEventMinimal
       website={website}
       guest={guest}
-      guestEvents={guestEvents}
-      initialIndex={eventIndex}
-      urlSlug={resolvedParams.url}
+      event={currentEventData.event}
+      invitation={currentEventData.invitation}
+      allEvents={allInvitedEvents}
     />
   );
 }
