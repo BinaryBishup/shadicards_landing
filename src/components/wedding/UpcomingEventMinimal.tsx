@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import ChatBar from "./ChatBar";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Home, Calendar, Clock, MapPin, Navigation, Check, X, HelpCircle, Users, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Navigation, Check, X, HelpCircle, Users, ExternalLink, Grid3x3 } from "lucide-react";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,39 +23,6 @@ interface UpcomingEventProps {
   allEvents?: Event[];
   onEditProfile?: () => void;
 }
-
-// Event type backgrounds
-const eventBackgrounds: Record<string, string> = {
-  haldi: '/templates/assets/event_type/haldi.jpg',
-  mehendi: '/templates/assets/event_type/mehandi.jpg',
-  mehandi: '/templates/assets/event_type/mehandi.jpg',
-  sangeet: '/templates/assets/event_type/sangeet.jpg',
-  wedding: '/templates/assets/event_type/wedding.jpg',
-  reception: '/templates/assets/event_type/reception.jpg',
-  engagement: '/templates/assets/event_type/engagement.jpg',
-};
-
-// Event themes with gold accent
-const eventThemes: Record<string, { primary: string; secondary: string; gold: string }> = {
-  haldi: { primary: '#FFA500', secondary: '#FFD700', gold: '#D4AF37' },
-  mehendi: { primary: '#228B22', secondary: '#90EE90', gold: '#B8860B' },
-  mehandi: { primary: '#228B22', secondary: '#90EE90', gold: '#B8860B' },
-  sangeet: { primary: '#9B59B6', secondary: '#E74C3C', gold: '#FFD700' },
-  wedding: { primary: '#E91E63', secondary: '#FF4081', gold: '#D4AF37' },
-  reception: { primary: '#2C3E50', secondary: '#34495E', gold: '#F0E68C' },
-  engagement: { primary: '#E74C3C', secondary: '#EC407A', gold: '#FFD700' },
-};
-
-// Cultural event descriptions
-const eventDescriptions: Record<string, string> = {
-  haldi: "Join us for blessings, turmeric, and the golden glow of tradition",
-  mehendi: "Let's celebrate love, color, and mehendi magic together",
-  mehandi: "Join us for an evening of music, laughter, and henna art",
-  sangeet: "An evening of dance, music, and joyful celebrations awaits",
-  wedding: "Witness the sacred union of two souls becoming one",
-  reception: "Celebrate our new beginning with dinner, dancing, and memories",
-  engagement: "Join us as we mark the beginning of our forever journey",
-};
 
 // Animated Counter Component
 const AnimatedCounter = ({ value, label }: { value: number; label: string }) => {
@@ -85,7 +52,7 @@ const AnimatedCounter = ({ value, label }: { value: number; label: string }) => 
 };
 
 // Bokeh Background Animation
-const BokehBackground = ({ eventType }: { eventType: string }) => {
+const BokehBackground = ({ primaryColor }: { primaryColor: string }) => {
   // Use deterministic values based on index instead of Math.random()
   const bokehElements = [
     { width: 150, height: 150, left: 20, top: 15 },
@@ -95,6 +62,14 @@ const BokehBackground = ({ eventType }: { eventType: string }) => {
     { width: 160, height: 160, left: 10, top: 50 },
     { width: 140, height: 140, left: 55, top: 35 },
   ];
+
+  // Convert hex to rgba with opacity
+  const hexToRgba = (hex: string, opacity: number) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result 
+      ? `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${opacity})`
+      : `rgba(255, 255, 255, ${opacity})`;
+  };
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -108,51 +83,109 @@ const BokehBackground = ({ eventType }: { eventType: string }) => {
             height: `${element.height}px`,
             left: `${element.left}%`,
             top: `${element.top}%`,
-            background: `radial-gradient(circle, ${
-              eventType === 'mehendi' || eventType === 'mehandi' 
-                ? 'rgba(34, 139, 34, 0.3)' 
-                : eventType === 'haldi'
-                ? 'rgba(255, 215, 0, 0.3)'
-                : 'rgba(255, 255, 255, 0.1)'
-            } 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${hexToRgba(primaryColor || '#FFFFFF', 0.3)} 0%, transparent 70%)`,
             animationDelay: `${i * 2}s`,
             animationDuration: `${15 + i * 3}s`,
           }}
         />
       ))}
+    </div>
+  );
+};
+
+// Event Selection Modal
+const EventSelectionModal = ({ 
+  isOpen, 
+  onClose, 
+  events, 
+  currentEventId,
+  guestId,
+  urlSlug 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  events: Event[]; 
+  currentEventId: string;
+  guestId: string;
+  urlSlug: string;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
       
-      {/* Floating petals/elements based on event type */}
-      {eventType === 'mehendi' || eventType === 'mehandi' ? (
-        // Mehendi cone patterns
-        [...Array(4)].map((_, i) => (
-          <div
-            key={`mehendi-${i}`}
-            className="absolute text-4xl animate-float-slow opacity-20"
-            style={{
-              left: `${20 + i * 20}%`,
-              animationDelay: `${i * 3}s`,
-              animationDuration: '20s',
-            }}
-          >
-            🌿
-          </div>
-        ))
-      ) : eventType === 'haldi' ? (
-        // Flower petals for Haldi
-        [...Array(4)].map((_, i) => (
-          <div
-            key={`haldi-${i}`}
-            className="absolute text-3xl animate-float-slow opacity-20"
-            style={{
-              left: `${15 + i * 25}%`,
-              animationDelay: `${i * 2}s`,
-              animationDuration: '18s',
-            }}
-          >
-            🌼
-          </div>
-        ))
-      ) : null}
+      {/* Modal */}
+      <div className="relative bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">All Your Events</h2>
+        
+        <div className="grid gap-4 sm:grid-cols-2">
+          {events.map((event, index) => {
+            const eventDate = new Date(event.event_date);
+            const isCurrentEvent = event.id === currentEventId;
+            
+            return (
+              <Link
+                key={event.id}
+                href={`/wedding/${urlSlug}/event?guest=${guestId}&index=${index}`}
+                onClick={onClose}
+                className={cn(
+                  "relative p-4 rounded-xl border-2 transition-all hover:scale-105",
+                  isCurrentEvent 
+                    ? "border-blue-500 bg-blue-50" 
+                    : "border-gray-200 hover:border-gray-400 bg-white"
+                )}
+              >
+                {isCurrentEvent && (
+                  <div className="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                    Current
+                  </div>
+                )}
+                
+                <div className="flex items-start gap-3">
+                  {event.icon && (
+                    <div 
+                      className="w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ 
+                        backgroundColor: `${event.primary_color || '#E91E63'}20`
+                      }}
+                    >
+                      <FontAwesomeIcon 
+                        icon={['fas', event.icon as any]} 
+                        className="text-lg"
+                        style={{ color: event.primary_color || '#E91E63' }}
+                      />
+                    </div>
+                  )}
+                  
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-800">{event.name}</h3>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {eventDate.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">{event.venue}</p>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+        
+        <button
+          onClick={onClose}
+          className="mt-6 w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-gray-700 transition-colors"
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 };
@@ -171,12 +204,14 @@ export default function UpcomingEventMinimal({
   const [showGuestCount, setShowGuestCount] = useState(rsvpStatus === 'yes');
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [prevPlusOnes, setPrevPlusOnes] = useState(plusOnes);
+  const [showEventModal, setShowEventModal] = useState(false);
 
-  const eventType = event.event_type?.toLowerCase() || 'wedding';
-  const backgroundImage = eventBackgrounds[eventType] || eventBackgrounds.wedding;
-  const theme = eventThemes[eventType] || eventThemes.wedding;
+  // Use dynamic data from Supabase
+  const backgroundImage = event.background_image || '/templates/assets/event_type/wedding.jpg';
+  const primaryColor = event.primary_color || '#E91E63';
+  const secondaryColor = event.secondary_color || '#FF4081';
+  const accentColor = event.accent_color || '#D4AF37';
   const showChat = website.show_chat !== false;
-  const customDescription = eventDescriptions[eventType] || event.description;
 
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
@@ -272,8 +307,6 @@ export default function UpcomingEventMinimal({
   const currentEventIndex = allEvents.findIndex(e => e.id === event.id);
   const hasPrevEvent = currentEventIndex > 0;
   const hasNextEvent = currentEventIndex < allEvents.length - 1;
-  const prevEventName = hasPrevEvent ? allEvents[currentEventIndex - 1].name : null;
-  const nextEventName = hasNextEvent ? allEvents[currentEventIndex + 1].name : null;
 
   return (
     <div className="min-h-screen relative">
@@ -301,7 +334,7 @@ export default function UpcomingEventMinimal({
           background: linear-gradient(
             45deg,
             transparent 30%,
-            rgba(212, 175, 55, 0.5) 50%,
+            ${accentColor}80 50%,
             transparent 70%
           );
           background-size: 200% 200%;
@@ -326,8 +359,30 @@ export default function UpcomingEventMinimal({
         {/* Enhanced gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60" />
         
-        {/* Bokeh animation */}
-        <BokehBackground eventType={eventType} />
+        {/* Bokeh animation with dynamic color */}
+        <BokehBackground primaryColor={primaryColor} />
+        
+        {/* Floating icon elements based on event icon */}
+        {event.icon && (
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={`icon-${i}`}
+                className="absolute animate-float-slow opacity-10"
+                style={{
+                  left: `${20 + i * 30}%`,
+                  animationDelay: `${i * 4}s`,
+                  animationDuration: '22s',
+                }}
+              >
+                <FontAwesomeIcon 
+                  icon={['fas', event.icon as any]} 
+                  className="text-6xl text-white"
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Content Overlay */}
@@ -340,49 +395,47 @@ export default function UpcomingEventMinimal({
               <Link 
                 href={hasPrevEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex - 1}` : '#'}
                 className={cn(
-                  "flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10",
-                  !hasPrevEvent && "opacity-50 pointer-events-none"
+                  "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
+                  hasPrevEvent 
+                    ? "bg-white/20 hover:bg-white/30 backdrop-blur-md shadow-lg" 
+                    : "bg-white/10 opacity-50 cursor-not-allowed"
                 )}
               >
-                <ChevronLeft className="w-5 h-5" />
-                <span className="text-xs sm:text-sm">
-                  <span className="sm:hidden">Prev</span>
-                  <span className="hidden sm:inline">Previous</span>
-                  {prevEventName && (
-                    <span className="block sm:hidden text-[10px] mt-0.5 text-white/60">
-                      {prevEventName.split(' ')[0]}
-                    </span>
-                  )}
-                </span>
+                <ChevronLeft className="w-4 h-4" />
+                <span className="hidden sm:inline text-sm">Previous</span>
               </Link>
 
-              {/* Center - View Website */}
-              <Link 
-                href={`/wedding/${website.url_slug}?guest=${guest.id}`}
-                className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
-              >
-                <ExternalLink className="w-4 h-4" />
-                <span className="text-sm sm:text-base">View Website</span>
-              </Link>
+              {/* Center Buttons */}
+              <div className="flex items-center gap-2">
+                <Link 
+                  href={`/wedding/${website.url_slug}?guest=${guest.id}`}
+                  className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span className="text-sm">View Website</span>
+                </Link>
+                
+                <button
+                  onClick={() => setShowEventModal(true)}
+                  className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
+                >
+                  <Grid3x3 className="w-4 h-4" />
+                  <span className="text-sm">All Events</span>
+                </button>
+              </div>
 
               {/* Next Event */}
               <Link 
                 href={hasNextEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex + 1}` : '#'}
                 className={cn(
-                  "flex flex-col-reverse sm:flex-row items-center gap-1 sm:gap-2 text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10",
-                  !hasNextEvent && "opacity-50 pointer-events-none"
+                  "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
+                  hasNextEvent 
+                    ? "bg-white/20 hover:bg-white/30 backdrop-blur-md shadow-lg" 
+                    : "bg-white/10 opacity-50 cursor-not-allowed"
                 )}
               >
-                <span className="text-xs sm:text-sm">
-                  <span className="sm:hidden">Next</span>
-                  <span className="hidden sm:inline">Next</span>
-                  {nextEventName && (
-                    <span className="block sm:hidden text-[10px] mt-0.5 text-white/60">
-                      {nextEventName.split(' ')[0]}
-                    </span>
-                  )}
-                </span>
-                <ChevronRight className="w-5 h-5" />
+                <span className="hidden sm:inline text-sm">Next</span>
+                <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -397,8 +450,8 @@ export default function UpcomingEventMinimal({
                 <div 
                   className="absolute inset-0 rounded-full border-4"
                   style={{ 
-                    borderColor: theme.gold,
-                    boxShadow: `0 0 30px ${theme.gold}40`
+                    borderColor: accentColor,
+                    boxShadow: `0 0 30px ${accentColor}40`
                   }}
                 />
                 <Image
@@ -430,14 +483,14 @@ export default function UpcomingEventMinimal({
                     <div 
                       className="w-14 h-14 rounded-full backdrop-blur flex items-center justify-center shadow-lg"
                       style={{ 
-                        background: `linear-gradient(135deg, ${theme.primary}40, ${theme.secondary}40)`,
-                        borderColor: theme.gold,
+                        background: `linear-gradient(135deg, ${primaryColor}40, ${secondaryColor}40)`,
+                        borderColor: accentColor,
                         borderWidth: '2px',
                         borderStyle: 'solid'
                       }}
                     >
                       <FontAwesomeIcon 
-                        icon={['fas', (event.icon || 'calendar') as any]} 
+                        icon={['fas', event.icon as any]} 
                         className="text-white text-xl"
                       />
                     </div>
@@ -446,9 +499,11 @@ export default function UpcomingEventMinimal({
                     {event.name}
                   </h1>
                 </div>
-                <p className="text-white/90 text-lg max-w-lg mx-auto italic">
-                  "{customDescription}"
-                </p>
+                {event.description && (
+                  <p className="text-white/90 text-lg max-w-lg mx-auto italic">
+                    "{event.description}"
+                  </p>
+                )}
               </div>
 
               <div className="h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
@@ -534,8 +589,8 @@ export default function UpcomingEventMinimal({
                       : 'bg-white hover:bg-gray-50 text-gray-600 hover:scale-105'
                   )}
                   style={{
-                    backgroundColor: rsvpStatus === 'yes' ? theme.primary : undefined,
-                    boxShadow: rsvpStatus === 'yes' ? `0 10px 30px ${theme.primary}40` : undefined,
+                    backgroundColor: rsvpStatus === 'yes' ? primaryColor : undefined,
+                    boxShadow: rsvpStatus === 'yes' ? `0 10px 30px ${primaryColor}40` : undefined,
                   }}
                 >
                   <Check className={cn(
@@ -555,8 +610,8 @@ export default function UpcomingEventMinimal({
                       : 'bg-white hover:bg-gray-50 text-gray-600 hover:scale-105'
                   )}
                   style={{
-                    backgroundColor: rsvpStatus === 'no' ? theme.primary : undefined,
-                    boxShadow: rsvpStatus === 'no' ? `0 10px 30px ${theme.primary}40` : undefined,
+                    backgroundColor: rsvpStatus === 'no' ? primaryColor : undefined,
+                    boxShadow: rsvpStatus === 'no' ? `0 10px 30px ${primaryColor}40` : undefined,
                   }}
                 >
                   <X className={cn(
@@ -576,8 +631,8 @@ export default function UpcomingEventMinimal({
                       : 'bg-white hover:bg-gray-50 text-gray-600 hover:scale-105'
                   )}
                   style={{
-                    backgroundColor: rsvpStatus === 'maybe' ? theme.primary : undefined,
-                    boxShadow: rsvpStatus === 'maybe' ? `0 10px 30px ${theme.primary}40` : undefined,
+                    backgroundColor: rsvpStatus === 'maybe' ? primaryColor : undefined,
+                    boxShadow: rsvpStatus === 'maybe' ? `0 10px 30px ${primaryColor}40` : undefined,
                   }}
                 >
                   <HelpCircle className={cn(
@@ -600,16 +655,16 @@ export default function UpcomingEventMinimal({
                       onClick={() => updateGuestCount(Math.max(1, plusOnes - 1))}
                       className="relative w-12 h-12 rounded-full transition-all hover:scale-110 group"
                       style={{ 
-                        background: `linear-gradient(135deg, ${theme.primary}20, ${theme.secondary}20)`,
-                        borderColor: theme.primary,
+                        background: `linear-gradient(135deg, ${primaryColor}20, ${secondaryColor}20)`,
+                        borderColor: primaryColor,
                         borderWidth: '2px',
                         borderStyle: 'solid'
                       }}
                     >
-                      <span className="text-xl font-bold" style={{ color: theme.primary }}>−</span>
+                      <span className="text-xl font-bold" style={{ color: primaryColor }}>−</span>
                       <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ 
-                          background: `radial-gradient(circle, ${theme.gold}20, transparent)`,
+                          background: `radial-gradient(circle, ${accentColor}20, transparent)`,
                         }}
                       />
                     </button>
@@ -618,7 +673,7 @@ export default function UpcomingEventMinimal({
                       <span 
                         className="text-3xl font-bold w-16 text-center block transition-all duration-300"
                         style={{ 
-                          color: theme.primary,
+                          color: primaryColor,
                           transform: plusOnes !== prevPlusOnes ? 'scale(1.2)' : 'scale(1)',
                         }}
                       >
@@ -630,16 +685,16 @@ export default function UpcomingEventMinimal({
                       onClick={() => updateGuestCount(plusOnes + 1)}
                       className="relative w-12 h-12 rounded-full transition-all hover:scale-110 group"
                       style={{ 
-                        background: `linear-gradient(135deg, ${theme.primary}20, ${theme.secondary}20)`,
-                        borderColor: theme.primary,
+                        background: `linear-gradient(135deg, ${primaryColor}20, ${secondaryColor}20)`,
+                        borderColor: primaryColor,
                         borderWidth: '2px',
                         borderStyle: 'solid'
                       }}
                     >
-                      <span className="text-xl font-bold" style={{ color: theme.primary }}>+</span>
+                      <span className="text-xl font-bold" style={{ color: primaryColor }}>+</span>
                       <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ 
-                          background: `radial-gradient(circle, ${theme.gold}20, transparent)`,
+                          background: `radial-gradient(circle, ${accentColor}20, transparent)`,
                         }}
                       />
                     </button>
@@ -672,6 +727,16 @@ export default function UpcomingEventMinimal({
           </div>
         </div>
       </div>
+
+      {/* Event Selection Modal */}
+      <EventSelectionModal
+        isOpen={showEventModal}
+        onClose={() => setShowEventModal(false)}
+        events={allEvents}
+        currentEventId={event.id}
+        guestId={guest.id}
+        urlSlug={website.url_slug}
+      />
 
       {/* Chat Bar */}
       {showChat && (

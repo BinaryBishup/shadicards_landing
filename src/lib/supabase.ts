@@ -103,6 +103,10 @@ export interface Event {
   icon: string | null;
   color: string | null;
   event_type: string | null;
+  background_image: string | null;
+  primary_color: string | null;
+  secondary_color: string | null;
+  accent_color: string | null;
 }
 
 export interface EventInvitation {
