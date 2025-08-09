@@ -3,8 +3,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import ChatBar from "./ChatBar";
+import EventLoadingScreen from "./EventLoadingScreen";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Navigation, Check, X, HelpCircle, Users, ExternalLink, Grid3x3 } from "lucide-react";
@@ -129,12 +131,15 @@ const EventSelectionModal = ({
             const isCurrentEvent = event.id === currentEventId;
             
             return (
-              <Link
+              <button
                 key={event.id}
-                href={`/wedding/${urlSlug}/event?guest=${guestId}&index=${index}`}
-                onClick={onClose}
+                onClick={() => {
+                  onClose();
+                  // Use window.location for full page reload to show loading
+                  window.location.href = `/wedding/${urlSlug}/event?guest=${guestId}&index=${index}`;
+                }}
                 className={cn(
-                  "relative p-4 rounded-xl border-2 transition-all hover:scale-105",
+                  "relative p-4 rounded-xl border-2 transition-all hover:scale-105 w-full text-left",
                   isCurrentEvent 
                     ? "border-blue-500 bg-blue-50" 
                     : "border-gray-200 hover:border-gray-400 bg-white"
@@ -174,7 +179,7 @@ const EventSelectionModal = ({
                     <p className="text-xs text-gray-500 mt-1">{event.venue}</p>
                   </div>
                 </div>
-              </Link>
+              </button>
             );
           })}
         </div>
@@ -198,6 +203,7 @@ export default function UpcomingEventMinimal({
   allEvents = [],
   onEditProfile
 }: UpcomingEventProps) {
+  const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 1);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -205,6 +211,8 @@ export default function UpcomingEventMinimal({
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [prevPlusOnes, setPrevPlusOnes] = useState(plusOnes);
   const [showEventModal, setShowEventModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Use dynamic data from Supabase
   const backgroundImage = event.background_image || '/templates/assets/event_type/wedding.jpg';
@@ -212,6 +220,14 @@ export default function UpcomingEventMinimal({
   const secondaryColor = event.secondary_color || '#FF4081';
   const accentColor = event.accent_color || '#D4AF37';
   const showChat = website.show_chat !== false;
+
+  // Set initial load to false after component mounts
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 500); // Short delay to show loading screen
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
@@ -308,6 +324,17 @@ export default function UpcomingEventMinimal({
   const hasPrevEvent = currentEventIndex > 0;
   const hasNextEvent = currentEventIndex < allEvents.length - 1;
 
+  // Handle navigation with loading state
+  const handleNavigation = (url: string) => {
+    setIsLoading(true);
+    router.push(url);
+  };
+
+  // Show loading screen when navigating or initial load
+  if (isLoading || isInitialLoad) {
+    return <EventLoadingScreen eventName={event.name} />;
+  }
+
   return (
     <div className="min-h-screen relative">
       <style jsx global>{`
@@ -392,8 +419,9 @@ export default function UpcomingEventMinimal({
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between gap-2">
               {/* Previous Event */}
-              <Link 
-                href={hasPrevEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex - 1}` : '#'}
+              <button
+                onClick={() => hasPrevEvent && handleNavigation(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex - 1}`)}
+                disabled={!hasPrevEvent}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
                   hasPrevEvent 
@@ -403,7 +431,7 @@ export default function UpcomingEventMinimal({
               >
                 <ChevronLeft className="w-4 h-4" />
                 <span className="hidden sm:inline text-sm">Previous</span>
-              </Link>
+              </button>
 
               {/* Center Buttons */}
               <div className="flex items-center gap-2">
@@ -425,8 +453,9 @@ export default function UpcomingEventMinimal({
               </div>
 
               {/* Next Event */}
-              <Link 
-                href={hasNextEvent ? `/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex + 1}` : '#'}
+              <button
+                onClick={() => hasNextEvent && handleNavigation(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex + 1}`)}
+                disabled={!hasNextEvent}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
                   hasNextEvent 
@@ -436,7 +465,7 @@ export default function UpcomingEventMinimal({
               >
                 <span className="hidden sm:inline text-sm">Next</span>
                 <ChevronRight className="w-4 h-4" />
-              </Link>
+              </button>
             </div>
           </div>
         </div>
