@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 import ChatBar from "./ChatBar";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, Home, Calendar, Clock, MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, Home, Calendar, Clock, MapPin, Navigation } from "lucide-react";
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -58,6 +58,7 @@ export default function UpcomingEventMinimal({
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 1);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showGuestCount, setShowGuestCount] = useState(rsvpStatus === 'yes');
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const eventType = event.event_type?.toLowerCase() || 'wedding';
   const backgroundImage = eventBackgrounds[eventType] || eventBackgrounds.wedding;
@@ -67,6 +68,31 @@ export default function UpcomingEventMinimal({
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
   }, [rsvpStatus]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const eventDateTime = new Date(`${event.event_date}T${event.start_time}`);
+      const now = new Date();
+      const difference = eventDateTime.getTime() - now.getTime();
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        setCountdown({ days, hours, minutes, seconds });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
+    calculateCountdown();
+    const timer = setInterval(calculateCountdown, 1000);
+
+    return () => clearInterval(timer);
+  }, [event.event_date, event.start_time]);
 
   const handleRSVPUpdate = async (status: 'yes' | 'no' | 'maybe') => {
     if (status === rsvpStatus) return;
@@ -221,12 +247,14 @@ export default function UpcomingEventMinimal({
               </div>
             )}
 
-            {/* Couple Names */}
+            {/* Guest Welcome */}
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-2">
-                {website.wedding.bride_name} & {website.wedding.groom_name}
+                Welcome, {guest.name}
               </h2>
-              <p className="text-white/80 text-lg">invite you to celebrate</p>
+              <p className="text-white/80 text-lg">
+                You are invited to {website.wedding.bride_name} & {website.wedding.groom_name}'s celebration
+              </p>
             </div>
 
             {/* Event Details Glass Card */}
@@ -255,42 +283,65 @@ export default function UpcomingEventMinimal({
 
               <div className="h-px bg-white/20" />
 
-              {/* Event Timing */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-center gap-2 text-white">
-                  <Calendar className="w-5 h-5" />
-                  <span className="text-xl font-medium">{formatDate(event.event_date)}</span>
+              {/* Countdown Timer */}
+              <div className="space-y-4">
+                <h3 className="text-white/80 text-sm uppercase tracking-wider">Event Starts In</h3>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-white">{countdown.days}</div>
+                    <div className="text-white/60 text-xs uppercase">Days</div>
+                  </div>
+                  <div className="text-white/40 text-2xl">:</div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-white">{countdown.hours}</div>
+                    <div className="text-white/60 text-xs uppercase">Hours</div>
+                  </div>
+                  <div className="text-white/40 text-2xl">:</div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-white">{countdown.minutes}</div>
+                    <div className="text-white/60 text-xs uppercase">Min</div>
+                  </div>
+                  <div className="text-white/40 text-2xl">:</div>
+                  <div className="text-center">
+                    <div className="text-3xl md:text-4xl font-bold text-white">{countdown.seconds}</div>
+                    <div className="text-white/60 text-xs uppercase">Sec</div>
+                  </div>
                 </div>
-                <div className="flex items-center justify-center gap-2 text-white/90">
-                  <Clock className="w-5 h-5" />
-                  <span className="text-lg">{formatTime(event.start_time)} - {formatTime(event.end_time)}</span>
+                
+                {/* Date and Time Below Countdown */}
+                <div className="space-y-1 pt-2">
+                  <div className="flex items-center justify-center gap-2 text-white/80">
+                    <Calendar className="w-4 h-4" />
+                    <span className="text-sm">{formatDate(event.event_date)}</span>
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-white/70">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-sm">{formatTime(event.start_time)} - {formatTime(event.end_time)}</span>
+                  </div>
                 </div>
               </div>
 
               <div className="h-px bg-white/20" />
 
-              {/* Venue with Google Maps */}
+              {/* Venue with Location Button */}
               <div className="space-y-4">
-                <div className="flex items-center justify-center gap-2 text-white">
-                  <MapPin className="w-5 h-5" />
-                  <span className="text-xl">{event.venue}</span>
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2 text-white">
+                    <MapPin className="w-5 h-5" />
+                    <span className="text-xl font-medium">{event.venue}</span>
+                  </div>
+                  {event.address && (
+                    <p className="text-white/80 text-sm max-w-md mx-auto">{event.address}</p>
+                  )}
                 </div>
-                {event.address && (
-                  <p className="text-white/80">{event.address}</p>
-                )}
                 
-                {/* Google Maps Button */}
+                {/* Open Location Button */}
                 <button
                   onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(event.address || event.venue)}`, '_blank')}
-                  className="inline-block mx-auto hover:scale-105 transition-transform"
+                  className="inline-flex items-center gap-2 mx-auto bg-white/20 hover:bg-white/30 backdrop-blur-md px-6 py-3 rounded-full transition-all text-white font-medium shadow-lg hover:scale-105"
                 >
-                  <Image
-                    src="/templates/assets/google_maps.jpg"
-                    alt="Open in Google Maps"
-                    width={180}
-                    height={60}
-                    className="rounded-lg shadow-lg"
-                  />
+                  <Navigation className="w-5 h-5" />
+                  <span>Open Location</span>
                 </button>
               </div>
             </div>
