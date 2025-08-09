@@ -86,18 +86,28 @@ const AnimatedCounter = ({ value, label }: { value: number; label: string }) => 
 
 // Bokeh Background Animation
 const BokehBackground = ({ eventType }: { eventType: string }) => {
+  // Use deterministic values based on index instead of Math.random()
+  const bokehElements = [
+    { width: 150, height: 150, left: 20, top: 15 },
+    { width: 200, height: 200, left: 70, top: 60 },
+    { width: 120, height: 120, left: 40, top: 80 },
+    { width: 180, height: 180, left: 85, top: 25 },
+    { width: 160, height: 160, left: 10, top: 50 },
+    { width: 140, height: 140, left: 55, top: 35 },
+  ];
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Animated bokeh lights */}
-      {[...Array(6)].map((_, i) => (
+      {bokehElements.map((element, i) => (
         <div
           key={i}
           className="absolute rounded-full mix-blend-screen animate-float"
           style={{
-            width: `${Math.random() * 200 + 100}px`,
-            height: `${Math.random() * 200 + 100}px`,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            width: `${element.width}px`,
+            height: `${element.height}px`,
+            left: `${element.left}%`,
+            top: `${element.top}%`,
             background: `radial-gradient(circle, ${
               eventType === 'mehendi' || eventType === 'mehandi' 
                 ? 'rgba(34, 139, 34, 0.3)' 
