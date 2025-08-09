@@ -550,14 +550,22 @@ export default function UpcomingEventMinimal({
                   )}
                 </div>
                 
-                {/* Map Thumbnail */}
-                <div className="rounded-xl overflow-hidden border border-white/20 mx-auto max-w-sm">
-                  <div className="relative h-32 bg-gradient-to-br from-gray-200 to-gray-300">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <MapPin className="w-8 h-8 text-gray-600" />
-                    </div>
+                {/* Embedded Google Maps */}
+                {event.address && (
+                  <div className="rounded-xl overflow-hidden border border-white/20 mx-auto max-w-md shadow-lg">
+                    <iframe
+                      src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCsfh2X85nOg6Gfqf9ijty2EuJvY50PQhU&q=${encodeURIComponent(event.address)}&zoom=15`}
+                      width="100%"
+                      height="200"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="w-full"
+                      title={`Map showing ${event.venue}`}
+                    />
                   </div>
-                </div>
+                )}
                 
                 {/* Get Directions Button */}
                 <button
