@@ -27,7 +27,8 @@ interface UpcomingEventProps {
 // Event type backgrounds
 const eventBackgrounds: Record<string, string> = {
   haldi: '/templates/assets/event_type/haldi.jpg',
-  mehendi: '/templates/assets/event_type/mehendi.jpg',
+  mehendi: '/templates/assets/event_type/mehandi.jpg',  // Fixed spelling to match file
+  mehandi: '/templates/assets/event_type/mehandi.jpg',  // Support both spellings
   sangeet: '/templates/assets/event_type/sangeet.jpg',
   wedding: '/templates/assets/event_type/wedding.jpg',
   reception: '/templates/assets/event_type/reception.jpg',
@@ -38,6 +39,7 @@ const eventBackgrounds: Record<string, string> = {
 const eventThemes: Record<string, { primary: string; secondary: string }> = {
   haldi: { primary: '#FFA500', secondary: '#FFD700' },
   mehendi: { primary: '#228B22', secondary: '#90EE90' },
+  mehandi: { primary: '#228B22', secondary: '#90EE90' },  // Support both spellings
   sangeet: { primary: '#9B59B6', secondary: '#E74C3C' },
   wedding: { primary: '#E91E63', secondary: '#FF4081' },
   reception: { primary: '#2C3E50', secondary: '#34495E' },
@@ -211,63 +213,70 @@ export default function UpcomingEventMinimal({
               <p className="text-white/80 text-lg">invite you to celebrate</p>
             </div>
 
-            {/* Event Name & Description */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-center gap-3">
-                {event.icon && (
-                  <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
-                    <FontAwesomeIcon 
-                      icon={['fas', (event.icon || 'calendar') as any]} 
-                      className="text-white text-xl"
-                    />
-                  </div>
+            {/* Event Details Glass Card */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl space-y-6">
+              {/* Event Name & Description */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-center gap-3">
+                  {event.icon && (
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur flex items-center justify-center">
+                      <FontAwesomeIcon 
+                        icon={['fas', (event.icon || 'calendar') as any]} 
+                        className="text-white text-xl"
+                      />
+                    </div>
+                  )}
+                  <h1 className="text-3xl md:text-4xl font-bold text-white">
+                    {event.name}
+                  </h1>
+                </div>
+                {event.description && (
+                  <p className="text-white/90 text-lg max-w-lg mx-auto">
+                    {event.description}
+                  </p>
                 )}
-                <h1 className="text-3xl md:text-4xl font-bold text-white">
-                  {event.name}
-                </h1>
               </div>
-              {event.description && (
-                <p className="text-white/90 text-lg max-w-lg mx-auto">
-                  {event.description}
-                </p>
-              )}
-            </div>
 
-            {/* Event Timing */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-center gap-2 text-white">
-                <Calendar className="w-5 h-5" />
-                <span className="text-xl font-medium">{formatDate(event.event_date)}</span>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-white/90">
-                <Clock className="w-5 h-5" />
-                <span className="text-lg">{formatTime(event.start_time)} - {formatTime(event.end_time)}</span>
-              </div>
-            </div>
+              <div className="h-px bg-white/20" />
 
-            {/* Venue with Google Maps */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-center gap-2 text-white">
-                <MapPin className="w-5 h-5" />
-                <span className="text-xl">{event.venue}</span>
+              {/* Event Timing */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-2 text-white">
+                  <Calendar className="w-5 h-5" />
+                  <span className="text-xl font-medium">{formatDate(event.event_date)}</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-white/90">
+                  <Clock className="w-5 h-5" />
+                  <span className="text-lg">{formatTime(event.start_time)} - {formatTime(event.end_time)}</span>
+                </div>
               </div>
-              {event.address && (
-                <p className="text-white/80">{event.address}</p>
-              )}
-              
-              {/* Google Maps Button */}
-              <button
-                onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(event.address || event.venue)}`, '_blank')}
-                className="inline-block mx-auto hover:scale-105 transition-transform"
-              >
-                <Image
-                  src="/templates/assets/google_maps.jpg"
-                  alt="Open in Google Maps"
-                  width={180}
-                  height={60}
-                  className="rounded-lg shadow-lg"
-                />
-              </button>
+
+              <div className="h-px bg-white/20" />
+
+              {/* Venue with Google Maps */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-2 text-white">
+                  <MapPin className="w-5 h-5" />
+                  <span className="text-xl">{event.venue}</span>
+                </div>
+                {event.address && (
+                  <p className="text-white/80">{event.address}</p>
+                )}
+                
+                {/* Google Maps Button */}
+                <button
+                  onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(event.address || event.venue)}`, '_blank')}
+                  className="inline-block mx-auto hover:scale-105 transition-transform"
+                >
+                  <Image
+                    src="/templates/assets/google_maps.jpg"
+                    alt="Open in Google Maps"
+                    width={180}
+                    height={60}
+                    className="rounded-lg shadow-lg"
+                  />
+                </button>
+              </div>
             </div>
 
             {/* RSVP Card - Only Card Element */}
