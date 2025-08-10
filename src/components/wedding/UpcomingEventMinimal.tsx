@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import ChatBar from "./ChatBar";
 import EventLoadingScreen from "./EventLoadingScreen";
@@ -203,7 +202,6 @@ export default function UpcomingEventMinimal({
   allEvents = [],
   onEditProfile
 }: UpcomingEventProps) {
-  const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 1);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -212,7 +210,6 @@ export default function UpcomingEventMinimal({
   const [prevPlusOnes, setPrevPlusOnes] = useState(plusOnes);
   const [showEventModal, setShowEventModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Use dynamic data from Supabase
   const backgroundImage = event.background_image || '/templates/assets/event_type/wedding.jpg';
@@ -220,14 +217,6 @@ export default function UpcomingEventMinimal({
   const secondaryColor = event.secondary_color || '#FF4081';
   const accentColor = event.accent_color || '#D4AF37';
   const showChat = website.show_chat !== false;
-
-  // Set initial load to false after component mounts
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsInitialLoad(false);
-    }, 500); // Short delay to show loading screen
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
@@ -327,11 +316,12 @@ export default function UpcomingEventMinimal({
   // Handle navigation with loading state
   const handleNavigation = (url: string) => {
     setIsLoading(true);
-    router.push(url);
+    // Use window.location for full page reload to ensure proper data fetching
+    window.location.href = url;
   };
 
-  // Show loading screen when navigating or initial load
-  if (isLoading || isInitialLoad) {
+  // Show loading screen when navigating
+  if (isLoading) {
     return <EventLoadingScreen eventName={event.name} />;
   }
 
