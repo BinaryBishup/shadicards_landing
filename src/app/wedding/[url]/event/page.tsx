@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
-import UpcomingEventMinimal from "@/components/wedding/UpcomingEventMinimal";
+import EventPageClient from "@/components/wedding/EventPageClient";
 
 export const dynamic = 'force-dynamic';
 
@@ -109,7 +109,6 @@ export default async function EventPage({ params, searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
   
   const guestId = resolvedSearchParams.guest;
-  const eventIndex = parseInt(resolvedSearchParams.index || '0');
   
   if (!guestId) {
     notFound();
@@ -145,20 +144,12 @@ export default async function EventPage({ params, searchParams }: PageProps) {
     );
   }
 
-  // Get the specific event based on index (default to first event if index is 0 or not provided)
-  const currentIndex = Math.min(Math.max(0, eventIndex), guestEvents.length - 1);
-  const currentEventData = guestEvents[currentIndex];
-
-  // Create array of just events for navigation in UpcomingEventMinimal
-  const allInvitedEvents = guestEvents.map(ge => ge.event);
-
   return (
-    <UpcomingEventMinimal
-      website={website}
-      guest={guest}
-      event={currentEventData.event}
-      invitation={currentEventData.invitation}
-      allEvents={allInvitedEvents}
+    <EventPageClient
+      initialWebsite={website}
+      initialGuest={guest}
+      initialEvents={guestEvents}
+      urlSlug={resolvedParams.url}
     />
   );
 }

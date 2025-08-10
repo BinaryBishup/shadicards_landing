@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import ChatBar from "./ChatBar";
 import EventLoadingScreen from "./EventLoadingScreen";
@@ -22,6 +23,8 @@ interface UpcomingEventProps {
   event: Event;
   invitation: EventInvitation;
   allEvents?: Event[];
+  currentEventIndex?: number;
+  onNavigate?: (newIndex: number) => void;
   onEditProfile?: () => void;
 }
 
@@ -101,7 +104,8 @@ const EventSelectionModal = ({
   events, 
   currentEventId,
   guestId,
-  urlSlug 
+  urlSlug,
+  onEventSelect
 }: { 
   isOpen: boolean; 
   onClose: () => void; 
@@ -109,6 +113,7 @@ const EventSelectionModal = ({
   currentEventId: string;
   guestId: string;
   urlSlug: string;
+  onEventSelect?: (index: number) => void;
 }) => {
   if (!isOpen) return null;
 
@@ -134,8 +139,12 @@ const EventSelectionModal = ({
                 key={event.id}
                 onClick={() => {
                   onClose();
-                  // Use window.location for full page reload to show loading
-                  window.location.href = `/wedding/${urlSlug}/event?guest=${guestId}&index=${index}`;
+                  // Navigate to the selected event
+                  if (onEventSelect) {
+                    onEventSelect(index);
+                  } else {
+                    window.location.href = `/wedding/${urlSlug}/event?guest=${guestId}&index=${index}`;
+                  }
                 }}
                 className={cn(
                   "relative p-4 rounded-xl border-2 transition-all hover:scale-105 w-full text-left",
@@ -200,8 +209,11 @@ export default function UpcomingEventMinimal({
   event, 
   invitation,
   allEvents = [],
+  currentEventIndex,
+  onNavigate,
   onEditProfile
 }: UpcomingEventProps) {
+  const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 1);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -209,7 +221,6 @@ export default function UpcomingEventMinimal({
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [prevPlusOnes, setPrevPlusOnes] = useState(plusOnes);
   const [showEventModal, setShowEventModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   // Use dynamic data from Supabase
   const backgroundImage = event.background_image || '/templates/assets/event_type/wedding.jpg';
@@ -308,22 +319,20 @@ export default function UpcomingEventMinimal({
     return `${displayHour}:${minutes} ${ampm}`;
   };
 
-  // Find current event index
-  const currentEventIndex = allEvents.findIndex(e => e.id === event.id);
-  const hasPrevEvent = currentEventIndex > 0;
-  const hasNextEvent = currentEventIndex < allEvents.length - 1;
+  // Find current event index if not provided
+  const eventIndex = currentEventIndex !== undefined ? currentEventIndex : allEvents.findIndex(e => e.id === event.id);
+  const hasPrevEvent = eventIndex > 0;
+  const hasNextEvent = eventIndex < allEvents.length - 1;
 
-  // Handle navigation with loading state
-  const handleNavigation = (url: string) => {
-    setIsLoading(true);
-    // Use window.location for full page reload to ensure proper data fetching
-    window.location.href = url;
+  // Handle navigation
+  const handleNavigation = (newIndex: number) => {
+    if (onNavigate) {
+      onNavigate(newIndex);
+    } else {
+      // Fallback to router navigation
+      router.push(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${newIndex}`);
+    }
   };
-
-  // Show loading screen when navigating
-  if (isLoading) {
-    return <EventLoadingScreen eventName={event.name} />;
-  }
 
   return (
     <div className="min-h-screen relative">
@@ -410,7 +419,7 @@ export default function UpcomingEventMinimal({
             <div className="flex items-center justify-between gap-2">
               {/* Previous Event */}
               <button
-                onClick={() => hasPrevEvent && handleNavigation(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex - 1}`)}
+                onClick={() => hasPrevEvent && handleNavigation(eventIndex - 1)}
                 disabled={!hasPrevEvent}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
@@ -444,7 +453,7 @@ export default function UpcomingEventMinimal({
 
               {/* Next Event */}
               <button
-                onClick={() => hasNextEvent && handleNavigation(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${currentEventIndex + 1}`)}
+                onClick={() => hasNextEvent && handleNavigation(eventIndex + 1)}
                 disabled={!hasNextEvent}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-white font-medium",
@@ -763,6 +772,7 @@ export default function UpcomingEventMinimal({
         currentEventId={event.id}
         guestId={guest.id}
         urlSlug={website.url_slug}
+        onEventSelect={onNavigate ? (index) => { setShowEventModal(false); handleNavigation(index); } : undefined}
       />
 
       {/* Chat Bar */}
