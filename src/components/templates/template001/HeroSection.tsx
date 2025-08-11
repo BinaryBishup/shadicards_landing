@@ -18,29 +18,40 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
         .cursive-font {
           font-family: 'Great Vibes', cursive;
         }
+        @keyframes rotate-subtle {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        .rotate-animation {
+          animation: rotate-subtle 60s linear infinite;
+        }
       `}</style>
       
       {/* Main Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gray-50">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-12 md:py-16">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             
-            {/* Left Side - Couple Photo with Floral Frame */}
+            {/* Left Side - Couple Photo with Animated Floral Frame */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                {/* Floral Frame Background */}
-                <div className="absolute inset-0 -inset-x-20 -inset-y-20 md:-inset-x-24 md:-inset-y-24 lg:-inset-x-28 lg:-inset-y-28 pointer-events-none">
+                {/* Floral Frame Background - Bigger with Animation */}
+                <div className="absolute inset-0 -inset-x-28 -inset-y-28 md:-inset-x-36 md:-inset-y-36 lg:-inset-x-44 lg:-inset-y-44 pointer-events-none rotate-animation">
                   <Image
                     src="/templates/assets/flower_couple_background.png"
                     alt="Floral Frame"
-                    width={650}
-                    height={650}
+                    width={850}
+                    height={850}
                     className="w-full h-full object-contain"
                   />
                 </div>
                 
-                {/* Couple Photo - Smaller */}
-                <div className="relative w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                {/* Couple Photo - Bigger */}
+                <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl">
                   {data.coupleImage ? (
                     <Image
                       src={data.coupleImage}
@@ -61,37 +72,37 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
             <div className="text-center lg:text-center">
 
               {/* Calendar Design with Names and Flowers */}
-              <div className="relative max-w-lg mx-auto lg:ml-0">
-                {/* Names with Cursive Font - Inside Calendar */}
-                <div className="mb-4">
-                  <h1 className="cursive-font text-5xl md:text-6xl lg:text-7xl text-gray-800 leading-tight">
+              <div className="relative max-w-md mx-auto lg:ml-0">
+                {/* Top Floral Decoration - Much Bigger */}
+                <div className="absolute -top-20 left-0 right-0 h-40 pointer-events-none z-10">
+                  <Image
+                    src="/templates/assets/flower_calendar_top.png"
+                    alt="Calendar Top Decoration"
+                    width={800}
+                    height={160}
+                    className="w-full h-full object-contain scale-125"
+                  />
+                </div>
+
+                {/* Names with Cursive Font - Smaller to fit */}
+                <div className="mb-2 pt-16">
+                  <h1 className="cursive-font text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight">
                     <span>{data.brideName}</span>
-                    <span className="text-pink-500 mx-3">&</span>
+                    <span className="text-pink-500 mx-2">&</span>
                     <span>{data.groomName}</span>
                   </h1>
                   {data.tagline && (
-                    <p className="text-sm md:text-base text-gray-500 mt-2 italic">
+                    <p className="text-xs md:text-sm text-gray-500 mt-1 italic">
                       {data.tagline}
                     </p>
                   )}
                 </div>
 
-                {/* Top Floral Decoration */}
-                <div className="absolute -top-12 left-0 right-0 h-24 pointer-events-none z-10">
-                  <Image
-                    src="/templates/assets/flower_calendar_top.png"
-                    alt="Calendar Top Decoration"
-                    width={600}
-                    height={100}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-
-                {/* Calendar Container with Padding */}
-                <div className="pt-8 pb-10 px-4">
+                {/* Calendar Container - Smaller */}
+                <div className="px-2">
                   {/* Month and Year */}
-                  <div className="text-center mb-3">
-                    <h2 className="text-2xl md:text-3xl font-serif text-gray-700">
+                  <div className="text-center mb-2">
+                    <h2 className="text-xl md:text-2xl font-serif text-gray-700">
                       {new Date(data.weddingDate).toLocaleDateString('en-US', { 
                         month: 'long',
                         year: 'numeric'
@@ -99,20 +110,20 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                     </h2>
                   </div>
 
-                  {/* Calendar Grid */}
-                  <div className="px-4">
+                  {/* Calendar Grid - Compact */}
+                  <div className="px-2">
                     <CalendarGrid weddingDate={data.weddingDate} primaryColor={primaryColor} />
                   </div>
                 </div>
 
-                {/* Bottom Floral Decoration */}
-                <div className="absolute -bottom-10 left-0 right-0 h-20 pointer-events-none z-10">
+                {/* Bottom Floral Decoration - Much Bigger */}
+                <div className="absolute -bottom-16 left-0 right-0 h-32 pointer-events-none z-10">
                   <Image
                     src="/templates/assets/flower_calendar_down.png"
                     alt="Calendar Bottom Decoration"
-                    width={600}
-                    height={80}
-                    className="w-full h-full object-contain"
+                    width={800}
+                    height={130}
+                    className="w-full h-full object-contain scale-125"
                   />
                 </div>
               </div>
@@ -175,34 +186,34 @@ function CalendarGrid({ weddingDate, primaryColor }: { weddingDate: string; prim
   }
   
   return (
-    <div className="grid grid-cols-7 gap-x-4 gap-y-3 text-center">
+    <div className="grid grid-cols-7 gap-x-2 gap-y-1 text-center">
       {/* Days of week headers */}
       {daysOfWeek.map((day, index) => (
-        <div key={`header-${index}`} className="text-sm font-semibold text-gray-600">
+        <div key={`header-${index}`} className="text-xs font-semibold text-gray-600 tracking-tight">
           {day}
         </div>
       ))}
       
-      {/* Calendar days */}
+      {/* Calendar days - Compact */}
       {calendarDays.map((day, index) => (
         <div 
           key={`day-${index}`} 
           className={`
-            py-2 text-base rounded-full transition-all
+            py-1 text-sm rounded-full transition-all
             ${!day ? '' : day === weddingDay 
-              ? 'text-white font-bold shadow-lg transform scale-110' 
+              ? 'text-white font-bold shadow-lg transform scale-105' 
               : 'text-gray-700'
             }
           `}
           style={day === weddingDay ? {
-            backgroundColor: primaryColor
+            backgroundColor: '#ec4899'
           } : {}}
         >
           {day && (
             <>
               {day}
               {day === weddingDay && (
-                <Heart className="w-3 h-3 mx-auto mt-0.5" fill="currentColor" />
+                <Heart className="w-2 h-2 mx-auto mt-0.5" fill="currentColor" />
               )}
             </>
           )}
