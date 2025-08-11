@@ -67,9 +67,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
 
             {/* Social Media Icons */}
             <div className="flex justify-center gap-4">
-              {data.bride.socialMedia?.instagram && (
+              {data.bride.socials?.instagram && (
                 <a 
-                  href={data.bride.socialMedia.instagram}
+                  href={data.bride.socials.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-pink-500 transition-colors"
@@ -77,9 +77,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
                   <FaInstagram className="w-5 h-5" />
                 </a>
               )}
-              {data.bride.socialMedia?.facebook && (
+              {data.bride.socials?.facebook && (
                 <a 
-                  href={data.bride.socialMedia.facebook}
+                  href={data.bride.socials.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-blue-500 transition-colors"
@@ -87,9 +87,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
                   <FaFacebook className="w-5 h-5" />
                 </a>
               )}
-              {data.bride.socialMedia?.twitter && (
+              {data.bride.socials?.twitter && (
                 <a 
-                  href={data.bride.socialMedia.twitter}
+                  href={data.bride.socials.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-blue-400 transition-colors"
@@ -127,9 +127,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
 
             {/* Social Media Icons */}
             <div className="flex justify-center gap-4">
-              {data.groom.socialMedia?.instagram && (
+              {data.groom.socials?.instagram && (
                 <a 
-                  href={data.groom.socialMedia.instagram}
+                  href={data.groom.socials.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-pink-500 transition-colors"
@@ -137,9 +137,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
                   <FaInstagram className="w-5 h-5" />
                 </a>
               )}
-              {data.groom.socialMedia?.facebook && (
+              {data.groom.socials?.facebook && (
                 <a 
-                  href={data.groom.socialMedia.facebook}
+                  href={data.groom.socials.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-blue-500 transition-colors"
@@ -147,9 +147,9 @@ export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSe
                   <FaFacebook className="w-5 h-5" />
                 </a>
               )}
-              {data.groom.socialMedia?.twitter && (
+              {data.groom.socials?.twitter && (
                 <a 
-                  href={data.groom.socialMedia.twitter}
+                  href={data.groom.socials.twitter}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-600 hover:text-blue-400 transition-colors"
