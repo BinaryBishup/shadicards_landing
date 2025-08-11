@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
+import type { Wedding, WeddingWebsite, Guest, Event as SupabaseEvent, EventInvitation } from "@/lib/supabase";
 import EventPageClient from "@/components/wedding/EventPageClient";
 
 export const dynamic = 'force-dynamic';
@@ -89,13 +89,13 @@ async function getGuestEvents(weddingId: string, guestId: string) {
   }
 
   // Combine events with invitations - only return events guest is invited to
-  const guestEvents: { event: Event; invitation: EventInvitation }[] = [];
+  const guestEvents: { event: SupabaseEvent; invitation: EventInvitation }[] = [];
   
   for (const event of events) {
     const invitation = invitations?.find(inv => inv.event_id === event.id);
     if (invitation) {
       guestEvents.push({
-        event: event as Event,
+        event: event as SupabaseEvent,
         invitation: invitation as EventInvitation
       });
     }

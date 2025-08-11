@@ -12,123 +12,139 @@ interface HeroSectionProps {
 
 export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSectionProps) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-50">
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-12 md:py-16">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          
-          {/* Left Side - Couple Photo with Floral Frame */}
-          <div className="flex justify-center lg:justify-end order-2 lg:order-1">
-            <div className="relative">
-              {/* Floral Frame Background - Larger on desktop */}
-              <div className="absolute inset-0 -inset-x-16 -inset-y-16 md:-inset-x-20 md:-inset-y-20 lg:-inset-x-24 lg:-inset-y-24 pointer-events-none">
-                <Image
-                  src="/templates/assets/flower_couple_background.png"
-                  alt="Floral Frame"
-                  width={600}
-                  height={600}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              
-              {/* Couple Photo - Larger on desktop */}
-              <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-4 border-white shadow-2xl">
-                {data.coupleImage ? (
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+        .cursive-font {
+          font-family: 'Great Vibes', cursive;
+        }
+      `}</style>
+      
+      {/* Main Hero Section */}
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gray-50">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-12 md:py-16">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            
+            {/* Left Side - Couple Photo with Floral Frame */}
+            <div className="flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* Floral Frame Background */}
+                <div className="absolute inset-0 -inset-x-20 -inset-y-20 md:-inset-x-24 md:-inset-y-24 lg:-inset-x-28 lg:-inset-y-28 pointer-events-none">
                   <Image
-                    src={data.coupleImage}
-                    alt={`${data.brideName} & ${data.groomName}`}
-                    fill
-                    className="object-cover"
+                    src="/templates/assets/flower_couple_background.png"
+                    alt="Floral Frame"
+                    width={650}
+                    height={650}
+                    className="w-full h-full object-contain"
                   />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
-                    <Heart className="w-32 h-32 text-blue-200" fill="currentColor" />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Side - Names and Calendar */}
-          <div className="text-center lg:text-left space-y-6 order-1 lg:order-2">
-            {/* Names - Using exact style from reference */}
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl text-gray-800">
-                <span className="font-normal">{data.brideName}</span>
-                <span className="block text-3xl md:text-4xl my-2" style={{ color: primaryColor }}>
-                  &
-                </span>
-                <span className="font-normal">{data.groomName}</span>
-              </h1>
-              {data.tagline && (
-                <p className="text-base md:text-lg text-gray-500 mt-4">
-                  {data.tagline}
-                </p>
-              )}
-            </div>
-
-            {/* Calendar Design - Transparent background, compact spacing */}
-            <div className="relative max-w-md mx-auto lg:mx-0">
-              {/* Top Floral Decoration - Larger */}
-              <div className="absolute -top-12 left-0 right-0 h-20 md:h-24 pointer-events-none z-10">
-                <Image
-                  src="/templates/assets/flower_calendar_top.png"
-                  alt="Calendar Top Decoration"
-                  width={500}
-                  height={80}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-
-              {/* Month and Year */}
-              <div className="text-center mb-2 pt-8">
-                <h2 className="text-xl md:text-2xl font-light text-gray-700">
-                  {new Date(data.weddingDate).toLocaleDateString('en-US', { 
-                    month: 'long',
-                    year: 'numeric'
-                  })}
-                </h2>
-              </div>
-
-              {/* Calendar Grid - Compact with no background */}
-              <div className="px-4">
-                <CalendarGrid weddingDate={data.weddingDate} primaryColor={primaryColor} />
-              </div>
-
-              {/* Bottom Floral Decoration - Larger */}
-              <div className="absolute -bottom-10 left-0 right-0 h-16 md:h-20 pointer-events-none z-10">
-                <Image
-                  src="/templates/assets/flower_calendar_down.png"
-                  alt="Calendar Bottom Decoration"
-                  width={500}
-                  height={60}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            </div>
-
-            {/* Venue Only - No time */}
-            {data.venue && (
-              <div className="pt-4">
-                <div className="flex items-center gap-3 justify-center lg:justify-start">
-                  <MapPin className="w-5 h-5" style={{ color: primaryColor }} />
-                  <p className="text-gray-700">
-                    <span className="font-medium">Venue:</span> {data.venue}
-                  </p>
+                </div>
+                
+                {/* Couple Photo - Smaller */}
+                <div className="relative w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                  {data.coupleImage ? (
+                    <Image
+                      src={data.coupleImage}
+                      alt={`${data.brideName} & ${data.groomName}`}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                      <Heart className="w-24 h-24 text-blue-200" fill="currentColor" />
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
+            </div>
 
-            {/* Countdown Timer */}
-            <div className="pt-2">
-              <p className="text-xs text-gray-500 uppercase tracking-wider text-center lg:text-left mb-3">
-                Countdown to the big day
-              </p>
-              <CountdownTimer targetDate={data.weddingDate} primaryColor={primaryColor} />
+            {/* Right Side - Calendar with Names Inside */}
+            <div className="text-center lg:text-center">
+
+              {/* Calendar Design with Names and Flowers */}
+              <div className="relative max-w-lg mx-auto lg:ml-0">
+                {/* Names with Cursive Font - Inside Calendar */}
+                <div className="mb-4">
+                  <h1 className="cursive-font text-5xl md:text-6xl lg:text-7xl text-gray-800 leading-tight">
+                    <span>{data.brideName}</span>
+                    <span className="text-pink-500 mx-3">&</span>
+                    <span>{data.groomName}</span>
+                  </h1>
+                  {data.tagline && (
+                    <p className="text-sm md:text-base text-gray-500 mt-2 italic">
+                      {data.tagline}
+                    </p>
+                  )}
+                </div>
+
+                {/* Top Floral Decoration */}
+                <div className="absolute -top-12 left-0 right-0 h-24 pointer-events-none z-10">
+                  <Image
+                    src="/templates/assets/flower_calendar_top.png"
+                    alt="Calendar Top Decoration"
+                    width={600}
+                    height={100}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {/* Calendar Container with Padding */}
+                <div className="pt-8 pb-10 px-4">
+                  {/* Month and Year */}
+                  <div className="text-center mb-3">
+                    <h2 className="text-2xl md:text-3xl font-serif text-gray-700">
+                      {new Date(data.weddingDate).toLocaleDateString('en-US', { 
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </h2>
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div className="px-4">
+                    <CalendarGrid weddingDate={data.weddingDate} primaryColor={primaryColor} />
+                  </div>
+                </div>
+
+                {/* Bottom Floral Decoration */}
+                <div className="absolute -bottom-10 left-0 right-0 h-20 pointer-events-none z-10">
+                  <Image
+                    src="/templates/assets/flower_calendar_down.png"
+                    alt="Calendar Bottom Decoration"
+                    width={600}
+                    height={80}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+
+              {/* Venue */}
+              {data.venue && (
+                <div className="pt-4">
+                  <div className="flex items-center gap-3 justify-center">
+                    <MapPin className="w-5 h-5" style={{ color: primaryColor }} />
+                    <p className="text-gray-700">
+                      <span className="font-medium">Venue:</span> {data.venue}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Countdown Section - Full Width Below */}
+      <section className="bg-white py-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p className="text-sm text-gray-500 uppercase tracking-wider mb-6">
+              Countdown to the big day
+            </p>
+            <CountdownTimer targetDate={data.weddingDate} primaryColor={primaryColor} />
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -159,23 +175,23 @@ function CalendarGrid({ weddingDate, primaryColor }: { weddingDate: string; prim
   }
   
   return (
-    <div className="grid grid-cols-7 gap-x-2 gap-y-1 text-center">
+    <div className="grid grid-cols-7 gap-x-4 gap-y-3 text-center">
       {/* Days of week headers */}
       {daysOfWeek.map((day, index) => (
-        <div key={`header-${index}`} className="text-xs font-medium text-gray-500 py-1">
+        <div key={`header-${index}`} className="text-sm font-semibold text-gray-600">
           {day}
         </div>
       ))}
       
-      {/* Calendar days - Compact spacing */}
+      {/* Calendar days */}
       {calendarDays.map((day, index) => (
         <div 
           key={`day-${index}`} 
           className={`
-            py-1 text-sm rounded-md transition-all
+            py-2 text-base rounded-full transition-all
             ${!day ? '' : day === weddingDay 
-              ? 'text-white font-semibold shadow-lg transform scale-110' 
-              : 'text-gray-600 hover:bg-gray-100'
+              ? 'text-white font-bold shadow-lg transform scale-110' 
+              : 'text-gray-700'
             }
           `}
           style={day === weddingDay ? {
@@ -186,7 +202,7 @@ function CalendarGrid({ weddingDate, primaryColor }: { weddingDate: string; prim
             <>
               {day}
               {day === weddingDay && (
-                <Heart className="w-2.5 h-2.5 mx-auto mt-0.5" fill="currentColor" />
+                <Heart className="w-3 h-3 mx-auto mt-0.5" fill="currentColor" />
               )}
             </>
           )}
@@ -229,13 +245,13 @@ function CountdownTimer({ targetDate, primaryColor }: { targetDate: string; prim
   }, [targetDate]);
 
   return (
-    <div className="flex gap-2 md:gap-3 justify-center lg:justify-start">
+    <div className="flex gap-4 md:gap-8 justify-center">
       {Object.entries(timeLeft).map(([unit, value]) => (
-        <div key={unit} className="bg-white rounded-lg shadow-sm p-2.5 min-w-[55px] md:min-w-[65px] border border-gray-200">
-          <div className="text-xl md:text-2xl font-semibold" style={{ color: primaryColor }}>
+        <div key={unit} className="text-center">
+          <div className="text-4xl md:text-6xl font-bold" style={{ color: '#ec4899' }}>
             {value.toString().padStart(2, '0')}
           </div>
-          <div className="text-xs text-gray-500 uppercase">{unit}</div>
+          <div className="text-xs md:text-sm text-gray-500 uppercase mt-2">{unit}</div>
         </div>
       ))}
     </div>

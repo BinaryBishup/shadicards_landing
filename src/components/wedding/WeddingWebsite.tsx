@@ -74,15 +74,31 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
               </Badge>
             </div>
             
-            {/* Right: Edit Profile Button */}
-            <Button 
-              onClick={onEditProfile}
-              className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
-            >
-              <Edit className="w-3 md:w-4 h-3 md:h-4" />
-              <span className="hidden sm:inline">Edit Profile</span>
-              <span className="sm:hidden">Edit</span>
-            </Button>
+            {/* Right: Action Buttons */}
+            <div className="flex items-center gap-2">
+              {/* View Events Button - Desktop Only */}
+              {events && events.length > 0 && (
+                <Link 
+                  href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
+                  className="hidden md:block"
+                >
+                  <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white gap-2 shadow-md text-sm px-4">
+                    <Calendar className="w-4 h-4" />
+                    View Events
+                  </Button>
+                </Link>
+              )}
+              
+              {/* Edit Profile Button */}
+              <Button 
+                onClick={onEditProfile}
+                className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
+              >
+                <Edit className="w-3 md:w-4 h-3 md:h-4" />
+                <span className="hidden sm:inline">Edit Profile</span>
+                <span className="sm:hidden">Edit</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -102,13 +118,13 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
         }}
       />
 
-      {/* Floating Upcoming Event Button */}
+      {/* Floating Upcoming Event Button - Mobile Only */}
       {events && events.length > 0 && (
         <Link 
           href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
-          className="fixed bottom-32 right-6 z-30"
+          className="md:hidden fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30"
         >
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg rounded-full px-6 py-3 flex items-center gap-2">
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-2xl rounded-full px-8 py-4 flex items-center gap-2 text-base font-medium">
             <Calendar className="w-5 h-5" />
             View Upcoming Event
           </Button>

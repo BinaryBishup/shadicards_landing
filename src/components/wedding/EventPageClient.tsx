@@ -5,12 +5,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Event from "./Event";
 import EventLoadingScreen from "./EventLoadingScreen";
-import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
+import type { Wedding, WeddingWebsite, Guest, Event as SupabaseEvent, EventInvitation } from "@/lib/supabase";
 
 interface EventPageClientProps {
   initialWebsite: WeddingWebsite & { wedding: Wedding };
   initialGuest: Guest;
-  initialEvents: { event: Event; invitation: EventInvitation }[];
+  initialEvents: { event: SupabaseEvent; invitation: EventInvitation }[];
   urlSlug: string;
 }
 
@@ -26,7 +26,7 @@ export default function EventPageClient({
   const [website] = useState(initialWebsite);
   const [guest] = useState(initialGuest);
   const [guestEvents] = useState(initialEvents);
-  const [currentEventData, setCurrentEventData] = useState<{ event: Event; invitation: EventInvitation } | null>(null);
+  const [currentEventData, setCurrentEventData] = useState<{ event: SupabaseEvent; invitation: EventInvitation } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
   const eventIndex = parseInt(searchParams.get('index') || '0');
