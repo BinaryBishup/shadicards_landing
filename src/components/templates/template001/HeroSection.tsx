@@ -34,13 +34,13 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       {/* Main Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-16 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 md:gap-24 lg:gap-32 items-center">
             
             {/* Left Side - Couple Photo with Animated Floral Frame */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 {/* Floral Frame Background - Subtle with Animation */}
-                <div className="absolute inset-0 -inset-x-24 -inset-y-24 md:-inset-x-28 md:-inset-y-28 lg:-inset-x-32 lg:-inset-y-32 pointer-events-none rotate-animation">
+                <div className="absolute inset-0 -inset-x-20 -inset-y-20 md:-inset-x-28 md:-inset-y-28 lg:-inset-x-32 lg:-inset-y-32 pointer-events-none rotate-animation">
                   <Image
                     src="/templates/assets/flower_couple_background.png"
                     alt="Floral Frame"
@@ -50,8 +50,8 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                   />
                 </div>
                 
-                {/* Couple Photo - Bigger */}
-                <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                {/* Couple Photo - Responsive Sizes */}
+                <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl">
                   {data.coupleImage ? (
                     <Image
                       src={data.coupleImage}
@@ -72,21 +72,21 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
             <div className="text-center lg:text-center">
 
               {/* Calendar Design with Names and Flowers */}
-              <div className="relative max-w-md mx-auto lg:ml-0">
-                {/* Top Floral Decoration - Much Bigger */}
-                <div className="absolute -top-20 left-0 right-0 h-40 pointer-events-none z-10">
+              <div className="relative max-w-sm md:max-w-md mx-auto lg:ml-0">
+                {/* Top Floral Decoration - Responsive */}
+                <div className="absolute -top-12 md:-top-16 lg:-top-20 left-0 right-0 h-24 md:h-32 lg:h-40 pointer-events-none z-10">
                   <Image
                     src="/templates/assets/flower_calendar_top.png"
                     alt="Calendar Top Decoration"
                     width={800}
                     height={160}
-                    className="w-full h-full object-contain scale-125"
+                    className="w-full h-full object-contain md:scale-110 lg:scale-125"
                   />
                 </div>
 
-                {/* Names with Cursive Font - Smaller to fit */}
-                <div className="mb-2 pt-16">
-                  <h1 className="cursive-font text-4xl md:text-5xl lg:text-6xl text-gray-800 leading-tight">
+                {/* Names with Cursive Font - Responsive */}
+                <div className="mb-2 pt-8 md:pt-12 lg:pt-16">
+                  <h1 className="cursive-font text-3xl md:text-4xl lg:text-6xl text-gray-800 leading-tight">
                     <span>{data.brideName}</span>
                     <span className="text-pink-500 mx-2">&</span>
                     <span>{data.groomName}</span>
@@ -116,14 +116,14 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                   </div>
                 </div>
 
-                {/* Bottom Floral Decoration - Much Bigger */}
-                <div className="absolute -bottom-16 left-0 right-0 h-32 pointer-events-none z-10">
+                {/* Bottom Floral Decoration - Responsive */}
+                <div className="absolute -bottom-10 md:-bottom-12 lg:-bottom-16 left-0 right-0 h-20 md:h-24 lg:h-32 pointer-events-none z-10">
                   <Image
                     src="/templates/assets/flower_calendar_down.png"
                     alt="Calendar Bottom Decoration"
                     width={800}
                     height={130}
-                    className="w-full h-full object-contain scale-125"
+                    className="w-full h-full object-contain md:scale-110 lg:scale-125"
                   />
                 </div>
               </div>
