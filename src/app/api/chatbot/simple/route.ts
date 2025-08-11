@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
       message,
       weddingData,
       guestData,
-      eventsData
+      eventsData || []
     );
 
     // Generate smart suggestions
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
       message,
       guestData,
       weddingData,
-      eventsData
+      eventsData || []
     );
 
     return NextResponse.json({

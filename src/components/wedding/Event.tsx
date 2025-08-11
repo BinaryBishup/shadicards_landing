@@ -15,6 +15,7 @@ import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Navigation, Check, 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 library.add(fas);
 
 interface UpcomingEventProps {
@@ -531,6 +532,14 @@ export default function UpcomingEventMinimal({
                   <p className="text-white/90 text-lg max-w-lg mx-auto italic">
                     "{event.description}"
                   </p>
+                )}
+                {event.message && (
+                  <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-xl max-w-lg mx-auto">
+                    <p className="text-white/90 text-base">
+                      <FontAwesomeIcon icon={faInfoCircle} className="mr-2 text-yellow-300" />
+                      {event.message}
+                    </p>
+                  </div>
                 )}
               </div>
 

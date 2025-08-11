@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import UpcomingEventMinimal from "./UpcomingEventMinimal";
+import Event from "./Event";
 import EventLoadingScreen from "./EventLoadingScreen";
 import type { Wedding, WeddingWebsite, Guest, Event, EventInvitation } from "@/lib/supabase";
 
@@ -55,7 +55,7 @@ export default function EventPageClient({
   const currentEventIndex = allInvitedEvents.findIndex(e => e.id === currentEventData.event.id);
 
   return (
-    <UpcomingEventMinimal
+    <Event
       website={website}
       guest={guest}
       event={currentEventData.event}

@@ -93,6 +93,7 @@ export interface Event {
   wedding_id: string;
   name: string;
   description: string | null;
+  message: string | null;
   event_date: string;
   start_time: string;
   end_time: string;
