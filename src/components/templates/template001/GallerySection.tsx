@@ -16,32 +16,35 @@ export default function GallerySection({ data, primaryColor = '#ec4899' }: Galle
   if (!data.images || data.images.length === 0) return null;
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-white to-rose-50">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-serif text-center mb-12" style={{ color: primaryColor }}>
-          {data.title || 'Our Memories'}
-        </h2>
+    <section className="py-20 px-4 bg-white">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-serif text-gray-800 mb-2">
+            Beautiful Gallery
+          </h2>
+          <p className="text-lg text-gray-600">Capturing Our Special Moments</p>
+        </div>
 
-        {/* Simple Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {data.images.map((image) => (
+        {/* Masonry Gallery Grid */}
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          {data.images.map((image, index) => (
             <div
               key={image.id}
               onClick={() => setSelectedImage(image.url)}
-              className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105"
+              className="break-inside-avoid cursor-pointer group"
             >
-              <Image
-                src={image.url}
-                alt={image.caption || 'Gallery image'}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                {image.caption && (
-                  <p className="absolute bottom-2 left-2 right-2 text-white text-sm">
-                    {image.caption}
-                  </p>
-                )}
+              <div className="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300">
+                <div className={`relative ${
+                  index % 3 === 0 ? 'h-80' : index % 3 === 1 ? 'h-64' : 'h-72'
+                }`}>
+                  <Image
+                    src={image.url}
+                    alt={image.caption || `Gallery image ${index + 1}`}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                </div>
               </div>
             </div>
           ))}
@@ -49,8 +52,8 @@ export default function GallerySection({ data, primaryColor = '#ec4899' }: Galle
 
         {/* Lightbox */}
         {selectedImage && (
-          <div 
-            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          <div
+            className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
             onClick={() => setSelectedImage(null)}
           >
             <button
@@ -59,13 +62,13 @@ export default function GallerySection({ data, primaryColor = '#ec4899' }: Galle
             >
               <X className="w-8 h-8" />
             </button>
-            <div className="relative max-w-4xl max-h-[90vh]">
+            <div className="relative max-w-5xl max-h-[90vh]">
               <Image
                 src={selectedImage}
-                alt="Gallery preview"
+                alt="Selected image"
                 width={1200}
                 height={800}
-                className="object-contain w-full h-full"
+                className="object-contain max-h-[90vh] w-auto"
               />
             </div>
           </div>

@@ -33,7 +33,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       
       {/* Main Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-16 md:py-20">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-24 md:py-32">
           <div className="grid lg:grid-cols-2 gap-20 md:gap-32 lg:gap-40 items-center">
             
             {/* Left Side - Couple Photo with Animated Floral Frame */}
@@ -256,23 +256,28 @@ function CountdownTimer({ targetDate, primaryColor }: { targetDate: string; prim
   }, [targetDate]);
 
   const units = [
-    { label: 'Days', value: timeLeft.days, hasFlower: true },
-    { label: 'Hours', value: timeLeft.hours, hasFlower: false },
-    { label: 'Mins', value: timeLeft.minutes, hasFlower: true },
-    { label: 'Secs', value: timeLeft.seconds, hasFlower: false }
+    { label: 'Days', value: timeLeft.days },
+    { label: 'Hours', value: timeLeft.hours },
+    { label: 'Mins', value: timeLeft.minutes },
+    { label: 'Secs', value: timeLeft.seconds }
   ];
 
   return (
-    <div className="flex gap-4 md:gap-8 lg:gap-12 justify-center items-center">
+    <div className="relative flex gap-4 md:gap-8 lg:gap-12 justify-center items-center">
+      {/* Left Flower Decoration */}
+      <div className="absolute -left-20 md:-left-32 lg:-left-40 w-32 md:w-40 lg:w-48 h-32 md:h-40 lg:h-48 pointer-events-none">
+        <Image
+          src="/templates/assets/flower_countdown.png"
+          alt="Flower Decoration"
+          width={200}
+          height={200}
+          className="w-full h-full object-contain"
+        />
+      </div>
+
+      {/* Countdown Units */}
       {units.map((unit, index) => (
         <div key={unit.label} className="relative">
-          {/* Floral Decoration */}
-          {unit.hasFlower && (
-            <div className="absolute -top-6 -left-6 md:-top-8 md:-left-8 w-16 h-16 md:w-20 md:h-20 pointer-events-none">
-              <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-30" />
-            </div>
-          )}
-          
           {/* Circular Badge */}
           <div className="relative bg-blue-50/50 rounded-full w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 flex flex-col items-center justify-center border-2 border-blue-200/30">
             <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800">
@@ -284,6 +289,17 @@ function CountdownTimer({ targetDate, primaryColor }: { targetDate: string; prim
           </div>
         </div>
       ))}
+
+      {/* Right Flower Decoration */}
+      <div className="absolute -right-20 md:-right-32 lg:-right-40 w-32 md:w-40 lg:w-48 h-32 md:h-40 lg:h-48 pointer-events-none">
+        <Image
+          src="/templates/assets/flower_countdown.png"
+          alt="Flower Decoration"
+          width={200}
+          height={200}
+          className="w-full h-full object-contain scale-x-[-1]"
+        />
+      </div>
     </div>
   );
 }

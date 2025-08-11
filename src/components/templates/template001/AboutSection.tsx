@@ -1,7 +1,6 @@
 "use client";
 
-import { Briefcase, GraduationCap } from 'lucide-react';
-import { FaInstagram, FaFacebook, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { FaInstagram, FaFacebook, FaTwitter } from 'react-icons/fa';
 import Image from 'next/image';
 import type { AboutData } from '@/types/wedding-template';
 
@@ -12,166 +11,152 @@ interface AboutSectionProps {
 
 export default function AboutSection({ data, primaryColor = '#ec4899' }: AboutSectionProps) {
   return (
-    <section className="py-20 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-serif text-center mb-16" style={{ color: primaryColor }}>
+    <section className="relative py-20 px-4 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
+      {/* Left Peacock Feather Decoration */}
+      <div className="absolute left-0 top-0 bottom-0 w-64 md:w-96 lg:w-[500px] pointer-events-none z-0">
+        <Image
+          src="/templates/assets/flower_left_shape.png"
+          alt="Peacock Feather Decoration"
+          width={500}
+          height={800}
+          className="h-full w-full object-cover object-right opacity-90"
+        />
+      </div>
+
+      {/* Right Peacock Feather Decoration */}
+      <div className="absolute right-0 top-0 bottom-0 w-64 md:w-96 lg:w-[500px] pointer-events-none z-0">
+        <Image
+          src="/templates/assets/flower_right_shape.png"
+          alt="Peacock Feather Decoration"
+          width={500}
+          height={800}
+          className="h-full w-full object-cover object-left opacity-90"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-serif text-center mb-16 text-gray-800">
           Meet The Couple
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-16">
           {/* Bride */}
-          <div className="group">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
-              <div className="relative h-96 bg-gradient-to-br from-pink-100 to-rose-100">
-                {data.bride.image && (
-                  <Image
-                    src={data.bride.image}
-                    alt={data.bride.name}
-                    fill
-                    className="object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <h3 className="absolute bottom-4 left-4 text-white text-2xl font-bold">
-                  {data.bride.name}
-                </h3>
-              </div>
-              
-              <div className="p-6">
-                {data.bride.description && (
-                  <p className="text-gray-600 mb-4">{data.bride.description}</p>
-                )}
-                
-                <div className="space-y-2 mb-4">
-                  {data.bride.profession && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Briefcase className="w-4 h-4" />
-                      <span>{data.bride.profession}</span>
-                    </div>
-                  )}
-                  {data.bride.education && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <GraduationCap className="w-4 h-4" />
-                      <span>{data.bride.education}</span>
-                    </div>
-                  )}
-                </div>
+          <div className="text-center">
+            <div className="relative mx-auto w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-6">
+              {data.bride.image ? (
+                <Image
+                  src={data.bride.image}
+                  alt={data.bride.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-pink-100 to-rose-200" />
+              )}
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-serif mb-3 text-gray-800">
+              {data.bride.name}
+            </h3>
+            
+            {data.bride.description && (
+              <p className="text-gray-600 mb-4 max-w-sm mx-auto">
+                {data.bride.description}
+              </p>
+            )}
 
-                {data.bride.socials && (
-                  <div className="flex gap-3">
-                    {data.bride.socials.instagram && (
-                      <a href={`https://instagram.com/${data.bride.socials.instagram}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-pink-100 transition-colors">
-                        <FaInstagram className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.bride.socials.facebook && (
-                      <a href={`https://facebook.com/${data.bride.socials.facebook}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-pink-100 transition-colors">
-                        <FaFacebook className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.bride.socials.twitter && (
-                      <a href={`https://twitter.com/${data.bride.socials.twitter}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-pink-100 transition-colors">
-                        <FaTwitter className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.bride.socials.linkedin && (
-                      <a href={`https://linkedin.com/in/${data.bride.socials.linkedin}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-pink-100 transition-colors">
-                        <FaLinkedin className="w-4 h-4" />
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
+            {/* Social Media Icons */}
+            <div className="flex justify-center gap-4">
+              {data.bride.socialMedia?.instagram && (
+                <a 
+                  href={data.bride.socialMedia.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-pink-500 transition-colors"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                </a>
+              )}
+              {data.bride.socialMedia?.facebook && (
+                <a 
+                  href={data.bride.socialMedia.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  <FaFacebook className="w-5 h-5" />
+                </a>
+              )}
+              {data.bride.socialMedia?.twitter && (
+                <a 
+                  href={data.bride.socialMedia.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-400 transition-colors"
+                >
+                  <FaTwitter className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
 
           {/* Groom */}
-          <div className="group">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105">
-              <div className="relative h-96 bg-gradient-to-br from-blue-100 to-indigo-100">
-                {data.groom.image && (
-                  <Image
-                    src={data.groom.image}
-                    alt={data.groom.name}
-                    fill
-                    className="object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <h3 className="absolute bottom-4 left-4 text-white text-2xl font-bold">
-                  {data.groom.name}
-                </h3>
-              </div>
-              
-              <div className="p-6">
-                {data.groom.description && (
-                  <p className="text-gray-600 mb-4">{data.groom.description}</p>
-                )}
-                
-                <div className="space-y-2 mb-4">
-                  {data.groom.profession && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <Briefcase className="w-4 h-4" />
-                      <span>{data.groom.profession}</span>
-                    </div>
-                  )}
-                  {data.groom.education && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                      <GraduationCap className="w-4 h-4" />
-                      <span>{data.groom.education}</span>
-                    </div>
-                  )}
-                </div>
+          <div className="text-center">
+            <div className="relative mx-auto w-64 h-64 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-white shadow-2xl mb-6">
+              {data.groom.image ? (
+                <Image
+                  src={data.groom.image}
+                  alt={data.groom.name}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-200" />
+              )}
+            </div>
+            
+            <h3 className="text-2xl md:text-3xl font-serif mb-3 text-gray-800">
+              {data.groom.name}
+            </h3>
+            
+            {data.groom.description && (
+              <p className="text-gray-600 mb-4 max-w-sm mx-auto">
+                {data.groom.description}
+              </p>
+            )}
 
-                {data.groom.socials && (
-                  <div className="flex gap-3">
-                    {data.groom.socials.instagram && (
-                      <a href={`https://instagram.com/${data.groom.socials.instagram}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors">
-                        <FaInstagram className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.groom.socials.facebook && (
-                      <a href={`https://facebook.com/${data.groom.socials.facebook}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors">
-                        <FaFacebook className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.groom.socials.twitter && (
-                      <a href={`https://twitter.com/${data.groom.socials.twitter}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors">
-                        <FaTwitter className="w-4 h-4" />
-                      </a>
-                    )}
-                    {data.groom.socials.linkedin && (
-                      <a href={`https://linkedin.com/in/${data.groom.socials.linkedin}`} 
-                         target="_blank" 
-                         rel="noopener noreferrer"
-                         className="p-2 bg-gray-100 rounded-full hover:bg-blue-100 transition-colors">
-                        <FaLinkedin className="w-4 h-4" />
-                      </a>
-                    )}
-                  </div>
-                )}
-              </div>
+            {/* Social Media Icons */}
+            <div className="flex justify-center gap-4">
+              {data.groom.socialMedia?.instagram && (
+                <a 
+                  href={data.groom.socialMedia.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-pink-500 transition-colors"
+                >
+                  <FaInstagram className="w-5 h-5" />
+                </a>
+              )}
+              {data.groom.socialMedia?.facebook && (
+                <a 
+                  href={data.groom.socialMedia.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-500 transition-colors"
+                >
+                  <FaFacebook className="w-5 h-5" />
+                </a>
+              )}
+              {data.groom.socialMedia?.twitter && (
+                <a 
+                  href={data.groom.socialMedia.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-blue-400 transition-colors"
+                >
+                  <FaTwitter className="w-5 h-5" />
+                </a>
+              )}
             </div>
           </div>
         </div>

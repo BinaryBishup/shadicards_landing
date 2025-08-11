@@ -82,7 +82,7 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
                   href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
                   className="hidden md:block"
                 >
-                  <Button className="bg-black hover:bg-gray-800 text-white gap-2 shadow-md text-sm px-4">
+                  <Button className="bg-white hover:bg-gray-50 text-black border-2 border-black gap-2 shadow-md text-sm px-6 py-2 rounded-full">
                     <Calendar className="w-4 h-4" />
                     View Events
                   </Button>
@@ -124,7 +124,7 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
           href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
           className="md:hidden fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30"
         >
-          <Button className="bg-black hover:bg-gray-800 text-white shadow-2xl rounded-full px-6 py-3 flex items-center gap-2 text-sm font-medium">
+          <Button className="bg-white hover:bg-gray-50 text-black border-2 border-black shadow-2xl rounded-full px-8 py-4 flex items-center gap-2 text-base font-medium">
             <Calendar className="w-5 h-5" />
             View Upcoming Event
           </Button>
