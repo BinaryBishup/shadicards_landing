@@ -32,20 +32,20 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       `}</style>
       
       {/* Main Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-gray-50">
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-12 md:py-16">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-16 md:py-20">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             
             {/* Left Side - Couple Photo with Animated Floral Frame */}
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
-                {/* Floral Frame Background - Bigger with Animation */}
-                <div className="absolute inset-0 -inset-x-28 -inset-y-28 md:-inset-x-36 md:-inset-y-36 lg:-inset-x-44 lg:-inset-y-44 pointer-events-none rotate-animation">
+                {/* Floral Frame Background - Subtle with Animation */}
+                <div className="absolute inset-0 -inset-x-24 -inset-y-24 md:-inset-x-28 md:-inset-y-28 lg:-inset-x-32 lg:-inset-y-32 pointer-events-none rotate-animation">
                   <Image
                     src="/templates/assets/flower_couple_background.png"
                     alt="Floral Frame"
-                    width={850}
-                    height={850}
+                    width={700}
+                    height={700}
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -145,7 +145,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       </section>
 
       {/* Countdown Section - Full Width Below */}
-      <section className="bg-white py-16">
+      <section className="bg-white py-20">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <p className="text-sm text-gray-500 uppercase tracking-wider mb-6">
