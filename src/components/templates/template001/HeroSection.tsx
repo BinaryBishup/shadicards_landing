@@ -34,7 +34,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       {/* Main Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-16 md:py-20">
-          <div className="grid lg:grid-cols-2 gap-16 md:gap-24 lg:gap-32 items-center">
+          <div className="grid lg:grid-cols-2 gap-20 md:gap-32 lg:gap-40 items-center">
             
             {/* Left Side - Couple Photo with Animated Floral Frame */}
             <div className="flex justify-center lg:justify-end">
@@ -72,7 +72,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
             <div className="text-center lg:text-center">
 
               {/* Calendar Design with Names and Flowers */}
-              <div className="relative max-w-sm md:max-w-md mx-auto lg:ml-0">
+              <div className="relative max-w-sm md:max-w-md mx-auto lg:ml-0 mb-8 md:mb-0">
                 {/* Top Floral Decoration - Responsive */}
                 <div className="absolute -top-12 md:-top-16 lg:-top-20 left-0 right-0 h-24 md:h-32 lg:h-40 pointer-events-none z-10">
                   <Image
@@ -99,7 +99,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                 </div>
 
                 {/* Calendar Container - Smaller */}
-                <div className="px-2">
+                <div className="px-2 pb-8 md:pb-10">
                   {/* Month and Year */}
                   <div className="text-center mb-2">
                     <h2 className="text-xl md:text-2xl font-serif text-gray-700">
@@ -255,14 +255,33 @@ function CountdownTimer({ targetDate, primaryColor }: { targetDate: string; prim
     return () => clearInterval(timer);
   }, [targetDate]);
 
+  const units = [
+    { label: 'Days', value: timeLeft.days, hasFlower: true },
+    { label: 'Hours', value: timeLeft.hours, hasFlower: false },
+    { label: 'Mins', value: timeLeft.minutes, hasFlower: true },
+    { label: 'Secs', value: timeLeft.seconds, hasFlower: false }
+  ];
+
   return (
-    <div className="flex gap-4 md:gap-8 justify-center">
-      {Object.entries(timeLeft).map(([unit, value]) => (
-        <div key={unit} className="text-center">
-          <div className="text-4xl md:text-6xl font-bold" style={{ color: '#ec4899' }}>
-            {value.toString().padStart(2, '0')}
+    <div className="flex gap-4 md:gap-8 lg:gap-12 justify-center items-center">
+      {units.map((unit, index) => (
+        <div key={unit.label} className="relative">
+          {/* Floral Decoration */}
+          {unit.hasFlower && (
+            <div className="absolute -top-6 -left-6 md:-top-8 md:-left-8 w-16 h-16 md:w-20 md:h-20 pointer-events-none">
+              <div className="w-full h-full bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-30" />
+            </div>
+          )}
+          
+          {/* Circular Badge */}
+          <div className="relative bg-blue-50/50 rounded-full w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 flex flex-col items-center justify-center border-2 border-blue-200/30">
+            <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800">
+              {unit.value.toString().padStart(2, '0')}
+            </div>
+            <div className="text-xs md:text-sm text-gray-600 mt-1">
+              {unit.label}
+            </div>
           </div>
-          <div className="text-xs md:text-sm text-gray-500 uppercase mt-2">{unit}</div>
         </div>
       ))}
     </div>
