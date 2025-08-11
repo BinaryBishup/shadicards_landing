@@ -138,6 +138,9 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
       {/* Chat Bar Interface - Conditionally rendered */}
       {showChat && (
         <ChatBar 
+          weddingId={website.wedding_id}
+          guestId={guest.id}
+          websiteSlug={urlSlug}
           weddingName={`${website.wedding.bride_name} & ${website.wedding.groom_name}'s wedding`}
           guestName={guest.first_name || guest.name.split(' ')[0]}
         />
