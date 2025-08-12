@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, HelpCircle, Home } from "lucide-react";
+import { Calendar, HelpCircle, Home, Loader2 } from "lucide-react";
 import HelpModal from "./HelpModal";
 
 interface FooterProps {
@@ -23,6 +23,12 @@ export default function Footer({
   onAllEventsClick
 }: FooterProps) {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
+
+  const handleViewEventsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsLoadingEvents(true);
+    // Let the navigation happen naturally
+  };
 
   return (
     <>
@@ -33,7 +39,8 @@ export default function Footer({
           : "bg-white border-t border-gray-200"
       }`}>
         <div className="container mx-auto max-w-4xl px-4 py-3">
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-3">
             
             {/* All Events Button (for event page) */}
             {isEventPage && showAllEvents && (
@@ -60,10 +67,20 @@ export default function Footer({
             {!isEventPage && showViewEvents && eventUrl && (
               <Link 
                 href={eventUrl}
-                className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
+                onClick={handleViewEventsClick}
+                className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Calendar className="w-4 h-4" />
-                <span>View Events</span>
+                {isLoadingEvents ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Calendar className="w-4 h-4" />
+                    <span>View Events</span>
+                  </>
+                )}
               </Link>
             )}
             
@@ -79,6 +96,13 @@ export default function Footer({
               <HelpCircle className="w-4 h-4" />
               <span className={isEventPage ? "text-sm" : ""}>Help</span>
             </button>
+            </div>
+            {/* Footer text below buttons */}
+            <div className={`text-xs ${
+              isEventPage ? "text-white/60" : "text-gray-500"
+            }`}>
+              Made with love by shadicards.in
+            </div>
           </div>
         </div>
       </div>

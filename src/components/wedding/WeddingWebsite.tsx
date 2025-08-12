@@ -104,24 +104,8 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
       />
 
 
-      {/* Enhanced Footer with Logo - Add margin bottom for footer */}
-      <div className="mt-16 mb-20 py-6 border-t border-gray-200 bg-white">
-        <div className="container mx-auto px-6 text-center">
-          <div className="flex items-center justify-center gap-2 text-gray-600">
-            <span className="text-sm">Made with</span>
-            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-            <span className="text-sm">by</span>
-            <a 
-              href="https://shadicards.in" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-gray-700 hover:text-gray-900 transition-colors text-sm font-medium"
-            >
-              shadicards.in
-            </a>
-          </div>
-        </div>
-      </div>
+      {/* Add spacing for fixed footer */}
+      <div className="mb-20"></div>
 
       {/* Footer with View Events and Help buttons */}
       <Footer 

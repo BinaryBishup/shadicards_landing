@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
-import GuestProfileEdit from "@/components/wedding/GuestProfileEdit";
+import GuestEditModal from "@/components/wedding/GuestEditModal";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
 import { 
@@ -163,28 +163,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
     );
   }
 
-  // Show profile edit view
-  if (showProfileEdit && guest) {
-    return (
-      <GuestProfileEdit
-        guestData={{
-          name: guest.name,
-          email: guest.email || '',
-          phone: guest.whatsapp || '',
-          avatar: guest.profile_image || undefined,
-          relation: guest.relationship,
-          attendingEvents: events.map(e => e.name),
-          guestsCount: 1,
-          dietaryPreferences: guest.dietary_preferences || '',
-          specialRequests: guest.notes || '',
-          address: guest.address || ''
-        }}
-        availableEvents={events.map(e => e.name)}
-        onSave={handleProfileSave}
-        onCancel={() => setShowProfileEdit(false)}
-      />
-    );
-  }
+  // Profile edit modal is now rendered alongside the main content, not as a separate view
 
   // Check access and show appropriate component
   if (!accessStatus?.hasAccess && !passwordVerified) {
@@ -242,13 +221,34 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
   // Show wedding website for authenticated guest
   if (guest) {
     return (
-      <WeddingWebsite 
-        website={website}
-        guest={guest}
-        events={events}
-        onEditProfile={() => setShowProfileEdit(true)}
-        urlSlug={url}
-      />
+      <>
+        <WeddingWebsite 
+          website={website}
+          guest={guest}
+          events={events}
+          onEditProfile={() => setShowProfileEdit(true)}
+          urlSlug={url}
+        />
+        
+        {/* Guest Edit Modal */}
+        <GuestEditModal
+          isOpen={showProfileEdit}
+          onClose={() => setShowProfileEdit(false)}
+          guestData={{
+            name: guest.name,
+            email: guest.email || '',
+            phone: guest.whatsapp || '',
+            relation: guest.relationship,
+            attendingEvents: events.map(e => e.name),
+            guestsCount: 1,
+            dietaryPreferences: guest.dietary_preferences || '',
+            specialRequests: guest.notes || '',
+            address: guest.address || ''
+          }}
+          availableEvents={events.map(e => e.name)}
+          onSave={handleProfileSave}
+        />
+      </>
     );
   }
 

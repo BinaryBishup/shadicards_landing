@@ -741,28 +741,7 @@ export default function UpcomingEventMinimal({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="mt-auto">
-          <div className="py-4 bg-black/20 backdrop-blur-sm border-t border-white/10">
-            <div className="container mx-auto px-6 text-center">
-              <div className="flex items-center justify-center gap-2 text-white/80">
-                <span className="text-sm">Made with</span>
-                <svg className="w-4 h-4" fill="#FF4081" viewBox="0 0 20 20">
-                  <path d="M10 18l-1.45-1.32C3.4 12.36 0 9.28 0 5.5 0 2.42 2.42 0 5.5 0c1.74 0 3.41.81 4.5 2.09C11.09.81 12.76 0 14.5 0 17.58 0 20 2.42 20 5.5c0 3.78-3.4 6.86-8.55 11.18L10 18z"/>
-                </svg>
-                <span className="text-sm">by</span>
-                <a 
-                  href="https://shadicards.in" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-white/90 hover:text-white transition-colors text-sm font-medium"
-                >
-                  shadicards.in
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Removed separate footer - now integrated in Footer component */}
       </div>
 
       {/* Event Selection Modal */}
