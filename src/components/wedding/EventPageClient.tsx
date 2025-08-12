@@ -28,16 +28,27 @@ export default function EventPageClient({
   const [guestEvents] = useState(initialEvents);
   const [currentEventData, setCurrentEventData] = useState<{ event: SupabaseEvent; invitation: EventInvitation } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   
   const eventIndex = parseInt(searchParams.get('index') || '0');
   const guestId = searchParams.get('guest');
 
   useEffect(() => {
-    // Update current event data based on index
-    const currentIndex = Math.min(Math.max(0, eventIndex), guestEvents.length - 1);
-    setCurrentEventData(guestEvents[currentIndex]);
-    setIsLoading(false);
-  }, [eventIndex, guestEvents]);
+    // Show loading screen for initial load
+    if (isInitialLoad) {
+      setTimeout(() => {
+        const currentIndex = Math.min(Math.max(0, eventIndex), guestEvents.length - 1);
+        setCurrentEventData(guestEvents[currentIndex]);
+        setIsLoading(false);
+        setIsInitialLoad(false);
+      }, 500); // Brief delay to show loading animation
+    } else {
+      // For subsequent navigation, update immediately
+      const currentIndex = Math.min(Math.max(0, eventIndex), guestEvents.length - 1);
+      setCurrentEventData(guestEvents[currentIndex]);
+      setIsLoading(false);
+    }
+  }, [eventIndex, guestEvents, isInitialLoad]);
 
   const handleNavigation = (newIndex: number) => {
     setIsLoading(true);
@@ -48,7 +59,7 @@ export default function EventPageClient({
   };
 
   if (isLoading || !currentEventData) {
-    return <EventLoadingScreen eventName={currentEventData?.event.name || "Event"} />;
+    return <EventLoadingScreen eventName={currentEventData?.event.name || guestEvents[eventIndex]?.event.name || "Event"} />;
   }
 
   const allInvitedEvents = guestEvents.map(ge => ge.event);

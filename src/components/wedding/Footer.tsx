@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, HelpCircle, Home } from "lucide-react";
 import HelpModal from "./HelpModal";
-import EventLoadingScreen from "./EventLoadingScreen";
 
 interface FooterProps {
   showViewEvents?: boolean;
@@ -25,16 +24,6 @@ export default function Footer({
   onAllEventsClick
 }: FooterProps) {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
-
-  const handleViewEventsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    setIsLoadingEvents(true);
-    // Navigate after a short delay to show the loading screen
-    setTimeout(() => {
-      window.location.href = e.currentTarget.href;
-    }, 100);
-  };
 
   return (
     <>
@@ -73,7 +62,6 @@ export default function Footer({
             {!isEventPage && showViewEvents && eventUrl && (
               <Link 
                 href={eventUrl}
-                onClick={handleViewEventsClick}
                 className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
               >
                 <Calendar className="w-4 h-4" />
@@ -113,13 +101,6 @@ export default function Footer({
 
       {/* Help Modal */}
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
-      
-      {/* Loading Screen Overlay */}
-      {isLoadingEvents && (
-        <div className="fixed inset-0 z-50">
-          <EventLoadingScreen eventName="Your Events" />
-        </div>
-      )}
     </>
   );
 }
