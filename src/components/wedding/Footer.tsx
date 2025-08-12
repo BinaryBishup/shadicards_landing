@@ -60,13 +60,13 @@ export default function Footer({
             
             {/* View Events Button (for wedding page) */}
             {!isEventPage && showViewEvents && eventUrl && (
-              <Link 
+              <a 
                 href={eventUrl}
                 className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
               >
                 <Calendar className="w-4 h-4" />
                 <span>View Events</span>
-              </Link>
+              </a>
             )}
             
             {/* Help Button - Different styles for event vs wedding page */}
@@ -87,13 +87,20 @@ export default function Footer({
               isEventPage ? "text-white/60" : "text-gray-500"
             }`}>
               <span>Made with love by</span>
-              <Image
-                src="/Shadiards_logo.svg"
-                alt="ShadiCards"
-                width={60}
-                height={18}
-                className={isEventPage ? "opacity-60 brightness-0 invert" : "opacity-70"}
-              />
+              <a 
+                href="https://shadicards.in" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:opacity-80 transition-opacity"
+              >
+                <Image
+                  src="/Shadiards_logo.svg"
+                  alt="ShadiCards"
+                  width={90}
+                  height={27}
+                  className={isEventPage ? "opacity-60 brightness-0 invert" : "opacity-70"}
+                />
+              </a>
             </div>
           </div>
         </div>
