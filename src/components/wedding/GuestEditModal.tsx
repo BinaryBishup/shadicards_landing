@@ -116,15 +116,15 @@ export default function GuestEditModal({
       {/* Modal */}
       <div className="relative bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
-        <div className="bg-gradient-to-r from-pink-500 to-purple-500 p-6 text-white">
+        <div className="bg-black p-6 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-semibold">Update Your Profile</h2>
-              <p className="text-white/90 text-sm mt-1">Help us personalize your experience</p>
+              <p className="text-white/80 text-sm mt-1">Help us personalize your experience</p>
             </div>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -160,7 +160,7 @@ export default function GuestEditModal({
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                   />
                 </div>
                 
@@ -172,7 +172,7 @@ export default function GuestEditModal({
                     <select 
                       value={formData.relation}
                       onChange={(e) => setFormData({...formData, relation: e.target.value})}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none transition-all"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent appearance-none transition-all"
                     >
                       <option value="">Select relation</option>
                       {relationOptions.map(option => (
@@ -195,7 +195,7 @@ export default function GuestEditModal({
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     placeholder="your@email.com"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                   />
                 </div>
                 
@@ -209,7 +209,7 @@ export default function GuestEditModal({
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
                     placeholder="+91 98765 43210"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                   />
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function GuestEditModal({
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
                   placeholder="Your address"
                   rows={2}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all resize-none"
                 />
               </div>
             </div>
@@ -248,7 +248,7 @@ export default function GuestEditModal({
                       onClick={() => handleEventToggle(event)}
                       className={`p-3 rounded-lg border-2 transition-all transform hover:scale-105 ${
                         selectedEvents.includes(event)
-                          ? "border-purple-500 bg-purple-50 text-purple-700"
+                          ? "border-black bg-gray-100 text-black"
                           : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
                       }`}
                     >
@@ -274,7 +274,7 @@ export default function GuestEditModal({
                   max="10"
                   value={formData.guestsCount}
                   onChange={(e) => setFormData({...formData, guestsCount: parseInt(e.target.value)})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all"
                 />
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function GuestEditModal({
                   <select 
                     value={formData.dietaryPreferences}
                     onChange={(e) => setFormData({...formData, dietaryPreferences: e.target.value})}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent appearance-none transition-all"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent appearance-none transition-all"
                   >
                     <option value="">Select preference</option>
                     {dietaryOptions.map(option => (
@@ -316,7 +316,7 @@ export default function GuestEditModal({
                   onChange={(e) => setFormData({...formData, specialRequests: e.target.value})}
                   placeholder="Any special requirements or messages for the couple..."
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent transition-all resize-none"
                 />
               </div>
             </div>
@@ -326,7 +326,7 @@ export default function GuestEditModal({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-full transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 bg-black hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-full transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isLoading ? (
                   <>

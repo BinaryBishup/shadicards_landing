@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Calendar, HelpCircle, Home, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Calendar, HelpCircle, Home } from "lucide-react";
 import HelpModal from "./HelpModal";
+import EventLoadingScreen from "./EventLoadingScreen";
 
 interface FooterProps {
   showViewEvents?: boolean;
@@ -26,8 +28,12 @@ export default function Footer({
   const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
   const handleViewEventsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
     setIsLoadingEvents(true);
-    // Let the navigation happen naturally
+    // Navigate after a short delay to show the loading screen
+    setTimeout(() => {
+      window.location.href = e.currentTarget.href;
+    }, 100);
   };
 
   return (
@@ -68,19 +74,10 @@ export default function Footer({
               <Link 
                 href={eventUrl}
                 onClick={handleViewEventsClick}
-                className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-6 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-all text-sm font-medium"
               >
-                {isLoadingEvents ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  <>
-                    <Calendar className="w-4 h-4" />
-                    <span>View Events</span>
-                  </>
-                )}
+                <Calendar className="w-4 h-4" />
+                <span>View Events</span>
               </Link>
             )}
             
@@ -98,10 +95,17 @@ export default function Footer({
             </button>
             </div>
             {/* Footer text below buttons */}
-            <div className={`text-xs ${
+            <div className={`flex items-center gap-1 text-xs ${
               isEventPage ? "text-white/60" : "text-gray-500"
             }`}>
-              Made with love by shadicards.in
+              <span>Made with love by</span>
+              <Image
+                src="/Shadiards_logo.svg"
+                alt="ShadiCards"
+                width={60}
+                height={18}
+                className={isEventPage ? "opacity-60 brightness-0 invert" : "opacity-70"}
+              />
             </div>
           </div>
         </div>
@@ -109,6 +113,13 @@ export default function Footer({
 
       {/* Help Modal */}
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+      
+      {/* Loading Screen Overlay */}
+      {isLoadingEvents && (
+        <div className="fixed inset-0 z-50">
+          <EventLoadingScreen eventName="Your Events" />
+        </div>
+      )}
     </>
   );
 }
