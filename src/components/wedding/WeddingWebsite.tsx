@@ -1,14 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, User, Edit, Calendar } from "lucide-react";
+import { Heart, User, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import ChatBar from "./ChatBar";
+import Footer from "./Footer";
 import Link from "next/link";
 import { getTemplate } from "@/lib/template-registry";
 import { mapDatabaseToTemplateData, getTemplateIdFromDatabase } from "@/lib/wedding-data-mapper";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event } from "@/lib/supabase";
+import { Calendar } from "../ui/calendar";
 
 interface WeddingWebsiteProps {
   website: WeddingWebsiteType & { wedding: Wedding };
@@ -27,8 +28,6 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
   // Map database data to template format
   const weddingData = mapDatabaseToTemplateData(website.wedding, website, events);
   
-  // Determine what sections to show based on website settings
-  const showChat = website.show_chat !== false; // Default to true if not set
 
   return (
     <div className="min-h-screen">
@@ -74,22 +73,8 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
               </Badge>
             </div>
             
-            {/* Right: Action Buttons */}
-            <div className="flex items-center gap-2">
-              {/* View Events Button - Desktop Only */}
-              {events && events.length > 0 && (
-                <Link 
-                  href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
-                  className="hidden md:block"
-                >
-                  <Button className="bg-white hover:bg-gray-50 text-black border-2 border-black gap-2 shadow-md text-sm px-6 py-2 rounded-full">
-                    <Calendar className="w-4 h-4" />
-                    View Events
-                  </Button>
-                </Link>
-              )}
-              
-              {/* Edit Profile Button */}
+            {/* Right: Edit Profile Button */}
+            <div className="flex items-center">
               <Button 
                 onClick={onEditProfile}
                 className="bg-black hover:bg-gray-800 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
@@ -118,49 +103,31 @@ export default function WeddingWebsite({ website, guest, events = [], onEditProf
         }}
       />
 
-      {/* Floating Upcoming Event Button - Mobile Only */}
-      {events && events.length > 0 && (
-        <Link 
-          href={`/wedding/${urlSlug}/event?guest=${guest.id}&index=0`}
-          className="md:hidden fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30"
-        >
-          <Button className="bg-white hover:bg-gray-50 text-black border-2 border-black shadow-2xl rounded-full px-8 py-4 flex items-center gap-2 text-base font-medium">
-            <Calendar className="w-5 h-5" />
-            View Upcoming Event
-          </Button>
-        </Link>
-      )}
 
-      {/* Enhanced Footer with Logo - Add margin bottom for chat bar */}
-      <div className={`mt-16 ${showChat ? 'mb-20' : 'mb-0'} py-8 border-t border-gray-200 bg-white`}>
+      {/* Enhanced Footer with Logo - Add margin bottom for footer */}
+      <div className="mt-16 mb-20 py-6 border-t border-gray-200 bg-white">
         <div className="container mx-auto px-6 text-center">
           <div className="flex items-center justify-center gap-2 text-gray-600">
             <span className="text-sm">Made with</span>
             <Heart className="w-4 h-4 text-red-500 fill-red-500" />
             <span className="text-sm">by</span>
-            <div className="flex items-center gap-2">
-              <Image
-                src="/Shadiards_logo.svg"
-                alt="ShadiCards"
-                width={100}
-                height={30}
-                className="object-contain"
-              />
-            </div>
+            <a 
+              href="https://shadicards.in" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-gray-700 hover:text-gray-900 transition-colors text-sm font-medium"
+            >
+              shadicards.in
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Chat Bar Interface - Conditionally rendered */}
-      {showChat && (
-        <ChatBar 
-          weddingId={website.wedding_id}
-          guestId={guest.id}
-          websiteSlug={urlSlug}
-          weddingName={`${website.wedding.bride_name} & ${website.wedding.groom_name}'s wedding`}
-          guestName={guest.first_name || guest.name.split(' ')[0]}
-        />
-      )}
+      {/* Footer with View Events and Help buttons */}
+      <Footer 
+        showViewEvents={events && events.length > 0}
+        eventUrl={events && events.length > 0 ? `/wedding/${urlSlug}/event?guest=${guest.id}&index=0` : undefined}
+      />
     </div>
   );
 }

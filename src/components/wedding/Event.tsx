@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import ChatBar from "./ChatBar";
+import Footer from "./Footer";
 import EventLoadingScreen from "./EventLoadingScreen";
 import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
@@ -228,7 +228,6 @@ export default function UpcomingEventMinimal({
   const primaryColor = event.primary_color || '#E91E63';
   const secondaryColor = event.secondary_color || '#FF4081';
   const accentColor = event.accent_color || '#D4AF37';
-  const showChat = website.show_chat !== false;
 
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
@@ -336,7 +335,7 @@ export default function UpcomingEventMinimal({
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative pb-20">
       <style jsx global>{`
         @keyframes float {
           0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
@@ -433,7 +432,7 @@ export default function UpcomingEventMinimal({
                 <span className="hidden sm:inline text-sm">Previous</span>
               </button>
 
-              {/* Center Buttons */}
+              {/* Center Button */}
               <div className="flex items-center gap-2">
                 <Link 
                   href={`/wedding/${website.url_slug}?guest=${guest.id}`}
@@ -442,14 +441,6 @@ export default function UpcomingEventMinimal({
                   <ExternalLink className="w-4 h-4" />
                   <span className="text-sm">View Website</span>
                 </Link>
-                
-                <button
-                  onClick={() => setShowEventModal(true)}
-                  className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
-                >
-                  <Grid3x3 className="w-4 h-4" />
-                  <span className="text-sm">All Events</span>
-                </button>
               </div>
 
               {/* Next Event */}
@@ -506,8 +497,8 @@ export default function UpcomingEventMinimal({
             {/* Event Details Glass Card */}
             <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/30 shadow-2xl space-y-6">
               {/* Event Name & Description */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-center gap-3">
+              <div className="space-y-3 text-center">
+                <div className="flex flex-col items-center justify-center gap-3">
                   {event.icon && (
                     <div 
                       className="w-14 h-14 rounded-full backdrop-blur flex items-center justify-center shadow-lg"
@@ -529,7 +520,7 @@ export default function UpcomingEventMinimal({
                   </h1>
                 </div>
                 {event.description && (
-                  <p className="text-white/90 text-lg max-w-lg mx-auto italic">
+                  <p className="text-white/90 text-lg max-w-lg mx-auto italic text-center">
                     "{event.description}"
                   </p>
                 )}
@@ -752,7 +743,7 @@ export default function UpcomingEventMinimal({
 
         {/* Footer */}
         <div className="mt-auto">
-          <div className="py-6 bg-black/20 backdrop-blur-sm border-t border-white/10">
+          <div className="py-4 bg-black/20 backdrop-blur-sm border-t border-white/10">
             <div className="container mx-auto px-6 text-center">
               <div className="flex items-center justify-center gap-2 text-white/80">
                 <span className="text-sm">Made with</span>
@@ -760,13 +751,14 @@ export default function UpcomingEventMinimal({
                   <path d="M10 18l-1.45-1.32C3.4 12.36 0 9.28 0 5.5 0 2.42 2.42 0 5.5 0c1.74 0 3.41.81 4.5 2.09C11.09.81 12.76 0 14.5 0 17.58 0 20 2.42 20 5.5c0 3.78-3.4 6.86-8.55 11.18L10 18z"/>
                 </svg>
                 <span className="text-sm">by</span>
-                <Image
-                  src="/Shadiards_logo.svg"
-                  alt="ShadiCards"
-                  width={100}
-                  height={30}
-                  className="object-contain brightness-0 invert"
-                />
+                <a 
+                  href="https://shadicards.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-white/90 hover:text-white transition-colors text-sm font-medium"
+                >
+                  shadicards.in
+                </a>
               </div>
             </div>
           </div>
@@ -784,13 +776,14 @@ export default function UpcomingEventMinimal({
         onEventSelect={onNavigate ? (index) => { setShowEventModal(false); handleNavigation(index); } : undefined}
       />
 
-      {/* Chat Bar */}
-      {showChat && (
-        <ChatBar 
-          weddingName={`${website.wedding.bride_name} & ${website.wedding.groom_name}'s wedding`}
-          guestName={guest.first_name || guest.name.split(' ')[0]}
-        />
-      )}
+      {/* Footer with Help and All Events buttons */}
+      <Footer 
+        showViewEvents={false}
+        isEventPage={true}
+        showAllEvents={true}
+        weddingUrl={`/wedding/${website.url_slug}?guest=${guest.id}`}
+        onAllEventsClick={() => setShowEventModal(true)}
+      />
     </div>
   );
 }

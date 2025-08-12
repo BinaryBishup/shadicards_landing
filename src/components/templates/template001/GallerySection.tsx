@@ -16,14 +16,25 @@ export default function GallerySection({ data, primaryColor = '#ec4899' }: Galle
   if (!data.images || data.images.length === 0) return null;
 
   return (
-    <section className="py-20 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif text-gray-800 mb-2">
-            Beautiful Gallery
-          </h2>
-          <p className="text-lg text-gray-600">Capturing Our Special Moments</p>
-        </div>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap');
+        .cursive-title {
+          font-family: 'Dancing Script', cursive;
+        }
+        .body-font {
+          font-family: 'Poppins', sans-serif;
+        }
+      `}</style>
+      
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="cursive-title text-3xl md:text-4xl text-gray-500 mb-4">Sweet Memories</p>
+            <h2 className="text-3xl md:text-4xl text-gray-700 body-font font-normal">
+              Our Captured Moments
+            </h2>
+          </div>
 
         {/* Masonry Gallery Grid */}
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
@@ -75,5 +86,6 @@ export default function GallerySection({ data, primaryColor = '#ec4899' }: Galle
         )}
       </div>
     </section>
+    </>
   );
 }

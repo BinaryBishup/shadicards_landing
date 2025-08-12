@@ -32,7 +32,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       `}</style>
       
       {/* Main Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
+      <section className="relative min-h-[85vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden bg-gray-50">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-4 py-24 md:py-32">
           <div className="grid lg:grid-cols-2 gap-20 md:gap-32 lg:gap-40 items-center">
             
@@ -40,7 +40,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
             <div className="flex justify-center lg:justify-end">
               <div className="relative">
                 {/* Floral Frame Background - Subtle with Animation */}
-                <div className="absolute inset-0 -inset-x-20 -inset-y-20 md:-inset-x-28 md:-inset-y-28 lg:-inset-x-32 lg:-inset-y-32 pointer-events-none rotate-animation">
+                <div className="absolute inset-0 -inset-x-12 -inset-y-12 md:-inset-x-16 md:-inset-y-16 lg:-inset-x-20 lg:-inset-y-20 pointer-events-none rotate-animation">
                   <Image
                     src="/templates/assets/flower_couple_background.png"
                     alt="Floral Frame"
@@ -50,8 +50,8 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                   />
                 </div>
                 
-                {/* Couple Photo - Responsive Sizes */}
-                <div className="relative w-56 h-56 md:w-72 md:h-72 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                {/* Couple Photo - Larger Sizes */}
+                <div className="relative w-72 h-72 md:w-80 md:h-80 lg:w-[28rem] lg:h-[28rem] rounded-full overflow-hidden border-4 border-white shadow-2xl">
                   {data.coupleImage ? (
                     <Image
                       src={data.coupleImage}
@@ -72,20 +72,20 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
             <div className="text-center lg:text-center">
 
               {/* Calendar Design with Names and Flowers */}
-              <div className="relative max-w-sm md:max-w-md mx-auto lg:ml-0 mb-8 md:mb-0">
+              <div className="relative max-w-xs md:max-w-sm mx-auto lg:ml-0 mt-16 mb-8 md:mb-0">
                 {/* Top Floral Decoration - Responsive */}
-                <div className="absolute -top-12 md:-top-16 lg:-top-20 left-0 right-0 h-24 md:h-32 lg:h-40 pointer-events-none z-10">
+                <div className="absolute -top-14 md:-top-16 lg:-top-20 left-0 right-0 h-28 md:h-32 lg:h-40 pointer-events-none z-10">
                   <Image
                     src="/templates/assets/flower_calendar_top.png"
                     alt="Calendar Top Decoration"
                     width={800}
                     height={160}
-                    className="w-full h-full object-contain md:scale-110 lg:scale-125"
+                    className="w-full h-full object-contain scale-125 md:scale-110 lg:scale-125"
                   />
                 </div>
 
                 {/* Names with Cursive Font - Responsive */}
-                <div className="mb-2 pt-8 md:pt-12 lg:pt-16">
+                <div className="mb-4 md:mb-2 pt-12 md:pt-12 lg:pt-16">
                   <h1 className="cursive-font text-3xl md:text-4xl lg:text-6xl text-gray-800 leading-tight">
                     <span>{data.brideName}</span>
                     <span className="text-pink-500 mx-2">&</span>
@@ -102,7 +102,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                 <div className="px-2 pb-8 md:pb-10">
                   {/* Month and Year */}
                   <div className="text-center mb-2">
-                    <h2 className="text-xl md:text-2xl font-serif text-gray-700">
+                    <h2 className="text-lg md:text-xl font-serif text-gray-700">
                       {new Date(data.weddingDate).toLocaleDateString('en-US', { 
                         month: 'long',
                         year: 'numeric'
@@ -111,19 +111,19 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                   </div>
 
                   {/* Calendar Grid - Compact */}
-                  <div className="px-2">
+                  <div className="px-1 scale-90">
                     <CalendarGrid weddingDate={data.weddingDate} primaryColor={primaryColor} />
                   </div>
                 </div>
 
                 {/* Bottom Floral Decoration - Responsive */}
-                <div className="absolute -bottom-10 md:-bottom-12 lg:-bottom-16 left-0 right-0 h-20 md:h-24 lg:h-32 pointer-events-none z-10">
+                <div className="absolute -bottom-12 md:-bottom-12 lg:-bottom-16 left-0 right-0 h-24 md:h-24 lg:h-32 pointer-events-none z-10">
                   <Image
                     src="/templates/assets/flower_calendar_down.png"
                     alt="Calendar Bottom Decoration"
                     width={800}
                     height={130}
-                    className="w-full h-full object-contain md:scale-110 lg:scale-125"
+                    className="w-full h-full object-contain scale-125 md:scale-110 lg:scale-125"
                   />
                 </div>
               </div>
@@ -145,7 +145,7 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
       </section>
 
       {/* Countdown Section - Full Width Below */}
-      <section className="bg-white py-20">
+      <section className="bg-white py-20 md:py-24">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <p className="text-sm text-gray-500 uppercase tracking-wider mb-6">
@@ -263,43 +263,37 @@ function CountdownTimer({ targetDate, primaryColor }: { targetDate: string; prim
   ];
 
   return (
-    <div className="relative flex gap-4 md:gap-8 lg:gap-12 justify-center items-center">
-      {/* Left Flower Decoration */}
-      <div className="absolute -left-20 md:-left-32 lg:-left-40 w-32 md:w-40 lg:w-48 h-32 md:h-40 lg:h-48 pointer-events-none">
-        <Image
-          src="/templates/assets/flower_countdown.png"
-          alt="Flower Decoration"
-          width={200}
-          height={200}
-          className="w-full h-full object-contain"
-        />
-      </div>
-
+    <div className="grid grid-cols-2 md:flex gap-6 md:gap-8 lg:gap-12 justify-center items-center max-w-sm md:max-w-none mx-auto">
       {/* Countdown Units */}
       {units.map((unit, index) => (
-        <div key={unit.label} className="relative">
+        <div key={unit.label} className="relative flex justify-center">
+          {/* Flower decoration - alternating positions exactly like reference */}
+          <div 
+            className={`absolute w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 pointer-events-none z-10 ${
+              index === 0 || index === 2 ? '-top-6 -left-6 md:-top-7 md:-left-7' : 
+              '-bottom-6 -right-6 md:-bottom-7 md:-right-7'
+            }`}
+          >
+            <Image
+              src="/templates/assets/flower_countdown.png"
+              alt="Flower"
+              width={112}
+              height={112}
+              className="w-full h-full object-contain"
+            />
+          </div>
+          
           {/* Circular Badge */}
-          <div className="relative bg-blue-50/50 rounded-full w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 flex flex-col items-center justify-center border-2 border-blue-200/30">
-            <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800">
+          <div className="relative bg-blue-50/80 rounded-full w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 flex flex-col items-center justify-center border-2 border-blue-300/50">
+            <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800">
               {unit.value.toString().padStart(2, '0')}
             </div>
-            <div className="text-xs md:text-sm text-gray-600 mt-1">
+            <div className="text-sm md:text-base text-gray-600 mt-1">
               {unit.label}
             </div>
           </div>
         </div>
       ))}
-
-      {/* Right Flower Decoration */}
-      <div className="absolute -right-20 md:-right-32 lg:-right-40 w-32 md:w-40 lg:w-48 h-32 md:h-40 lg:h-48 pointer-events-none">
-        <Image
-          src="/templates/assets/flower_countdown.png"
-          alt="Flower Decoration"
-          width={200}
-          height={200}
-          className="w-full h-full object-contain scale-x-[-1]"
-        />
-      </div>
     </div>
   );
 }

@@ -15,14 +15,25 @@ export default function StorySection({ data, primaryColor = '#ec4899' }: StorySe
   const storyItems = data[0]?.items || [];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif text-gray-800 mb-2">
-            Our Story
-          </h2>
-          <p className="text-lg text-gray-600">How it Happened</p>
-        </div>
+    <>
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap');
+        .cursive-title {
+          font-family: 'Dancing Script', cursive;
+        }
+        .body-font {
+          font-family: 'Poppins', sans-serif;
+        }
+      `}</style>
+      
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="cursive-title text-3xl md:text-4xl text-gray-500 mb-4">Our Story</p>
+            <h2 className="text-3xl md:text-4xl text-gray-700 body-font font-normal">
+              How it Happened
+            </h2>
+          </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {storyItems.slice(0, 4).map((event, index) => (
@@ -47,8 +58,8 @@ export default function StorySection({ data, primaryColor = '#ec4899' }: StorySe
 
                 {/* Content Overlay */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                  <h3 className="font-serif text-xl mb-1">{event.title}</h3>
-                  <p className="text-sm opacity-90">{event.date}</p>
+                  <h3 className="cursive-title text-2xl mb-1">{event.title}</h3>
+                  <p className="text-sm opacity-90 body-font">{event.date}</p>
                 </div>
               </div>
             </div>
@@ -56,5 +67,6 @@ export default function StorySection({ data, primaryColor = '#ec4899' }: StorySe
         </div>
       </div>
     </section>
+    </>
   );
 }
