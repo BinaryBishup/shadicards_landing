@@ -46,9 +46,16 @@ export default function AutoInvitationsSection() {
     let currentDelay = 0;
     
     demoMessages.forEach((message, index) => {
+      // Map the message to WhatsAppChat format
+      const mappedMessage = {
+        ...message,
+        text: message.message,
+        sender: message.sender === 'bot' ? 'ai' as const : 'guest' as const
+      };
+      
       // Add the actual message
       const messageTimeout = setTimeout(() => {
-        setMessages(prev => [...prev, message]);
+        setMessages(prev => [...prev, mappedMessage]);
       }, currentDelay);
       timeoutsRef.current.push(messageTimeout);
       
@@ -61,7 +68,7 @@ export default function AutoInvitationsSection() {
             id: `typing-${index}`, 
             text: "", 
             sender: "ai" as const, 
-            timestamp: "", 
+            timestamp: "...", 
             isTyping: true 
           }]);
         }, currentDelay - 1500);
