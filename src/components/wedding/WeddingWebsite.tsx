@@ -26,6 +26,10 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
   const TemplateComponent = templateConfig.component;
 
   // Map database data to template format
+  console.log("Debug - Wedding data:", website.wedding);
+  console.log("Debug - Website data:", website);
+  console.log("Debug - bride_families:", website.bride_families);
+  console.log("Debug - bridesmaids:", website.bridesmaids);
   const weddingData = mapDatabaseToTemplateData(website.wedding, website, events);
   
 
