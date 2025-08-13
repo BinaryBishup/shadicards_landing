@@ -6,6 +6,12 @@ import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
 import { User, Phone, MapPin, Mail, Save, X, Camera, Heart } from "lucide-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface ExtraField {
   label: string;
@@ -206,49 +212,62 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
     switch (field.type) {
       case "textarea":
         return (
-          <textarea
+          <Textarea
             key={index}
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             rows={4}
-            className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700 resize-none"
+            className="resize-none transition-all"
           />
         );
 
       case "select":
         return (
-          <select
-            key={index}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            required={field.required}
-            className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
-          >
-            <option value="">Select {field.label}</option>
-            {field.options?.map((option, i) => (
-              <option key={i} value={option}>{option}</option>
-            ))}
-          </select>
+          <Select key={index} value={value} onValueChange={handleChange} required={field.required}>
+            <SelectTrigger className="transition-all">
+              <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options?.map((option, i) => (
+                <SelectItem key={i} value={option}>{option}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         );
 
       case "checkbox":
         return (
-          <label key={index} className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={value || false}
-              onChange={(e) => handleChange(e.target.checked)}
-              className="w-5 h-5 text-rose-600 bg-gray-100 border-gray-300 rounded focus:ring-rose-500 focus:ring-2"
-            />
-            <span className="text-gray-700">{field.placeholder || `Yes, ${field.label.toLowerCase()}`}</span>
-          </label>
+          <div key={index} className="flex items-center space-x-3">
+            <div className="relative">
+              <input
+                type="checkbox"
+                checked={value || false}
+                onChange={(e) => handleChange(e.target.checked)}
+                className="peer sr-only"
+                id={`checkbox-${index}`}
+              />
+              <label
+                htmlFor={`checkbox-${index}`}
+                className="flex h-5 w-5 cursor-pointer items-center justify-center rounded border border-input ring-offset-background transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-checked:bg-rose-500 peer-checked:border-rose-500 peer-checked:text-white hover:bg-rose-50"
+              >
+                {value && (
+                  <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </label>
+            </div>
+            <label htmlFor={`checkbox-${index}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
+              {field.placeholder || `Yes, ${field.label.toLowerCase()}`}
+            </label>
+          </div>
         );
 
       case "number":
         return (
-          <input
+          <Input
             key={index}
             type="number"
             value={value}
@@ -256,20 +275,20 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
             placeholder={field.placeholder}
             required={field.required}
             min="0"
-            className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
+            className="transition-all"
           />
         );
 
       default:
         return (
-          <input
+          <Input
             key={index}
             type={field.type}
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
-            className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
+            className="transition-all"
           />
         );
     }
@@ -373,94 +392,94 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
 
               {/* Name Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-sm font-medium">
                     <User className="w-4 h-4 text-rose-500" />
                     First Name *
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="text"
                     required
                     value={formData.first_name}
                     onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-                    className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
                     placeholder="First name"
+                    className="transition-all"
                   />
                 </div>
                 
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-sm font-medium">
                     <User className="w-4 h-4 text-rose-500" />
                     Last Name *
-                  </label>
-                  <input
+                  </Label>
+                  <Input
                     type="text"
                     required
                     value={formData.last_name}
                     onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-                    className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
                     placeholder="Last name"
+                    className="transition-all"
                   />
                 </div>
               </div>
 
               {/* Email */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium">
                   <Mail className="w-4 h-4 text-rose-500" />
                   Email Address
-                </label>
-                <input
+                </Label>
+                <Input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
                   placeholder="Enter your email"
+                  className="transition-all"
                 />
               </div>
 
               {/* WhatsApp */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium">
                   <Phone className="w-4 h-4 text-rose-500" />
                   WhatsApp Number
-                </label>
-                <input
+                </Label>
+                <Input
                   type="tel"
                   value={formData.whatsapp}
                   onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-                  className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
                   placeholder="+1 234 567 8900"
+                  className="transition-all"
                 />
               </div>
 
               {/* Address */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium">
                   <MapPin className="w-4 h-4 text-rose-500" />
                   Address
-                </label>
-                <textarea
+                </Label>
+                <Textarea
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700 resize-none"
                   placeholder="Enter your address"
+                  className="resize-none transition-all"
+                  rows={3}
                 />
               </div>
 
               {/* Dietary Preferences */}
-              <div>
-                <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2 text-sm font-medium">
                   <Heart className="w-4 h-4 text-rose-500" />
                   Dietary Preferences
-                </label>
-                <input
+                </Label>
+                <Input
                   type="text"
                   value={formData.dietary_preferences}
                   onChange={(e) => setFormData({...formData, dietary_preferences: e.target.value})}
-                  className="w-full px-4 py-3 border border-rose-200 rounded-xl focus:ring-2 focus:ring-rose-400 focus:border-rose-400 transition-all bg-white text-gray-700"
                   placeholder="Any dietary restrictions or preferences"
+                  className="transition-all"
                 />
               </div>
 
@@ -477,62 +496,67 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
                     </div>
                   </div>
 
-                  {/* Header with Icon */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
-                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-pink-500"></div>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900">Additional Information</h3>
-                      <p className="text-sm text-gray-500">Help us plan the perfect celebration for you</p>
-                    </div>
-                  </div>
-
-                  {/* Fields Grid */}
-                  <div className="grid gap-6">
-                    {extraFields.map((field, index) => (
-                      <div key={index} className="group">
-                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
-                          <div className="w-2 h-2 rounded-full bg-rose-400"></div>
-                          <span>{field.label}</span>
-                          {field.required && <span className="text-rose-500 text-base">*</span>}
-                        </label>
-                        <div className="relative">
-                          {renderExtraField(field, index)}
+                  <Card className="border-rose-100 shadow-sm">
+                    <CardContent className="p-6">
+                      {/* Header with Icon */}
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-pink-500"></div>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-semibold text-gray-900">Additional Information</h3>
+                          <p className="text-sm text-gray-500">Help us plan the perfect celebration for you</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
+
+                      {/* Fields Grid */}
+                      <div className="grid gap-6">
+                        {extraFields.map((field, index) => (
+                          <div key={index} className="group space-y-2">
+                            <Label className="flex items-center gap-2 text-sm font-medium">
+                              <div className="w-2 h-2 rounded-full bg-rose-400"></div>
+                              <span>{field.label}</span>
+                              {field.required && <span className="text-rose-500 text-base">*</span>}
+                            </Label>
+                            <div className="relative">
+                              {renderExtraField(field, index)}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
               )}
 
               {/* Submit Button */}
-              <div className="flex gap-3 pt-4">
-                <button
+              <div className="flex gap-3 pt-6">
+                <Button
                   type="submit"
                   disabled={saving}
-                  className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+                  className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium py-6 px-6 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
                 >
                   {saving ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                       <span>Saving...</span>
                     </>
                   ) : (
                     <>
-                      <Save className="w-5 h-5" />
+                      <Save className="w-5 h-5 mr-2" />
                       <span>Save Details</span>
                     </>
                   )}
-                </button>
+                </Button>
                 
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={onClose}
-                  className="px-6 py-3 border-2 border-rose-200 text-rose-600 font-medium rounded-xl hover:bg-rose-50 transition-all"
+                  className="px-6 py-6 border-2 border-rose-200 text-rose-600 font-medium hover:bg-rose-50 transition-all"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </form>
           )}
