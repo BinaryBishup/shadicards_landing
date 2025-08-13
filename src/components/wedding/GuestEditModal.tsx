@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { User, Phone, MapPin, Camera, Upload, X, Check, Save, ChevronDown } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { User, Phone, MapPin, Camera, X, Check, Save, ChevronDown } from "lucide-react";
 import { uploadProfilePicture } from "@/lib/storage-utils";
 import Image from "next/image";
 
@@ -186,7 +185,7 @@ export default function GuestEditModal({
 
     try {
       if (onSave) {
-        await onSave(updatedData);
+        onSave(updatedData);
       }
       
       setShowSuccess(true);
