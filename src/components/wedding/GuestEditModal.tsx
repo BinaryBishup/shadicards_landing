@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { User, Phone, MapPin, Camera, Upload, X, Check, Save, ChevronDown } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { uploadProfilePicture } from "@/lib/storage-utils";
 import Image from "next/image";
 
 // Country codes for phone number
@@ -157,25 +158,14 @@ export default function GuestEditModal({
   const uploadImage = async (file: File) => {
     setUploadingImage(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
-      const filePath = `profile-pictures/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('guest-profiles')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        alert('Failed to upload image');
-        return;
+      const result = await uploadProfilePicture(file);
+      
+      if (result.success && result.publicUrl) {
+        setFormData(prev => ({ ...prev, profile_image: result.publicUrl }));
+      } else {
+        console.error('Upload error:', result.error);
+        alert(result.error || 'Failed to upload image');
       }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('guest-profiles')
-        .getPublicUrl(filePath);
-
-      setFormData(prev => ({ ...prev, profile_image: publicUrl }));
     } catch (error) {
       console.error('Image upload error:', error);
       alert('Failed to upload image');

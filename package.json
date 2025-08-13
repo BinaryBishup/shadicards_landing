@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "optimize-assets": "node optimize-assets.js",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "create-bucket": "node src/scripts/create-bucket.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
