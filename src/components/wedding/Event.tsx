@@ -26,7 +26,6 @@ interface UpcomingEventProps {
   allEvents?: Event[];
   currentEventIndex?: number;
   onNavigate?: (newIndex: number) => void;
-  onEditProfile?: () => void;
 }
 
 // Animated Counter Component
@@ -211,8 +210,7 @@ export default function UpcomingEventMinimal({
   invitation,
   allEvents = [],
   currentEventIndex,
-  onNavigate,
-  onEditProfile
+  onNavigate
 }: UpcomingEventProps) {
   const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);

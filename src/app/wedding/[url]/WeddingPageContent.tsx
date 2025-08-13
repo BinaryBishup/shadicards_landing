@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
-import GuestEditModal from "@/components/wedding/GuestEditModal";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
 import { 
@@ -13,7 +12,6 @@ import {
   checkWebsiteAccess,
   verifyWebsitePassword,
   getGuestWithInvitations,
-  updateGuestProfile
 } from "@/lib/wedding-helpers";
 import { supabase } from "@/lib/supabase";
 import type { Wedding, WeddingWebsite as WeddingWebsiteType, Guest, Event } from "@/lib/supabase";
@@ -31,7 +29,6 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
   const [events, setEvents] = useState<Event[]>([]);
   const [accessStatus, setAccessStatus] = useState<any>(null);
   const [passwordVerified, setPasswordVerified] = useState(false);
-  const [showProfileEdit, setShowProfileEdit] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -135,16 +132,6 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
     }
   };
 
-  const handleProfileSave = async (profileData: any) => {
-    if (!guest) return;
-    
-    const result = await updateGuestProfile(guest.id, profileData);
-    
-    if (result.success && result.data) {
-      setGuest(result.data as Guest);
-      setShowProfileEdit(false);
-    }
-  };
 
   // Loading state with improved experience
   if (loading) {
@@ -226,21 +213,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
           website={website}
           guest={guest}
           events={events}
-          onEditProfile={() => setShowProfileEdit(true)}
           urlSlug={url}
-        />
-        
-        {/* Guest Edit Modal */}
-        <GuestEditModal
-          isOpen={showProfileEdit}
-          onClose={() => setShowProfileEdit(false)}
-          guestData={{
-            name: guest.name,
-            phone: guest.whatsapp || '',
-            address: guest.address || '',
-            profile_image: guest.profile_image || ''
-          }}
-          onSave={handleProfileSave}
         />
         
       </>

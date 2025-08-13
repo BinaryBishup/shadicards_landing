@@ -26,7 +26,6 @@ interface EventUnifiedProps {
   allEvents?: Event[];
   currentEventIndex?: number;
   onNavigate?: (newIndex: number) => void;
-  onEditProfile?: () => void;
 }
 
 // Animated Counter Component
@@ -205,8 +204,7 @@ export default function EventUnified({
   invitation,
   allEvents = [],
   currentEventIndex,
-  onNavigate,
-  onEditProfile
+  onNavigate
 }: EventUnifiedProps) {
   const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);

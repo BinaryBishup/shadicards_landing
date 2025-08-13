@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Heart, User, Edit } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Heart, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Footer from "./Footer";
 import Link from "next/link";
@@ -14,7 +13,6 @@ interface WeddingWebsiteUnifiedProps {
   wedding: Weddings;
   guest: Guest | null;
   events?: Event[];
-  onEditProfile?: () => void;
   urlSlug: string;
 }
 
@@ -22,7 +20,6 @@ export default function WeddingWebsiteUnified({
   wedding, 
   guest, 
   events = [], 
-  onEditProfile, 
   urlSlug 
 }: WeddingWebsiteUnifiedProps) {
   // Get the template ID from the database
@@ -84,17 +81,6 @@ export default function WeddingWebsiteUnified({
                 </Badge>
               </div>
               
-              {/* Right: Edit Profile Button */}
-              <div className="flex items-center">
-                <Button 
-                  onClick={onEditProfile}
-                  className="bg-black hover:bg-gray-800 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
-                >
-                  <Edit className="w-3 md:w-4 h-3 md:h-4" />
-                  <span className="hidden sm:inline">Edit Profile</span>
-                  <span className="sm:hidden">Edit</span>
-                </Button>
-              </div>
             </div>
           </div>
         </div>

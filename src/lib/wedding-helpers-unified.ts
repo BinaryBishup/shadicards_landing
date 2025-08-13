@@ -154,46 +154,6 @@ export async function getGuestWithInvitations(guestId: string) {
   }
 }
 
-/**
- * Updates guest profile information
- */
-export async function updateGuestProfile(guestId: string, profileData: Partial<Guest> & { phone?: string }) {
-  try {
-    // Transform phone field to whatsapp if present (field mapping fix)
-    const transformedData = { ...profileData };
-    if ('phone' in transformedData && transformedData.phone !== undefined) {
-      // Map phone field to whatsapp field for database compatibility
-      transformedData.whatsapp = transformedData.phone as string;
-      delete (transformedData as any).phone;
-    }
-
-    console.log('Updating guest profile with data:', transformedData);
-
-    const { data, error } = await supabase
-      .from('guests')
-      .update(transformedData)
-      .eq('id', guestId)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating guest profile:', error);
-      console.error('Error details:', {
-        message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code
-      });
-      return { success: false, error: error.message || 'Unknown error occurred' };
-    }
-
-    console.log('Successfully updated guest profile:', data);
-    return { success: true, data };
-  } catch (error) {
-    console.error('Error in updateGuestProfile:', error);
-    return { success: false, error: error instanceof Error ? error.message : 'Unknown error occurred' };
-  }
-}
 
 /**
  * Gets all events for a wedding

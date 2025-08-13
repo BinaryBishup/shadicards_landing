@@ -173,32 +173,6 @@ export async function getGuestWithInvitations(guestId: string) {
   }
 }
 
-/**
- * Updates guest profile information
- */
-export async function updateGuestProfile(guestId: string, updates: Partial<Guest>) {
-  try {
-    const { data, error } = await supabase
-      .from('guests')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', guestId)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating guest profile:', error);
-      return { success: false, error: error.message };
-    }
-
-    return { success: true, data };
-  } catch (error) {
-    console.error('Error in updateGuestProfile:', error);
-    return { success: false, error: 'Failed to update profile' };
-  }
-}
 
 /**
  * Updates RSVP status for an event invitation

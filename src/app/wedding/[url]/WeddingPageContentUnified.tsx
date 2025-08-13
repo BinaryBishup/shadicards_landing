@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
-import GuestEditModal from "@/components/wedding/GuestEditModal";
 import WeddingWebsiteUnified from "@/components/wedding/WeddingWebsiteUnified";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
 import { 
@@ -13,7 +12,6 @@ import {
   checkWebsiteAccess,
   verifyWebsitePassword,
   getGuestWithInvitations,
-  updateGuestProfile,
   getWeddingEvents,
   updateWeddingViewCount
 } from "@/lib/wedding-helpers-unified";
@@ -32,7 +30,6 @@ export default function WeddingPageContentUnified({ url, guestId }: WeddingPageC
   const [events, setEvents] = useState<Event[]>([]);
   const [accessStatus, setAccessStatus] = useState<any>(null);
   const [passwordVerified, setPasswordVerified] = useState(false);
-  const [showProfileEdit, setShowProfileEdit] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -123,22 +120,6 @@ export default function WeddingPageContentUnified({ url, guestId }: WeddingPageC
     }
   };
 
-  const handleProfileSave = async (profileData: any) => {
-    if (!guest) return;
-    
-    console.log('Attempting to update guest profile with data:', profileData);
-    const result = await updateGuestProfile(guest.id, profileData);
-    
-    if (result.success && result.data) {
-      console.log('Profile update successful:', result.data);
-      setGuest(result.data as Guest);
-      setShowProfileEdit(false);
-    } else {
-      console.error('Profile update failed:', result.error);
-      // You might want to show an error message to the user
-      alert(`Failed to update profile: ${result.error}`);
-    }
-  };
 
   // Loading state
   if (loading) {
@@ -200,24 +181,9 @@ export default function WeddingPageContentUnified({ url, guestId }: WeddingPageC
         wedding={wedding}
         guest={guest}
         events={events}
-        onEditProfile={() => setShowProfileEdit(true)}
         urlSlug={url}
       />
 
-      {/* Guest Profile Edit Modal */}
-      {guest && (
-        <GuestEditModal
-          isOpen={showProfileEdit}
-          onClose={() => setShowProfileEdit(false)}
-          guestData={{
-            name: guest.name,
-            phone: guest.whatsapp || '',
-            address: guest.address || '',
-            profile_image: guest.profile_image || ''
-          }}
-          onSave={handleProfileSave}
-        />
-      )}
 
     </>
   );
