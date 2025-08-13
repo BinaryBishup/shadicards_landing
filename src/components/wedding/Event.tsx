@@ -328,7 +328,7 @@ export default function UpcomingEventMinimal({
       onNavigate(newIndex);
     } else {
       // Fallback to router navigation
-      router.push(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${newIndex}`);
+      router.push(`/wedding/${website.wedding_id}/event?guest=${guest.id}&index=${newIndex}`);
     }
   };
 
@@ -738,7 +738,7 @@ export default function UpcomingEventMinimal({
         events={allEvents}
         currentEventId={event.id}
         guestId={guest.id}
-        urlSlug={website.url_slug}
+        urlSlug={website.wedding_id}
         onEventSelect={onNavigate ? (index) => { setShowEventModal(false); handleNavigation(index); } : undefined}
       />
 
@@ -748,7 +748,7 @@ export default function UpcomingEventMinimal({
         isEventPage={true}
         showAllEvents={false}
         showViewWebsite={true}
-        weddingUrl={`/wedding/${website.url_slug}?guest=${guest.id}`}
+        weddingUrl={`/wedding/${website.wedding_id}?guest=${guest.id}`}
         onAllEventsClick={() => setShowEventModal(true)}
         eventLocation={event.address || event.venue}
       />

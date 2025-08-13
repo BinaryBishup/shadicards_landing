@@ -182,7 +182,7 @@ export default async function EventPage({ params, searchParams }: PageProps) {
       initialWebsite={websiteData}
       initialGuest={guest}
       initialEvents={guestEvents}
-      urlSlug={wedding.id}
+      weddingId={wedding.id}
     />
   );
 }

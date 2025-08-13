@@ -112,7 +112,7 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
   const websiteData = {
     id: wedding.id,
     wedding_id: wedding.id,
-    url_slug: wedding.id, // Use ID as slug for now
+    url_slug: wedding.id,
     status: wedding.status,
     is_password_protected: wedding.is_password_protected,
     password: wedding.password,

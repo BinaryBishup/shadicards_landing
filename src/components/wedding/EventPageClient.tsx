@@ -11,14 +11,14 @@ interface EventPageClientProps {
   initialWebsite: WeddingWebsite & { wedding: Wedding };
   initialGuest: Guest;
   initialEvents: { event: SupabaseEvent; invitation: EventInvitation }[];
-  urlSlug: string;
+  weddingId: string;
 }
 
 export default function EventPageClient({ 
   initialWebsite, 
   initialGuest, 
   initialEvents,
-  urlSlug 
+  weddingId 
 }: EventPageClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -54,7 +54,7 @@ export default function EventPageClient({
     setIsLoading(true);
     // Show loading screen briefly for smooth transition
     setTimeout(() => {
-      router.push(`/wedding/${urlSlug}/event?guest=${guestId}&index=${newIndex}`);
+      router.push(`/wedding/${weddingId}/event?guest=${guestId}&index=${newIndex}`);
     }, 100);
   };
 
