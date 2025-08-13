@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
+import GuestDetailsModal from "@/components/wedding/GuestDetailsModal";
 import { 
   getWeddingWebsiteByUrl, 
   validateGuestAccess, 
@@ -21,13 +23,24 @@ interface WeddingPageContentProps {
 }
 
 export default function WeddingPageContent({ url, guestId }: WeddingPageContentProps) {
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [website, setWebsite] = useState<(WeddingWebsiteType & { wedding: Wedding }) | null>(null);
   const [guest, setGuest] = useState<Guest | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [accessStatus, setAccessStatus] = useState<any>(null);
   const [passwordVerified, setPasswordVerified] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Check if edit=true parameter is present
+  const editParam = searchParams?.get('edit');
+  
+  useEffect(() => {
+    if (editParam === 'true' && guest) {
+      setShowGuestModal(true);
+    }
+  }, [editParam, guest]);
 
   useEffect(() => {
     loadWeddingData();
@@ -212,8 +225,16 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
           guest={guest}
           events={events}
           urlSlug={url}
+          onEditProfile={() => setShowGuestModal(true)}
         />
         
+        {/* Guest Details Modal */}
+        <GuestDetailsModal
+          isOpen={showGuestModal}
+          onClose={() => setShowGuestModal(false)}
+          weddingId={website.wedding.id}
+          guestId={guest.id}
+        />
       </>
     );
   }

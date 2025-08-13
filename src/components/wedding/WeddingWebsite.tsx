@@ -16,9 +16,10 @@ interface WeddingWebsiteProps {
   guest: Guest;
   events?: Event[];
   urlSlug: string;
+  onEditProfile?: () => void;
 }
 
-export default function WeddingWebsite({ website, guest, events = [], urlSlug }: WeddingWebsiteProps) {
+export default function WeddingWebsite({ website, guest, events = [], urlSlug, onEditProfile }: WeddingWebsiteProps) {
   // Get the template ID from the database
   const templateId = getTemplateIdFromDatabase(website.template_id);
   const templateConfig = getTemplate(templateId);
@@ -73,19 +74,18 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug }:
             </div>
             
             {/* Right: Edit Profile Button */}
-            <div className="flex items-center">
-              <Button 
-                onClick={() => {
-                  const url = `/guest-details?wedding_id=${website.wedding.id}&guest_id=${guest.id}`;
-                  window.location.href = url;
-                }}
-                className="bg-black hover:bg-gray-800 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
-              >
-                <Edit className="w-3 md:w-4 h-3 md:h-4" />
-                <span className="hidden sm:inline">Edit Profile</span>
-                <span className="sm:hidden">Edit</span>
-              </Button>
-            </div>
+            {onEditProfile && (
+              <div className="flex items-center">
+                <Button 
+                  onClick={onEditProfile}
+                  className="bg-black hover:bg-gray-800 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
+                >
+                  <Edit className="w-3 md:w-4 h-3 md:h-4" />
+                  <span className="hidden sm:inline">Edit Profile</span>
+                  <span className="sm:hidden">Edit</span>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
