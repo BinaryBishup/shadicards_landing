@@ -5,20 +5,19 @@ interface PageProps {
   params: Promise<{ guest_id: string; wedding_id: string }>;
 }
 
-async function getWeddingWebsite(weddingId: string) {
+async function getWedding(weddingId: string) {
   const { data, error } = await supabase
-    .from('wedding_website')
-    .select('url_slug')
-    .eq('wedding_id', weddingId)
-    .eq('status', 'active')
+    .from('weddings')
+    .select('id')
+    .eq('id', weddingId)
     .single();
 
   if (error || !data) {
-    console.error('Error fetching wedding website:', error);
+    console.error('Error fetching wedding:', error);
     return null;
   }
 
-  return data.url_slug;
+  return data.id;
 }
 
 async function getGuestEvents(weddingId: string, guestId: string) {
@@ -86,9 +85,9 @@ export default async function TapRedirectPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get wedding website URL slug
-  const urlSlug = await getWeddingWebsite(weddingId);
-  if (!urlSlug) {
+  // Verify wedding exists
+  const weddingExists = await getWedding(weddingId);
+  if (!weddingExists) {
     notFound();
   }
 
@@ -118,10 +117,10 @@ export default async function TapRedirectPage({ params }: PageProps) {
 
   if (guestEvents.length === 0) {
     // No events found, redirect to main wedding page
-    redirectUrl = `/wedding/${urlSlug}?guest=${guestId}`;
+    redirectUrl = `/wedding/${weddingId}?guest=${guestId}`;
   } else {
     // Default behavior: redirect to event index 0 (first event)
-    redirectUrl = `/wedding/${urlSlug}/event?guest=${guestId}&index=0`;
+    redirectUrl = `/wedding/${weddingId}/event?guest=${guestId}&index=0`;
   }
 
   // Perform the redirect
