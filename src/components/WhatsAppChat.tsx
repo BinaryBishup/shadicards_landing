@@ -12,6 +12,9 @@ interface Message {
   status?: "sent" | "delivered" | "read";
   isTyping?: boolean;
   hasImage?: boolean;
+  hasButton?: boolean;
+  buttonText?: string;
+  isReminder?: boolean;
 }
 
 interface WhatsAppChatProps {
@@ -107,7 +110,9 @@ export default function WhatsAppChat({ messages, language }: WhatsAppChatProps) 
                   <div
                     className={`px-2.5 py-1.5 max-w-[80%] shadow-sm ${
                       message.sender === "ai"
-                        ? "bg-white text-gray-900 rounded-lg rounded-bl-none"
+                        ? message.isReminder 
+                          ? "bg-green-50 border-l-2 border-green-400 text-gray-900 rounded-lg rounded-bl-none"
+                          : "bg-white text-gray-900 rounded-lg rounded-bl-none"
                         : "bg-[#dcf8c6] text-gray-900 rounded-lg rounded-br-none"
                     }`}
                   >
@@ -121,6 +126,15 @@ export default function WhatsAppChat({ messages, language }: WhatsAppChatProps) 
                       </div>
                     )}
                     <p className="text-xs leading-relaxed whitespace-pre-wrap">{message.text}</p>
+                    
+                    {message.hasButton && message.buttonText && message.sender === "ai" && (
+                      <div className="mt-2 -mx-2.5 -mb-1.5">
+                        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white text-xs py-1.5 px-3 rounded-md transition-colors">
+                          {message.buttonText}
+                        </button>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center justify-end gap-0.5 mt-0.5">
                       <span className="text-[9px] text-gray-500">{message.timestamp}</span>
                       {message.sender === "guest" && (

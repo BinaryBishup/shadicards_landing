@@ -51,7 +51,10 @@ export default function AutoInvitationsSection() {
         ...message,
         text: message.message,
         sender: message.sender === 'bot' ? 'ai' as const : 'guest' as const,
-        hasImage: message.hasImage || false
+        hasImage: message.hasImage || false,
+        hasButton: message.hasButton || false,
+        buttonText: message.buttonText || '',
+        isReminder: message.isReminder || false
       };
       
       // Add the actual message
