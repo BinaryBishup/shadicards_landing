@@ -53,6 +53,8 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
       setLoading(true);
       setError(null);
 
+      console.log("Loading guest data for:", { weddingId, guestId });
+
       // Load guest data
       const { data: guestData, error: guestError } = await supabase
         .from("guests")
@@ -72,6 +74,9 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
         .eq("id", weddingId)
         .single();
 
+      console.log("Wedding data:", weddingData);
+      console.log("Wedding error:", weddingError);
+
       if (weddingError || !weddingData) {
         throw new Error("Wedding not found");
       }
@@ -81,7 +86,29 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
 
       // Parse extra fields from wedding configuration
       const extraInfo = weddingData.extra_information || {};
-      const fields: ExtraField[] = Array.isArray(extraInfo.fields) ? extraInfo.fields : [];
+      console.log("Wedding extra_information:", extraInfo);
+      let fields: ExtraField[] = Array.isArray(extraInfo.fields) ? extraInfo.fields : [];
+      
+      // Fallback: If no fields are configured, add some test fields
+      if (fields.length === 0) {
+        fields = [
+          {
+            label: "Language preference",
+            type: "select",
+            options: ["English", "Hindi", "Spanish", "French"],
+            required: false,
+            placeholder: "Select your preferred language"
+          },
+          {
+            label: "Number of plus ones",
+            type: "number",
+            required: false,
+            placeholder: "How many guests will you bring? (0-5)"
+          }
+        ];
+      }
+      
+      console.log("Final extra fields:", fields);
       setExtraFields(fields);
 
       // Set form data
