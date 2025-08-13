@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
-import { User, Phone, MapPin, Mail, Save, X, Camera, Heart, Home, CheckCircle } from "lucide-react";
+import { User, Phone, MapPin, Mail, Save, X, Camera, Heart, Home, CheckCircle, ChevronDown, AlignLeft, Hash, CheckSquare, Type } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -508,43 +508,32 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
                   {/* Decorative Divider */}
                   <div className="relative mb-6">
                     <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                      <div className="w-full border-t border-gray-200"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="bg-rose-50 px-4 text-gray-500 font-medium">Additional Details</span>
+                      <span className="bg-white px-4 text-gray-500 font-medium">Additional Details</span>
                     </div>
                   </div>
 
-                  <Card className="border-rose-100 shadow-sm bg-rose-50/50">
-                    <CardContent className="p-6">
-                      {/* Header with Icon */}
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-pink-500"></div>
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900">Additional Information</h3>
-                          <p className="text-sm text-gray-500">Help us plan the perfect celebration for you</p>
-                        </div>
-                      </div>
-
-                      {/* Fields Grid */}
-                      <div className="grid gap-6">
-                        {extraFields.map((field, index) => (
-                          <div key={index} className="group space-y-2">
-                            <Label className="flex items-center gap-2 text-sm font-medium">
-                              <div className="w-2 h-2 rounded-full bg-rose-400"></div>
-                              <span>{field.label}</span>
-                              {field.required && <span className="text-rose-500 text-base">*</span>}
-                            </Label>
-                            <div className="relative">
-                              {renderExtraField(field, index)}
-                            </div>
+                  {/* Fields in same style as rest of form */}
+                  <div className="space-y-6">
+                    {extraFields.map((field, index) => (
+                      <div key={index} className="space-y-2">
+                        <Label className="flex items-center gap-2 text-sm font-medium">
+                          <div className="w-4 h-4 text-rose-500">
+                            {field.type === 'select' && <ChevronDown className="w-4 h-4" />}
+                            {field.type === 'textarea' && <AlignLeft className="w-4 h-4" />}
+                            {field.type === 'number' && <Hash className="w-4 h-4" />}
+                            {field.type === 'checkbox' && <CheckSquare className="w-4 h-4" />}
+                            {field.type === 'text' && <Type className="w-4 h-4" />}
                           </div>
-                        ))}
+                          {field.label}
+                          {field.required && <span className="text-rose-500">*</span>}
+                        </Label>
+                        {renderExtraField(field, index)}
                       </div>
-                    </CardContent>
-                  </Card>
+                    ))}
+                  </div>
                 </div>
               )}
 

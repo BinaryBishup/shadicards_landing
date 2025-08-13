@@ -15,6 +15,7 @@ interface HelpCard {
 interface HelpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  rsvpContact?: string | null;
 }
 
 const helpCards: HelpCard[] = [
@@ -115,7 +116,7 @@ const helpCards: HelpCard[] = [
   }
 ];
 
-export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
+export default function HelpModal({ isOpen, onClose, rsvpContact }: HelpModalProps) {
   const [selectedCard, setSelectedCard] = useState<HelpCard | null>(null);
 
   if (!isOpen) return null;
@@ -154,6 +155,17 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(80vh-80px)]">
+            {/* RSVP Contact Info */}
+            {rsvpContact && (
+              <div className="mx-6 mt-4 p-4 bg-gradient-to-r from-rose-50 to-pink-50 rounded-lg border border-rose-200">
+                <p className="text-sm font-medium text-gray-700">
+                  <span className="text-rose-600">Need immediate assistance?</span>
+                  <br />
+                  Contact us at: <a href={`tel:${rsvpContact}`} className="font-semibold text-rose-700 hover:text-rose-800">{rsvpContact}</a>
+                </p>
+              </div>
+            )}
+            
             {!selectedCard ? (
               /* Card Grid */
               <div className="p-6 grid gap-4 sm:grid-cols-2">

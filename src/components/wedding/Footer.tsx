@@ -15,6 +15,7 @@ interface FooterProps {
   weddingUrl?: string;
   onAllEventsClick?: () => void;
   eventLocation?: string;
+  rsvpContact?: string | null;
 }
 
 export default function Footer({ 
@@ -25,7 +26,8 @@ export default function Footer({
   showViewWebsite = false,
   weddingUrl = "/",
   onAllEventsClick,
-  eventLocation
+  eventLocation,
+  rsvpContact
 }: FooterProps) {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
 
@@ -133,7 +135,7 @@ export default function Footer({
       </div>
 
       {/* Help Modal */}
-      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} rsvpContact={rsvpContact} />
     </>
   );
 }

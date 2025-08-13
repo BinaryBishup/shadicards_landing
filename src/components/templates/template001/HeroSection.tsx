@@ -74,13 +74,13 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
               {/* Calendar Design with Names and Flowers */}
               <div className="relative max-w-xs md:max-w-sm mx-auto lg:ml-0 mt-16 mb-8 md:mb-0">
                 {/* Top Floral Decoration - Responsive */}
-                <div className="absolute -top-14 md:-top-16 lg:-top-20 left-0 right-0 h-28 md:h-32 lg:h-40 pointer-events-none z-10">
+                <div className="absolute -top-14 md:-top-16 lg:-top-20 left-0 right-0 h-28 md:h-32 lg:h-40 pointer-events-none z-10 overflow-hidden">
                   <Image
                     src="/templates/assets/flower_calendar_top.png"
                     alt="Calendar Top Decoration"
                     width={800}
                     height={160}
-                    className="w-full h-full object-contain scale-125 md:scale-110 lg:scale-125"
+                    className="w-full h-full object-contain scale-110 md:scale-110 lg:scale-125"
                   />
                 </div>
 
@@ -117,13 +117,13 @@ export default function HeroSection({ data, primaryColor = '#3b82f6' }: HeroSect
                 </div>
 
                 {/* Bottom Floral Decoration - Responsive */}
-                <div className="absolute -bottom-12 md:-bottom-12 lg:-bottom-16 left-0 right-0 h-24 md:h-24 lg:h-32 pointer-events-none z-10">
+                <div className="absolute -bottom-12 md:-bottom-12 lg:-bottom-16 left-0 right-0 h-24 md:h-24 lg:h-32 pointer-events-none z-10 overflow-hidden">
                   <Image
                     src="/templates/assets/flower_calendar_down.png"
                     alt="Calendar Bottom Decoration"
                     width={800}
                     height={130}
-                    className="w-full h-full object-contain scale-125 md:scale-110 lg:scale-125"
+                    className="w-full h-full object-contain scale-110 md:scale-110 lg:scale-125"
                   />
                 </div>
               </div>

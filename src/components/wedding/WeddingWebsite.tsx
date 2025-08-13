@@ -117,6 +117,7 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
       <Footer 
         showViewEvents={events && events.length > 0}
         eventUrl={events && events.length > 0 ? `/wedding/${urlSlug}/event?guest=${guest.id}&index=0` : undefined}
+        rsvpContact={website.wedding.rsvp_contact}
       />
     </div>
   );

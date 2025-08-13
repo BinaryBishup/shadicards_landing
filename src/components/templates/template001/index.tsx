@@ -20,7 +20,7 @@ export default function Template001({ data, primaryColor = '#ec4899', secondaryC
   } = visibility || {};
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-rose-50">
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 via-white to-rose-50 overflow-x-hidden">
       {show_hero && <HeroSection data={data.hero} primaryColor={primaryColor} />}
       {show_about && <AboutSection data={data.about} primaryColor={primaryColor} />}
       {show_story && <StorySection data={data.story} primaryColor={primaryColor} />}
