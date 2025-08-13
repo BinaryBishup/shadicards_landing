@@ -427,7 +427,7 @@ export default function UpcomingEventMinimal({
                 )}
               >
                 <ChevronLeft className="w-4 h-4" />
-                <span className="text-sm">Previous</span>
+                <span className="text-sm">Past</span>
               </button>
 
               {/* All Events Button in Center */}

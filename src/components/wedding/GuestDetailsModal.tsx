@@ -466,22 +466,44 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
 
               {/* Extra Fields */}
               {extraFields.length > 0 && (
-                <>
-                  <div className="border-t border-gray-200 pt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
-                    <div className="space-y-4">
-                      {extraFields.map((field, index) => (
-                        <div key={index}>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            {field.label}
-                            {field.required && <span className="text-rose-500 ml-1">*</span>}
-                          </label>
-                          {renderExtraField(field, index)}
-                        </div>
-                      ))}
+                <div className="mt-8">
+                  {/* Decorative Divider */}
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="bg-white px-4 text-gray-500 font-medium">Additional Details</span>
                     </div>
                   </div>
-                </>
+
+                  {/* Header with Icon */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
+                      <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-pink-500"></div>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold text-gray-900">Additional Information</h3>
+                      <p className="text-sm text-gray-500">Help us plan the perfect celebration for you</p>
+                    </div>
+                  </div>
+
+                  {/* Fields Grid */}
+                  <div className="grid gap-6">
+                    {extraFields.map((field, index) => (
+                      <div key={index} className="group">
+                        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-rose-400"></div>
+                          <span>{field.label}</span>
+                          {field.required && <span className="text-rose-500 text-base">*</span>}
+                        </label>
+                        <div className="relative">
+                          {renderExtraField(field, index)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {/* Submit Button */}

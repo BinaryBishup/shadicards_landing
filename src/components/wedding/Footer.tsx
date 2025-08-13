@@ -48,7 +48,7 @@ export default function Footer({
                 className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
               >
                 <Home className="w-4 h-4" />
-                <span className="text-sm">View Website</span>
+                <span className="text-sm">Website</span>
               </Link>
             )}
             
@@ -56,7 +56,7 @@ export default function Footer({
             {isEventPage && eventLocation && (
               <button 
                 onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(eventLocation)}`, '_blank')}
-                className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
+                className="flex items-center gap-2 bg-gradient-to-r from-rose-500/90 to-pink-600/90 hover:from-rose-600 hover:to-pink-700 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-rose-400/50 hover:scale-105"
               >
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm">Location</span>
