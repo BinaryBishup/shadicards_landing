@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import RestrictedAccess from "@/components/wedding/RestrictedAccess";
 import PasswordProtection from "@/components/wedding/PasswordProtection";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
@@ -22,7 +21,6 @@ interface WeddingPageContentProps {
 }
 
 export default function WeddingPageContent({ url, guestId }: WeddingPageContentProps) {
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [website, setWebsite] = useState<(WeddingWebsiteType & { wedding: Wedding }) | null>(null);
   const [guest, setGuest] = useState<Guest | null>(null);

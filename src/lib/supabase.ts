@@ -68,6 +68,8 @@ export interface Weddings {
   // Analytics
   view_count: number | null;
   last_viewed_at: string | null;
+  // Extra Information
+  extra_information: any | null;
   // User & Timestamps
   user_id: string | null;
   created_at?: string;
@@ -144,6 +146,7 @@ export interface Guest {
   title: string | null;
   smart_card: 'none' | 'paper' | 'pvc' | 'wooden' | 'metal' | null;
   profile_image: string | null;
+  extra_information: any | null;
 }
 
 export interface Event {

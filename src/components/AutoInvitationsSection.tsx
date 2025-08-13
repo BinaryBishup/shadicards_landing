@@ -55,7 +55,7 @@ export default function AutoInvitationsSection() {
       currentDelay += 2000; // 2 seconds between messages
       
       // Add typing indicator for next AI message (if there is one)
-      if (index < demoMessages.length - 1 && demoMessages[index + 1].sender === "ai") {
+      if (index < demoMessages.length - 1 && demoMessages[index + 1].sender === "bot") {
         const typingTimeout = setTimeout(() => {
           setMessages(prev => [...prev, { 
             id: `typing-${index}`, 
