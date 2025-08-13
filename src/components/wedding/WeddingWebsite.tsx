@@ -42,7 +42,7 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
                   <div className="w-10 md:w-12 h-10 md:h-12 rounded-full overflow-hidden border-2 md:border-3 border-rose-300 shadow-md flex-shrink-0">
                     <img 
                       src={guest.profile_image} 
-                      alt={guest.name}
+                      alt={`${guest.first_name} ${guest.last_name}`.trim()}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -55,7 +55,7 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
                   <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Welcome</p>
                   <p className="font-semibold text-gray-900 text-sm md:text-lg truncate">
                     <span className="hidden sm:inline">{guest.title || ''} </span>
-                    {guest.name}
+                    {`${guest.first_name} ${guest.last_name}`.trim()}
                   </p>
                 </div>
               </div>

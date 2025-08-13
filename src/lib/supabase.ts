@@ -131,7 +131,6 @@ export interface WeddingWebsite {
 export interface Guest {
   id: string;
   wedding_id: string;
-  name: string;
   first_name: string;
   last_name: string;
   whatsapp: string | null;

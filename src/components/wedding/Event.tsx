@@ -508,7 +508,7 @@ export default function UpcomingEventMinimal({
                 Welcome, <span className="font-bold text-xl" style={{ 
                   color: accentColor,
                   textShadow: `0 0 20px ${accentColor}40`
-                }}>{guest.name}</span>
+                }}>{`${guest.first_name} ${guest.last_name}`.trim()}</span>
               </p>
               <p className="text-white/80 text-base">
                 {website.wedding.bride_name} & {website.wedding.groom_name} invite you to celebrate
