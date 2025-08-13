@@ -50,7 +50,8 @@ export default function AutoInvitationsSection() {
       const mappedMessage = {
         ...message,
         text: message.message,
-        sender: message.sender === 'bot' ? 'ai' as const : 'guest' as const
+        sender: message.sender === 'bot' ? 'ai' as const : 'guest' as const,
+        hasImage: message.hasImage || false
       };
       
       // Add the actual message
@@ -140,10 +141,10 @@ export default function AutoInvitationsSection() {
               {/* Header */}
               <div>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6">
-                  <span className="text-gray-100 font-normal">AI That Speaks</span> <span className="font-medium">Your Language</span>
+                  <span className="text-gray-100 font-normal">Automated WhatsApp</span> <span className="font-medium">Invitations</span>
                 </h2>
                 <p className="text-lg md:text-xl text-gray-400 max-w-3xl">
-                  WhatsApp AI that collects addresses, manages RSVPs, and answers queries in 8+ Indian languages
+                  Send personalized invitations, collect RSVPs & addresses for physical cards - all automated via WhatsApp in 8+ languages
                 </p>
               </div>
 
@@ -154,8 +155,8 @@ export default function AutoInvitationsSection() {
                     <MessageCircle className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Try AI Assistant</h3>
-                    <p className="text-sm text-gray-400">Get instant demo on WhatsApp</p>
+                    <h3 className="text-xl font-semibold text-white">Try Live Demo</h3>
+                    <p className="text-sm text-gray-400">Experience automated invitations</p>
                   </div>
                 </div>
                 
@@ -276,10 +277,10 @@ export default function AutoInvitationsSection() {
               <div className="group">
                 <div className="relative bg-[#262626] backdrop-blur rounded-xl p-4 border border-gray-800 hover:border-gray-700 transition-all duration-300">
                   <div className="w-10 h-10 rounded-lg bg-rose-500 flex items-center justify-center mb-3">
-                    <MapPin className="w-5 h-5 text-white" />
+                    <MessageCircle className="w-5 h-5 text-white" />
                   </div>
-                  <h4 className="text-sm font-medium text-gray-200 mb-1">Collects Addresses</h4>
-                  <p className="text-xl font-bold text-rose-400">Auto</p>
+                  <h4 className="text-sm font-medium text-gray-200 mb-1">Send Invitations</h4>
+                  <p className="text-xl font-bold text-rose-400">Instant</p>
                 </div>
               </div>
               
@@ -288,28 +289,28 @@ export default function AutoInvitationsSection() {
                   <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center mb-3">
                     <Users className="w-5 h-5 text-white" />
                   </div>
-                  <h4 className="text-sm font-medium text-gray-200 mb-1">Manages RSVPs</h4>
-                  <p className="text-xl font-bold text-white">100%</p>
+                  <h4 className="text-sm font-medium text-gray-200 mb-1">RSVP Collection</h4>
+                  <p className="text-xl font-bold text-white">Auto</p>
                 </div>
               </div>
               
               <div className="group">
                 <div className="relative bg-[#262626] backdrop-blur rounded-xl p-4 border border-gray-800 hover:border-gray-700 transition-all duration-300">
                   <div className="w-10 h-10 rounded-lg bg-rose-500 flex items-center justify-center mb-3">
-                    <Languages className="w-5 h-5 text-white" />
+                    <MapPin className="w-5 h-5 text-white" />
                   </div>
-                  <h4 className="text-sm font-medium text-gray-200 mb-1">Languages</h4>
-                  <p className="text-xl font-bold text-rose-400">8+</p>
+                  <h4 className="text-sm font-medium text-gray-200 mb-1">Address Collection</h4>
+                  <p className="text-xl font-bold text-rose-400">Smart</p>
                 </div>
               </div>
               
               <div className="group">
                 <div className="relative bg-[#262626] backdrop-blur rounded-xl p-4 border border-gray-800 hover:border-gray-700 transition-all duration-300">
                   <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center mb-3">
-                    <Clock className="w-5 h-5 text-white" />
+                    <Languages className="w-5 h-5 text-white" />
                   </div>
-                  <h4 className="text-sm font-medium text-gray-200 mb-1">Available</h4>
-                  <p className="text-xl font-bold text-white">24/7</p>
+                  <h4 className="text-sm font-medium text-gray-200 mb-1">Multi-Language</h4>
+                  <p className="text-xl font-bold text-white">8+</p>
                 </div>
               </div>
             </div>
