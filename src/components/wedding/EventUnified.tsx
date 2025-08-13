@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import Footer from "./Footer";
 import EventLoadingScreen from "./EventLoadingScreen";
-import type { Guest, Wedding, WeddingWebsite as WeddingWebsiteType, Event, EventInvitation } from "@/lib/supabase";
+import type { Guest, Weddings, Event, EventInvitation } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight, Calendar, Clock, MapPin, Navigation, Check, X, HelpCircle, Users, ExternalLink, Grid3x3 } from "lucide-react";
 
@@ -18,8 +18,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 library.add(fas);
 
-interface UpcomingEventProps {
-  website: WeddingWebsiteType & { wedding: Wedding };
+interface EventUnifiedProps {
+  wedding: Weddings;
   guest: Guest;
   event: Event;
   invitation: EventInvitation;
@@ -58,7 +58,6 @@ const AnimatedCounter = ({ value, label }: { value: number; label: string }) => 
 
 // Bokeh Background Animation
 const BokehBackground = ({ primaryColor }: { primaryColor: string }) => {
-  // Use deterministic values based on index instead of Math.random()
   const bokehElements = [
     { width: 150, height: 150, left: 20, top: 15 },
     { width: 200, height: 200, left: 70, top: 60 },
@@ -68,7 +67,6 @@ const BokehBackground = ({ primaryColor }: { primaryColor: string }) => {
     { width: 140, height: 140, left: 55, top: 35 },
   ];
 
-  // Convert hex to rgba with opacity
   const hexToRgba = (hex: string, opacity: number) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result 
@@ -78,7 +76,6 @@ const BokehBackground = ({ primaryColor }: { primaryColor: string }) => {
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Animated bokeh lights */}
       {bokehElements.map((element, i) => (
         <div
           key={i}
@@ -120,13 +117,11 @@ const EventSelectionModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
       
-      {/* Modal */}
       <div className="relative bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">All Your Events</h2>
         
@@ -140,7 +135,6 @@ const EventSelectionModal = ({
                 key={event.id}
                 onClick={() => {
                   onClose();
-                  // Navigate to the selected event
                   if (onEventSelect) {
                     onEventSelect(index);
                   } else {
@@ -204,8 +198,8 @@ const EventSelectionModal = ({
   );
 };
 
-export default function UpcomingEventMinimal({ 
-  website, 
+export default function EventUnified({ 
+  wedding, 
   guest, 
   event, 
   invitation,
@@ -213,7 +207,7 @@ export default function UpcomingEventMinimal({
   currentEventIndex,
   onNavigate,
   onEditProfile
-}: UpcomingEventProps) {
+}: EventUnifiedProps) {
   const router = useRouter();
   const [rsvpStatus, setRsvpStatus] = useState<'yes' | 'no' | 'maybe' | null>(invitation.rsvp_status);
   const [plusOnes, setPlusOnes] = useState(invitation.plus_ones || 1);
@@ -223,17 +217,16 @@ export default function UpcomingEventMinimal({
   const [prevPlusOnes, setPrevPlusOnes] = useState(plusOnes);
   const [showEventModal, setShowEventModal] = useState(false);
 
-  // Use dynamic data from Supabase
+  // Use dynamic data from event and wedding
   const backgroundImage = event.background_image || '/templates/assets/event_type/wedding.jpg';
-  const primaryColor = event.primary_color || '#E91E63';
-  const secondaryColor = event.secondary_color || '#FF4081';
+  const primaryColor = event.primary_color || wedding.primary_color || '#E91E63';
+  const secondaryColor = event.secondary_color || wedding.secondary_color || '#FF4081';
   const accentColor = event.accent_color || '#D4AF37';
 
   useEffect(() => {
     setShowGuestCount(rsvpStatus === 'yes');
   }, [rsvpStatus]);
 
-  // Smooth counter animation for guest count
   useEffect(() => {
     if (plusOnes !== prevPlusOnes) {
       const timer = setTimeout(() => setPrevPlusOnes(plusOnes), 50);
@@ -319,18 +312,15 @@ export default function UpcomingEventMinimal({
     return `${displayHour}:${minutes} ${ampm}`;
   };
 
-  // Find current event index if not provided
   const eventIndex = currentEventIndex !== undefined ? currentEventIndex : allEvents.findIndex(e => e.id === event.id);
   const hasPrevEvent = eventIndex > 0;
   const hasNextEvent = eventIndex < allEvents.length - 1;
 
-  // Handle navigation
   const handleNavigation = (newIndex: number) => {
     if (onNavigate) {
       onNavigate(newIndex);
     } else {
-      // Fallback to router navigation
-      router.push(`/wedding/${website.url_slug}/event?guest=${guest.id}&index=${newIndex}`);
+      router.push(`/wedding/${wedding.url_slug}/event?guest=${guest.id}&index=${newIndex}`);
     }
   };
 
@@ -382,13 +372,10 @@ export default function UpcomingEventMinimal({
           className="object-cover"
           priority
         />
-        {/* Enhanced gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/60" />
         
-        {/* Bokeh animation with dynamic color */}
         <BokehBackground primaryColor={primaryColor} />
         
-        {/* Floating icon elements based on event icon */}
         {event.icon && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(3)].map((_, i) => (
@@ -417,7 +404,6 @@ export default function UpcomingEventMinimal({
         <div className="bg-black/20 backdrop-blur-sm border-b border-white/10">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between gap-2">
-              {/* Previous Event */}
               <button
                 onClick={() => hasPrevEvent && handleNavigation(eventIndex - 1)}
                 disabled={!hasPrevEvent}
@@ -432,7 +418,6 @@ export default function UpcomingEventMinimal({
                 <span className="text-sm">Previous</span>
               </button>
 
-              {/* All Events Button in Center */}
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => setShowEventModal(true)}
@@ -443,7 +428,6 @@ export default function UpcomingEventMinimal({
                 </button>
               </div>
 
-              {/* Next Event */}
               <button
                 onClick={() => hasNextEvent && handleNavigation(eventIndex + 1)}
                 disabled={!hasNextEvent}
@@ -461,11 +445,11 @@ export default function UpcomingEventMinimal({
           </div>
         </div>
 
-        {/* Main Content - Adjusted for better visibility */}
+        {/* Main Content */}
         <div className="flex-1 flex items-center justify-center px-6 py-8">
           <div className="max-w-2xl w-full text-center space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
-            {/* Couple Image with Gold Ring - Moved to top */}
-            {website.wedding.couple_picture && (
+            {/* Couple Image - Moved to top */}
+            {wedding.couple_picture && (
               <div className="mx-auto w-32 h-32 rounded-full overflow-hidden shadow-2xl relative mb-6">
                 <div 
                   className="absolute inset-0 rounded-full border-4"
@@ -475,8 +459,8 @@ export default function UpcomingEventMinimal({
                   }}
                 />
                 <Image
-                  src={website.wedding.couple_picture}
-                  alt={`${website.wedding.bride_name} & ${website.wedding.groom_name}`}
+                  src={wedding.couple_picture}
+                  alt={`${wedding.bride_name} & ${wedding.groom_name}`}
                   width={128}
                   height={128}
                   className="object-cover"
@@ -484,7 +468,7 @@ export default function UpcomingEventMinimal({
               </div>
             )}
 
-            {/* Event Name - After couple picture */}
+            {/* Event Name */}
             <div className="mb-4">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-3 drop-shadow-2xl">
                 {event.name}
@@ -496,7 +480,7 @@ export default function UpcomingEventMinimal({
               )}
             </div>
 
-            {/* Countdown Timer - After event name */}
+            {/* Countdown Timer */}
             <div className="flex justify-center gap-3 mb-6">
               <AnimatedCounter value={countdown.days} label="Days" />
               <AnimatedCounter value={countdown.hours} label="Hours" />
@@ -504,7 +488,7 @@ export default function UpcomingEventMinimal({
               <AnimatedCounter value={countdown.seconds} label="Seconds" />
             </div>
 
-            {/* Guest Welcome */}
+            {/* Guest Welcome with highlighted name */}
             <div>
               <p className="text-white/90 text-lg">
                 Welcome, <span className="font-bold text-xl" style={{ 
@@ -513,13 +497,12 @@ export default function UpcomingEventMinimal({
                 }}>{guest.name}</span>
               </p>
               <p className="text-white/80 text-base">
-                {website.wedding.bride_name} & {website.wedding.groom_name} invite you to celebrate
+                {wedding.bride_name} & {wedding.groom_name} invite you to celebrate
               </p>
             </div>
 
-            {/* Event Details Glass Card - Compact */}
+            {/* Event Details Glass Card */}
             <div className="bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-lg rounded-3xl p-6 border border-white/30 shadow-2xl space-y-4">
-              {/* Event Icon if available */}
               {event.icon && (
                 <div className="flex justify-center">
                   <div 
@@ -539,7 +522,6 @@ export default function UpcomingEventMinimal({
                 </div>
               )}
               
-              {/* Special Message if available */}
               {event.message && (
                 <div className="p-4 bg-white/10 backdrop-blur-sm rounded-xl max-w-lg mx-auto">
                   <p className="text-white/90 text-base text-center">
@@ -549,7 +531,6 @@ export default function UpcomingEventMinimal({
                 </div>
               )}
               
-              {/* Date and Time */}
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-white/90">
                   <Calendar className="w-4 h-4" />
@@ -563,7 +544,6 @@ export default function UpcomingEventMinimal({
 
               <div className="h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-              {/* Enhanced Venue Section */}
               <div className="space-y-4">
                 <div className="text-center space-y-2">
                   <div className="flex items-center justify-center gap-2 text-white">
@@ -575,7 +555,6 @@ export default function UpcomingEventMinimal({
                   )}
                 </div>
                 
-                {/* Embedded Google Maps */}
                 {event.address && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && (
                   <div className="rounded-xl overflow-hidden border border-white/20 mx-auto max-w-md shadow-lg">
                     <iframe
@@ -591,18 +570,15 @@ export default function UpcomingEventMinimal({
                     />
                   </div>
                 )}
-                
               </div>
             </div>
 
-            {/* Enhanced RSVP Card */}
+            {/* RSVP Card */}
             <div className="relative bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-8 mt-8 overflow-hidden">
-              {/* Gold foil effect */}
               <div className="absolute inset-0 gold-shimmer opacity-10 pointer-events-none" />
               
               <h3 className="font-semibold text-gray-800 mb-6 text-lg relative z-10">Will you be attending?</h3>
               
-              {/* RSVP Buttons with Icons */}
               <div className="flex rounded-xl overflow-hidden shadow-inner relative z-10">
                 <button
                   onClick={() => handleRSVPUpdate('yes')}
@@ -668,7 +644,6 @@ export default function UpcomingEventMinimal({
                 </button>
               </div>
 
-              {/* Enhanced Guest Count Selector */}
               {showGuestCount && (
                 <div className="mt-8 animate-in fade-in slide-in-from-top-2 duration-500 relative z-10">
                   <label className="text-sm font-medium text-gray-600 block mb-4 flex items-center justify-center gap-2">
@@ -729,8 +704,6 @@ export default function UpcomingEventMinimal({
             </div>
           </div>
         </div>
-
-        {/* Removed separate footer - now integrated in Footer component */}
       </div>
 
       {/* Event Selection Modal */}
@@ -740,17 +713,17 @@ export default function UpcomingEventMinimal({
         events={allEvents}
         currentEventId={event.id}
         guestId={guest.id}
-        urlSlug={website.url_slug}
+        urlSlug={wedding.url_slug}
         onEventSelect={onNavigate ? (index) => { setShowEventModal(false); handleNavigation(index); } : undefined}
       />
 
-      {/* Footer with View Website button and Location */}
+      {/* Footer with Location button */}
       <Footer 
         showViewEvents={false}
         isEventPage={true}
         showAllEvents={false}
         showViewWebsite={true}
-        weddingUrl={`/wedding/${website.url_slug}?guest=${guest.id}`}
+        weddingUrl={`/wedding/${wedding.url_slug}?guest=${guest.id}`}
         onAllEventsClick={() => setShowEventModal(true)}
         eventLocation={event.address || event.venue}
       />

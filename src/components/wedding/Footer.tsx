@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, HelpCircle, Home } from "lucide-react";
+import { Calendar, HelpCircle, Home, MapPin } from "lucide-react";
 import HelpModal from "./HelpModal";
 
 interface FooterProps {
@@ -11,8 +11,10 @@ interface FooterProps {
   eventUrl?: string;
   isEventPage?: boolean;
   showAllEvents?: boolean;
+  showViewWebsite?: boolean;
   weddingUrl?: string;
   onAllEventsClick?: () => void;
+  eventLocation?: string;
 }
 
 export default function Footer({ 
@@ -20,8 +22,10 @@ export default function Footer({
   eventUrl, 
   isEventPage = false,
   showAllEvents = false,
+  showViewWebsite = false,
   weddingUrl = "/",
-  onAllEventsClick
+  onAllEventsClick,
+  eventLocation
 }: FooterProps) {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
 
@@ -37,14 +41,36 @@ export default function Footer({
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex items-center justify-center gap-3">
             
-            {/* All Events Button (for event page) */}
+            {/* View Website Button (for event page) */}
+            {isEventPage && showViewWebsite && (
+              <Link 
+                href={weddingUrl}
+                className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
+              >
+                <Home className="w-4 h-4" />
+                <span className="text-sm">View Website</span>
+              </Link>
+            )}
+            
+            {/* Location Button (for event page) */}
+            {isEventPage && eventLocation && (
+              <button 
+                onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(eventLocation)}`, '_blank')}
+                className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm">Location</span>
+              </button>
+            )}
+            
+            {/* All Events Button (for event page) - Legacy support */}
             {isEventPage && showAllEvents && (
               onAllEventsClick ? (
                 <button 
                   onClick={onAllEventsClick}
                   className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
                 >
-                  <Home className="w-4 h-4" />
+                  <Calendar className="w-4 h-4" />
                   <span className="text-sm">All Events</span>
                 </button>
               ) : (
@@ -52,7 +78,7 @@ export default function Footer({
                   href={weddingUrl}
                   className="flex items-center gap-2 bg-gradient-to-r from-white/20 to-white/10 hover:from-white/30 hover:to-white/20 backdrop-blur-md px-4 py-2 rounded-full transition-all text-white font-medium shadow-lg border border-white/20"
                 >
-                  <Home className="w-4 h-4" />
+                  <Calendar className="w-4 h-4" />
                   <span className="text-sm">All Events</span>
                 </Link>
               )

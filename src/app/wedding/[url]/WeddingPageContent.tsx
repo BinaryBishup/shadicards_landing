@@ -236,16 +236,10 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
           onClose={() => setShowProfileEdit(false)}
           guestData={{
             name: guest.name,
-            email: guest.email || '',
             phone: guest.whatsapp || '',
-            relation: guest.relationship,
-            attendingEvents: events.map(e => e.name),
-            guestsCount: 1,
-            dietaryPreferences: guest.dietary_preferences || '',
-            specialRequests: guest.notes || '',
-            address: guest.address || ''
+            address: guest.address || '',
+            profile_image: guest.profile_image || ''
           }}
-          availableEvents={events.map(e => e.name)}
           onSave={handleProfileSave}
         />
       </>

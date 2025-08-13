@@ -17,6 +17,64 @@ if (!supabaseUrl || !apiKey) {
 export const supabase = createClient(supabaseUrl, apiKey);
 
 // Type definitions based on your database schema
+
+// Unified Weddings table that combines Wedding and WeddingWebsite
+export interface Weddings {
+  id: string;
+  // Wedding Information
+  bride_name: string;
+  groom_name: string;
+  wedding_date: string | null;
+  venue_name: string | null;
+  venue_address: string | null;
+  phone_number: string | null;
+  email: string | null;
+  is_active: boolean | null;
+  couple_picture: string | null;
+  bride_photo_url: string | null;
+  groom_photo_url: string | null;
+  about_bride: string | null;
+  about_groom: string | null;
+  rsvp_contact: string | null;
+  // Website Configuration
+  url_slug: string;
+  status: 'active' | 'inactive' | 'draft' | null;
+  is_password_protected: boolean | null;
+  password: string | null;
+  visibility: string | null;
+  template_id: string | null;
+  primary_color: string | null;
+  secondary_color: string | null;
+  // Website Section Visibility
+  show_hero: boolean | null;
+  show_about: boolean | null;
+  show_story: boolean | null;
+  show_gallery: boolean | null;
+  show_events: boolean | null;
+  show_families: boolean | null;
+  show_wedding_party: boolean | null;
+  show_chat: boolean | null;
+  // Website Content
+  story_items: any | null;
+  gallery_images: any | null;
+  bride_families: any | null;
+  groom_families: any | null;
+  bridesmaids: any | null;
+  groomsmen: any | null;
+  // SEO & Meta
+  meta_title: string | null;
+  meta_description: string | null;
+  og_image: string | null;
+  // Analytics
+  view_count: number | null;
+  last_viewed_at: string | null;
+  // User & Timestamps
+  user_id: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// Legacy interfaces for backwards compatibility
 export interface Wedding {
   id: string;
   bride_name: string;

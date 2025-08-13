@@ -118,8 +118,10 @@ export interface VisibilitySettings {
   show_about?: boolean;
   show_story?: boolean;
   show_gallery?: boolean;
+  show_events?: boolean;
   show_families?: boolean;
   show_wedding_party?: boolean;
+  show_chat?: boolean;
 }
 
 // Template Component Props
