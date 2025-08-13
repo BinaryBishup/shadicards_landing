@@ -2,18 +2,21 @@
 
 import { useState, useEffect, useRef } from "react";
 import { User, Phone, MapPin, Camera, X, Check, Save, ChevronDown } from "lucide-react";
-import { uploadProfilePicture } from "@/lib/storage-utils";
+import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
 // Country codes for phone number
 const countryCodes = [
-  { code: '+91', country: 'IN', name: 'India' },
-  { code: '+1', country: 'US', name: 'United States' },
-  { code: '+44', country: 'GB', name: 'United Kingdom' },
-  { code: '+61', country: 'AU', name: 'Australia' },
-  { code: '+971', country: 'AE', name: 'UAE' },
-  { code: '+65', country: 'SG', name: 'Singapore' },
-  { code: '+81', country: 'JP', name: 'Japan' },
+  { code: '+91', country: 'IN', name: 'India', flag: '🇮🇳' },
+  { code: '+1', country: 'US', name: 'United States', flag: '🇺🇸' },
+  { code: '+44', country: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
+  { code: '+61', country: 'AU', name: 'Australia', flag: '🇦🇺' },
+  { code: '+971', country: 'AE', name: 'UAE', flag: '🇦🇪' },
+  { code: '+65', country: 'SG', name: 'Singapore', flag: '🇸🇬' },
+  { code: '+81', country: 'JP', name: 'Japan', flag: '🇯🇵' },
+  { code: '+49', country: 'DE', name: 'Germany', flag: '🇩🇪' },
+  { code: '+33', country: 'FR', name: 'France', flag: '🇫🇷' },
+  { code: '+39', country: 'IT', name: 'Italy', flag: '🇮🇹' },
 ];
 
 interface GuestEditModalProps {
@@ -72,7 +75,7 @@ const AddressAutocomplete = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className="w-full px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all bg-white placeholder-gray-400"
+      className="w-full px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all bg-white placeholder-gray-400 text-gray-700"
     />
   );
 };
@@ -95,6 +98,7 @@ export default function GuestEditModal({
   const [showSuccess, setShowSuccess] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Load Google Places script
@@ -157,17 +161,34 @@ export default function GuestEditModal({
   const uploadImage = async (file: File) => {
     setUploadingImage(true);
     try {
-      const result = await uploadProfilePicture(file);
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `profile-${Date.now()}.${fileExt}`;
       
-      if (result.success && result.publicUrl) {
-        setFormData(prev => ({ ...prev, profile_image: result.publicUrl }));
-      } else {
-        console.error('Upload error:', result.error);
-        alert(result.error || 'Failed to upload image');
+      // Upload to Supabase Storage
+      const { error } = await supabase.storage
+        .from('guest-profiles')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) {
+        throw error;
       }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('guest-profiles')
+        .getPublicUrl(fileName);
+
+      if (urlData.publicUrl) {
+        setFormData(prev => ({ ...prev, profile_image: urlData.publicUrl }));
+      }
+
     } catch (error) {
       console.error('Image upload error:', error);
-      alert('Failed to upload image');
+      alert('Failed to upload image. Make sure the storage bucket is set up correctly.');
     } finally {
       setUploadingImage(false);
     }
@@ -201,6 +222,8 @@ export default function GuestEditModal({
     }
   };
 
+  const selectedCountry = countryCodes.find(c => c.code === countryCode);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
@@ -212,15 +235,19 @@ export default function GuestEditModal({
       {/* Modal */}
       <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
         {/* Header */}
-        <div className="bg-gradient-to-r from-pink-500 to-pink-600 p-6 text-white">
-          <div className="flex items-center justify-between">
+        <div className="bg-gradient-to-r from-pink-500 to-pink-600 p-6 text-white relative overflow-hidden">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-pink-400/20 rounded-full -translate-y-16 translate-x-16"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-700/20 rounded-full translate-y-12 -translate-x-12"></div>
+          
+          <div className="flex items-center justify-between relative">
             <div>
               <h2 className="text-2xl font-semibold">Update Your Profile</h2>
-              <p className="text-pink-100 text-sm mt-1">Let us know more about you</p>
+              <p className="text-pink-100 text-sm mt-1">Let us know more about you ✨</p>
             </div>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all hover:scale-110"
             >
               <X className="w-5 h-5" />
             </button>
@@ -229,7 +256,7 @@ export default function GuestEditModal({
 
         {/* Success Banner */}
         {showSuccess && (
-          <div className="bg-pink-50 border-b border-pink-200 px-6 py-3">
+          <div className="bg-pink-50 border-b border-pink-200 px-6 py-3 animate-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-2 text-pink-700">
               <Check className="w-5 h-5" />
               <span className="font-medium">Profile updated successfully!</span>
@@ -243,7 +270,7 @@ export default function GuestEditModal({
             {/* Profile Picture */}
             <div className="text-center">
               <div className="relative inline-block">
-                <div className="w-24 h-24 rounded-full overflow-hidden bg-pink-100 border-4 border-pink-200 mx-auto">
+                <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-pink-100 to-pink-200 border-4 border-pink-300 mx-auto shadow-lg">
                   {previewImage ? (
                     <Image
                       src={previewImage}
@@ -264,7 +291,7 @@ export default function GuestEditModal({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="absolute -bottom-2 -right-2 w-8 h-8 bg-pink-500 hover:bg-pink-600 text-white rounded-full flex items-center justify-center transition-all hover:scale-110 disabled:opacity-50"
+                  className="absolute -bottom-2 -right-2 w-8 h-8 bg-pink-500 hover:bg-pink-600 text-white rounded-full flex items-center justify-center transition-all hover:scale-110 disabled:opacity-50 shadow-lg"
                 >
                   {uploadingImage ? (
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -296,7 +323,7 @@ export default function GuestEditModal({
                 required
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all"
+                className="w-full px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all bg-white text-gray-700"
                 placeholder="Enter your full name"
               />
             </div>
@@ -305,23 +332,42 @@ export default function GuestEditModal({
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <Phone className="w-4 h-4 text-pink-500" />
-                Phone Number
+                WhatsApp Phone Number
               </label>
               <div className="flex gap-2">
                 {/* Country Code Dropdown */}
                 <div className="relative">
-                  <select 
-                    value={countryCode}
-                    onChange={(e) => setCountryCode(e.target.value)}
-                    className="px-3 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 appearance-none bg-white pr-8 min-w-[80px]"
+                  <button
+                    type="button"
+                    onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                    className="px-3 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 bg-white min-w-[100px] flex items-center justify-between gap-2 text-gray-700"
                   >
-                    {countryCodes.map(country => (
-                      <option key={country.code} value={country.code}>
-                        {country.code}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                    <span className="flex items-center gap-1">
+                      <span>{selectedCountry?.flag}</span>
+                      <span className="text-sm">{countryCode}</span>
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
+                  </button>
+                  
+                  {showCountryDropdown && (
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-pink-200 rounded-xl shadow-lg z-10 max-h-60 overflow-y-auto w-64">
+                      {countryCodes.map(country => (
+                        <button
+                          key={country.code}
+                          type="button"
+                          onClick={() => {
+                            setCountryCode(country.code);
+                            setShowCountryDropdown(false);
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-pink-50 flex items-center gap-3 text-gray-700"
+                        >
+                          <span>{country.flag}</span>
+                          <span className="text-sm font-medium">{country.code}</span>
+                          <span className="text-sm text-gray-500">{country.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 {/* Phone Number Input */}
@@ -330,7 +376,7 @@ export default function GuestEditModal({
                   required
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="flex-1 px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all"
+                  className="flex-1 px-4 py-3 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition-all bg-white text-gray-700"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -354,7 +400,7 @@ export default function GuestEditModal({
               <button
                 type="submit"
                 disabled={isLoading || uploadingImage}
-                className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
               >
                 {isLoading ? (
                   <>

@@ -126,11 +126,17 @@ export default function WeddingPageContentUnified({ url, guestId }: WeddingPageC
   const handleProfileSave = async (profileData: any) => {
     if (!guest) return;
     
+    console.log('Attempting to update guest profile with data:', profileData);
     const result = await updateGuestProfile(guest.id, profileData);
     
     if (result.success && result.data) {
+      console.log('Profile update successful:', result.data);
       setGuest(result.data as Guest);
       setShowProfileEdit(false);
+    } else {
+      console.error('Profile update failed:', result.error);
+      // You might want to show an error message to the user
+      alert(`Failed to update profile: ${result.error}`);
     }
   };
 
@@ -212,6 +218,7 @@ export default function WeddingPageContentUnified({ url, guestId }: WeddingPageC
           onSave={handleProfileSave}
         />
       )}
+
     </>
   );
 }
