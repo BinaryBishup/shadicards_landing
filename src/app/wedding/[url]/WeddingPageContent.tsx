@@ -146,7 +146,7 @@ export default function WeddingPageContent({ url, guestId }: WeddingPageContentP
 
   // Loading state with improved experience
   if (loading) {
-    return <LoadingScreen guestName={guest?.first_name || guest?.name} />;
+    return <LoadingScreen guestName={guest?.first_name || guest?.last_name} />;
   }
 
   // Error state

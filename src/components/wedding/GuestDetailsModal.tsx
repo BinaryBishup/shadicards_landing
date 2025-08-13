@@ -115,7 +115,6 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
         .update({
           first_name: formData.first_name,
           last_name: formData.last_name,
-          name: `${formData.first_name} ${formData.last_name}`.trim(), // Keep name field synced
           email: formData.email,
           whatsapp: formData.whatsapp,
           address: formData.address,
