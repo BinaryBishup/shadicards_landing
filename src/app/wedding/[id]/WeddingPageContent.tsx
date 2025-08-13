@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
-import GuestDetailsModal from "@/components/wedding/GuestDetailsModal";
 import { supabase } from "@/lib/supabase";
 import type { Weddings, Guest, Event } from "@/lib/supabase";
 
@@ -14,22 +12,11 @@ interface WeddingPageContentProps {
 }
 
 export default function WeddingPageContent({ weddingId, guestId }: WeddingPageContentProps) {
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [wedding, setWedding] = useState<Weddings | null>(null);
   const [guest, setGuest] = useState<Guest | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
-  const [showGuestModal, setShowGuestModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Check if edit=true parameter is present
-  const editParam = searchParams?.get('edit');
-  
-  useEffect(() => {
-    if (editParam === 'true' && guest) {
-      setShowGuestModal(true);
-    }
-  }, [editParam, guest]);
 
   useEffect(() => {
     loadWeddingData();
@@ -167,7 +154,7 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
           guest={guest}
           events={events}
           urlSlug={wedding.id}
-          onEditProfile={() => setShowGuestModal(true)}
+          onEditProfile={() => window.location.href = `/wedding/${wedding.id}/edit?guest=${guest.id}`}
         />
       )}
 
@@ -181,15 +168,6 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
         </div>
       )}
 
-      {/* Guest Details Modal */}
-      {guest && showGuestModal && (
-        <GuestDetailsModal
-          isOpen={showGuestModal}
-          onClose={() => setShowGuestModal(false)}
-          weddingId={wedding.id}
-          guestId={guest.id}
-        />
-      )}
     </>
   );
 }
