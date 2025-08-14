@@ -1,12 +1,34 @@
+"use client";
+
 import Header from "@/components/Header";
 import Image from "next/image";
+import { useEffect, useState, useRef } from "react";
 import { 
   Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin, 
   Heart, Camera, Instagram, Gift, Clock, Shield, Sparkles,
-  ArrowRight, Check, Star
+  ArrowRight, Check, Star, Scan, Wifi, CreditCard
 } from "lucide-react";
 
 export default function SmartCardPage() {
+  const [isVisible, setIsVisible] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (heroRef.current) {
+      observer.observe(heroRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
   const features = [
     {
       icon: <QrCode className="w-8 h-8" />,
@@ -111,7 +133,7 @@ export default function SmartCardPage() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 bg-[rgb(254.7,255,235)] overflow-hidden">
+      <section ref={heroRef} className="relative pt-32 pb-24 bg-[rgb(254.7,255,235)] overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[rgb(254.7,255,235)] to-[rgb(252,250,230)]" />
@@ -173,49 +195,88 @@ export default function SmartCardPage() {
               </div>
             </div>
             
-            {/* Right Column - Card Visual */}
-            <div className="relative flex items-center justify-center">
-              <div className="relative">
-                {/* Floating annotations */}
-                <div className="absolute -top-4 -left-8 bg-white rounded-xl shadow-md p-3 max-w-[160px] animate-float z-10">
-                  <p className="text-xs text-gray-600">
-                    Instant access with tap or scan
-                  </p>
-                  <div className="absolute bottom-0 left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white transform translate-y-full"></div>
+            {/* Right Column - Card Visual with Tiles */}
+            <div className="relative flex items-center justify-center min-h-[600px]">
+              {/* Feature Tiles positioned around the card */}
+              {/* Top Left Tile */}
+              <div className={`absolute top-0 left-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+                   style={{animationDelay: '0.8s'}}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
+                    <Scan className="w-5 h-5 text-rose-600" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-800">Instant Access</h4>
                 </div>
-                
-                <div className="absolute -top-8 -right-6 bg-white rounded-xl shadow-md p-3 max-w-[140px] animate-float z-10" style={{animationDelay: '1s'}}>
-                  <p className="text-xs text-gray-600">
-                    Personalized for each guest
-                  </p>
-                  <div className="absolute bottom-0 right-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white transform translate-y-full"></div>
+                <p className="text-xs text-gray-600">Tap or scan for immediate access</p>
+              </div>
+
+              {/* Top Right Tile */}
+              <div className={`absolute top-0 right-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+                   style={{animationDelay: '1s'}}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Users className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-800">Personalized</h4>
                 </div>
-                
-                <div className="absolute -bottom-6 -left-12 bg-white rounded-xl shadow-md p-3 max-w-[140px] animate-float z-10" style={{animationDelay: '2s'}}>
-                  <p className="text-xs text-gray-600">
-                    Schedule content updates
-                  </p>
-                  <div className="absolute top-3 right-0 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-white transform translate-x-full"></div>
+                <p className="text-xs text-gray-600">Unique content for each guest</p>
+              </div>
+
+              {/* Bottom Left Tile */}
+              <div className={`absolute bottom-0 left-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+                   style={{animationDelay: '1.2s'}}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-green-600" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-800">Schedule</h4>
                 </div>
-                
-                {/* Smart Card Image */}
+                <p className="text-xs text-gray-600">Time-based content updates</p>
+              </div>
+
+              {/* Bottom Right Tile */}
+              <div className={`absolute bottom-0 right-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+                   style={{animationDelay: '1.4s'}}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <Smartphone className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <h4 className="text-sm font-semibold text-gray-800">Universal</h4>
+                </div>
+                <p className="text-xs text-gray-600">Works on all smartphones</p>
+              </div>
+
+              {/* Center Card with Animation */}
+              <div className={`relative z-10 ${isVisible ? 'animate-slideUpCard' : 'opacity-0'}`}>
                 <div className="relative transform hover:scale-105 transition-transform duration-300">
                   <Image
                     src="/smart-card.svg"
                     alt="Smart Wedding Card"
-                    width={400}
-                    height={250}
-                    className="w-full max-w-[400px] h-auto"
+                    width={350}
+                    height={220}
+                    className="w-full max-w-[350px] h-auto drop-shadow-2xl"
                     priority
                   />
+                  
+                  {/* Glowing effect behind card */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 blur-3xl opacity-20 -z-10"></div>
                 </div>
-                
-                {/* Decorative dots */}
-                <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px]">
-                  <div className="absolute top-10 right-10 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
-                  <div className="absolute bottom-10 left-10 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
-                  <div className="absolute top-1/2 right-5 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
-                  <div className="absolute bottom-20 right-20 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
+              </div>
+
+              {/* Additional floating elements */}
+              <div className="absolute top-1/2 left-8 transform -translate-y-1/2">
+                <div className="flex flex-col gap-2">
+                  <div className="w-2 h-2 bg-rose-300 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                  <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                </div>
+              </div>
+
+              <div className="absolute top-1/2 right-8 transform -translate-y-1/2">
+                <div className="flex flex-col gap-2">
+                  <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
                 </div>
               </div>
             </div>
