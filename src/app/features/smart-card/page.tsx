@@ -182,68 +182,76 @@ export default function SmartCardPage() {
                 <ArrowRight className="w-5 h-5 ml-2 inline group-hover:translate-x-1 transition-transform" />
               </button>
               
-              <div className="mt-8 flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                </div>
-                
-                <div className="text-sm text-gray-600">
-                  @shaadicards
-                </div>
-              </div>
             </div>
             
-            {/* Right Column - Card Visual with Tiles */}
+            {/* Right Column - Card Visual with Simple Text Annotations */}
             <div className="relative flex items-center justify-center min-h-[600px]">
-              {/* Feature Tiles positioned around the card */}
-              {/* Top Left Tile */}
-              <div className={`absolute top-0 left-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+              {/* Top Left Annotation */}
+              <div className={`absolute top-10 left-0 max-w-[180px] ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
                    style={{animationDelay: '0.8s'}}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center">
-                    <Scan className="w-5 h-5 text-rose-600" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-gray-800">Instant Access</h4>
-                </div>
-                <p className="text-xs text-gray-600">Tap or scan for immediate access</p>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Share wedding details instantly with tap or scan
+                </p>
+                {/* Curved arrow pointing to card */}
+                <svg className="absolute -bottom-2 right-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
+                  <path d="M10 10 Q 50 30 80 50" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead1)"/>
+                  <defs>
+                    <marker id="arrowhead1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
+                    </marker>
+                  </defs>
+                </svg>
               </div>
 
-              {/* Top Right Tile */}
-              <div className={`absolute top-0 right-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+              {/* Top Right Annotation */}
+              <div className={`absolute top-10 right-0 max-w-[180px] text-right ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
                    style={{animationDelay: '1s'}}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <Users className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-gray-800">Personalized</h4>
-                </div>
-                <p className="text-xs text-gray-600">Unique content for each guest</p>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Personalized content for each wedding guest
+                </p>
+                {/* Curved arrow pointing to card */}
+                <svg className="absolute -bottom-2 left-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
+                  <path d="M90 10 Q 50 30 20 50" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead2)"/>
+                  <defs>
+                    <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
+                    </marker>
+                  </defs>
+                </svg>
               </div>
 
-              {/* Bottom Left Tile */}
-              <div className={`absolute bottom-0 left-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+              {/* Bottom Left Annotation */}
+              <div className={`absolute bottom-10 left-0 max-w-[180px] ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
                    style={{animationDelay: '1.2s'}}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-green-600" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-gray-800">Schedule</h4>
-                </div>
-                <p className="text-xs text-gray-600">Time-based content updates</p>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Schedule content to appear at perfect moments
+                </p>
+                {/* Curved arrow pointing to card */}
+                <svg className="absolute -top-2 right-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
+                  <path d="M10 50 Q 50 30 80 10" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead3)"/>
+                  <defs>
+                    <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
+                    </marker>
+                  </defs>
+                </svg>
               </div>
 
-              {/* Bottom Right Tile */}
-              <div className={`absolute bottom-0 right-0 bg-white rounded-2xl shadow-lg p-4 w-48 ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
+              {/* Bottom Right Annotation */}
+              <div className={`absolute bottom-10 right-0 max-w-[180px] text-right ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
                    style={{animationDelay: '1.4s'}}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Smartphone className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-gray-800">Universal</h4>
-                </div>
-                <p className="text-xs text-gray-600">Works on all smartphones</p>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Works on every smartphone without any app
+                </p>
+                {/* Curved arrow pointing to card */}
+                <svg className="absolute -top-2 left-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
+                  <path d="M90 50 Q 50 30 20 10" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead4)"/>
+                  <defs>
+                    <marker id="arrowhead4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
+                    </marker>
+                  </defs>
+                </svg>
               </div>
 
               {/* Center Card with Animation */}
@@ -254,29 +262,12 @@ export default function SmartCardPage() {
                     alt="Smart Wedding Card"
                     width={350}
                     height={220}
-                    className="w-full max-w-[350px] h-auto drop-shadow-2xl"
+                    className="w-full max-w-[350px] h-auto drop-shadow-xl"
                     priority
                   />
                   
-                  {/* Glowing effect behind card */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 blur-3xl opacity-20 -z-10"></div>
-                </div>
-              </div>
-
-              {/* Additional floating elements */}
-              <div className="absolute top-1/2 left-8 transform -translate-y-1/2">
-                <div className="flex flex-col gap-2">
-                  <div className="w-2 h-2 bg-rose-300 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-rose-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                  <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                </div>
-              </div>
-
-              <div className="absolute top-1/2 right-8 transform -translate-y-1/2">
-                <div className="flex flex-col gap-2">
-                  <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse"></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+                  {/* Subtle glow effect behind card */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-rose-300 to-pink-300 blur-2xl opacity-15 -z-10"></div>
                 </div>
               </div>
             </div>
