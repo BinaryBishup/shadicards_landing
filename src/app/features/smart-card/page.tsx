@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Image from "next/image";
 import { 
   Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin, 
   Heart, Camera, Instagram, Gift, Clock, Shield, Sparkles,
@@ -128,41 +129,29 @@ export default function SmartCardPage() {
               </div>
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                SMART CARDS FOR UNFORGETTABLE WEDDINGS
+                SMART CARDS FOR YOUR WEDDING
               </h1>
               
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1">
-                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                  </div>
-                  <p className="text-gray-700 text-lg">
-                    Transform traditional invitations into smart, interactive experiences that adapt to your guests and timeline
-                  </p>
-                </div>
+              <div className="space-y-3 mb-8">
+                <p className="text-gray-700 text-lg flex items-start gap-3">
+                  <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Tap or scan to instantly share wedding details</span>
+                </p>
                 
-                <div className="flex items-start gap-3">
-                  <div className="mt-1">
-                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                  </div>
-                  <p className="text-gray-700 text-lg">
-                    NFC & QR technology works instantly on all phones - no apps needed
-                  </p>
-                </div>
+                <p className="text-gray-700 text-lg flex items-start gap-3">
+                  <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Personalized content for each guest</span>
+                </p>
                 
-                <div className="flex items-start gap-3">
-                  <div className="mt-1">
-                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                  </div>
-                  <p className="text-gray-700 text-lg">
-                    Schedule content, target guests, and automate your entire wedding communication
-                  </p>
-                </div>
+                <p className="text-gray-700 text-lg flex items-start gap-3">
+                  <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Works on all phones - no app needed</span>
+                </p>
               </div>
               
               <div className="mb-8">
-                <p className="text-2xl font-bold text-gray-900 mb-2">
-                  GET YOUR SMART CARDS READY FOR YOUR SPECIAL DAY!
+                <p className="text-xl font-semibold text-gray-900">
+                  GET YOUR SMART CARDS READY TODAY!
                 </p>
               </div>
               
@@ -171,7 +160,7 @@ export default function SmartCardPage() {
                 <ArrowRight className="w-5 h-5 ml-2 inline group-hover:translate-x-1 transition-transform" />
               </button>
               
-              <div className="mt-8 flex items-center gap-8">
+              <div className="mt-8 flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
@@ -188,57 +177,45 @@ export default function SmartCardPage() {
             <div className="relative flex items-center justify-center">
               <div className="relative">
                 {/* Floating annotations */}
-                <div className="absolute -top-8 -left-12 bg-white rounded-2xl shadow-lg p-4 max-w-[200px] animate-float">
-                  <p className="text-sm text-gray-700">
-                    Works on every smartphone instantly
+                <div className="absolute -top-4 -left-8 bg-white rounded-xl shadow-md p-3 max-w-[160px] animate-float z-10">
+                  <p className="text-xs text-gray-600">
+                    Instant access with tap or scan
                   </p>
-                  <div className="absolute bottom-0 left-8 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white transform translate-y-full"></div>
+                  <div className="absolute bottom-0 left-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white transform translate-y-full"></div>
                 </div>
                 
-                <div className="absolute -top-12 -right-8 bg-white rounded-2xl shadow-lg p-4 max-w-[180px] animate-float" style={{animationDelay: '1s'}}>
-                  <p className="text-sm text-gray-700">
-                    Personalized content for each guest
+                <div className="absolute -top-8 -right-6 bg-white rounded-xl shadow-md p-3 max-w-[140px] animate-float z-10" style={{animationDelay: '1s'}}>
+                  <p className="text-xs text-gray-600">
+                    Personalized for each guest
                   </p>
-                  <div className="absolute bottom-0 right-8 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white transform translate-y-full"></div>
+                  <div className="absolute bottom-0 right-6 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-white transform translate-y-full"></div>
                 </div>
                 
-                <div className="absolute -bottom-8 -left-16 bg-white rounded-2xl shadow-lg p-4 max-w-[180px] animate-float" style={{animationDelay: '2s'}}>
-                  <p className="text-sm text-gray-700">
-                    Schedule when content appears
+                <div className="absolute -bottom-6 -left-12 bg-white rounded-xl shadow-md p-3 max-w-[140px] animate-float z-10" style={{animationDelay: '2s'}}>
+                  <p className="text-xs text-gray-600">
+                    Schedule content updates
                   </p>
-                  <div className="absolute top-4 right-0 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-l-[8px] border-l-white transform translate-x-full"></div>
+                  <div className="absolute top-3 right-0 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-white transform translate-x-full"></div>
                 </div>
                 
-                {/* Main Card */}
+                {/* Smart Card Image */}
                 <div className="relative transform hover:scale-105 transition-transform duration-300">
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 blur-2xl opacity-30"></div>
-                  <div className="relative bg-gray-900 rounded-3xl p-1 shadow-2xl">
-                    <div className="bg-gradient-to-br from-gray-800 to-black rounded-3xl p-8 w-[320px] h-[200px] flex flex-col justify-between">
-                      {/* Card Chip */}
-                      <div className="flex justify-between items-start">
-                        <div className="w-12 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-md"></div>
-                        <div className="flex items-center gap-1">
-                          <Nfc className="w-6 h-6 text-white/60" />
-                          <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center">
-                            <QrCode className="w-5 h-5 text-white/60" />
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Card Details */}
-                      <div>
-                        <p className="text-white/60 text-xs mb-1">SMART WEDDING CARD</p>
-                        <p className="text-white text-xl font-light tracking-wider">Your Names Here</p>
-                      </div>
-                    </div>
-                  </div>
+                  <Image
+                    src="/smart-card.svg"
+                    alt="Smart Wedding Card"
+                    width={400}
+                    height={250}
+                    className="w-full max-w-[400px] h-auto"
+                    priority
+                  />
                 </div>
                 
-                {/* Decorative elements */}
-                <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px]">
-                  <div className="absolute top-0 right-0 w-3 h-3 bg-rose-500 rounded-full"></div>
-                  <div className="absolute bottom-0 left-0 w-3 h-3 bg-rose-500 rounded-full"></div>
-                  <div className="absolute top-1/2 right-0 w-3 h-3 bg-rose-500 rounded-full"></div>
+                {/* Decorative dots */}
+                <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px]">
+                  <div className="absolute top-10 right-10 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
+                  <div className="absolute bottom-10 left-10 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
+                  <div className="absolute top-1/2 right-5 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
+                  <div className="absolute bottom-20 right-20 w-2 h-2 bg-rose-400 rounded-full opacity-60"></div>
                 </div>
               </div>
             </div>
