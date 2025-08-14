@@ -5,6 +5,10 @@ export interface ChatMessage {
   sender: 'user' | 'bot';
   message: string;
   timestamp: string;
+  hasImage?: boolean;
+  hasButton?: boolean;
+  buttonText?: string;
+  isReminder?: boolean;
 }
 
 function formatTime(date: Date): string {
@@ -16,7 +20,7 @@ function formatTime(date: Date): string {
   return `${displayHours}:${displayMinutes} ${ampm}`;
 }
 
-export function generateDemoMessages(language?: string): ChatMessage[] {
+export function generateDemoMessages(language: string = 'en'): ChatMessage[] {
   const messages: any = {
     en: [
       {
