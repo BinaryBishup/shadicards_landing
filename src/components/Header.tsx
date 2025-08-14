@@ -16,53 +16,65 @@ import React from "react";
 
 const featuresData = [
   {
-    title: "Guest Management",
-    href: "/features/guest-management",
-    description: "Organize your wedding guest list effortlessly",
+    title: "Smart Card",
+    href: "/features/smart-card",
+    description: "Intelligent cards with NFC and QR code technology",
+    icon: "nfc",
+  },
+  {
+    title: "Wedding Website",
+    href: "/features/wedding-website",
+    description: "Beautiful websites for your love story",
+    icon: "language",
+  },
+  {
+    title: "Guest Data Collection",
+    href: "/features/guest-data-collection",
+    description: "Automatically collect guest information",
     icon: "groups",
   },
   {
-    title: "RSVP Tracking",
-    href: "/features/rsvp",
-    description: "Track responses with automated reminders",
-    icon: "check_circle",
+    title: "WhatsApp Broadcasting",
+    href: "/features/whatsapp-broadcasting",
+    description: "Mass messaging and event reminders",
+    icon: "chat",
   },
   {
-    title: "Event Scheduling",
-    href: "/features/scheduling",
-    description: "Manage all your wedding events in one place",
+    title: "Event Invitations",
+    href: "/features/event-invitations",
+    description: "Targeted invites for each wedding event",
     icon: "event",
   },
   {
-    title: "Digital Invitations",
-    href: "/features/invitations",
-    description: "Beautiful, customizable wedding invitations",
-    icon: "mail",
+    title: "Event Pictures",
+    href: "/features/event-pictures",
+    description: "AI-powered photo sharing and distribution",
+    icon: "photo_camera",
   },
 ];
 
-const templatesData = [
+const themesData = [
   {
     title: "Traditional",
-    href: "/templates/traditional",
+    href: "/themes/traditional",
     description: "Classic Indian wedding invitation designs",
     icon: "temple_hindu",
   },
   {
     title: "Modern",
-    href: "/templates/modern",
+    href: "/themes/modern",
     description: "Contemporary and minimalist wedding cards",
     icon: "auto_awesome",
   },
   {
     title: "Royal",
-    href: "/templates/royal",
+    href: "/themes/royal",
     description: "Luxurious designs for grand celebrations",
     icon: "workspace_premium",
   },
   {
     title: "Floral",
-    href: "/templates/floral",
+    href: "/themes/floral",
     description: "Beautiful floral themed invitations",
     icon: "local_florist",
   },
@@ -125,9 +137,9 @@ export default function Header() {
                       Features
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="w-auto p-5 bg-[#F5F5F5] rounded-2xl border-2 border-gray-900">
-                        <p className="text-[11px] font-medium text-gray-600 uppercase tracking-wider mb-4">GET STARTED</p>
-                        <ul className="flex gap-6">
+                      <div className="w-[800px] p-6 bg-white rounded-2xl border border-gray-200 shadow-xl">
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">POWERFUL FEATURES</p>
+                        <ul className="grid grid-cols-2 gap-4">
                           {featuresData.map((feature) => (
                             <ListItem
                               key={feature.title}
@@ -145,20 +157,20 @@ export default function Header() {
                   
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="bg-transparent hover:bg-transparent data-[state=open]:bg-transparent">
-                      Templates
+                      Themes
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="w-auto p-5 bg-[#F5F5F5] rounded-2xl border-2 border-gray-900">
-                        <p className="text-[11px] font-medium text-gray-600 uppercase tracking-wider mb-4">CHOOSE YOUR STYLE</p>
-                        <ul className="flex gap-6">
-                          {templatesData.map((template) => (
+                      <div className="w-[600px] p-6 bg-white rounded-2xl border border-gray-200 shadow-xl">
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">CHOOSE YOUR STYLE</p>
+                        <ul className="grid grid-cols-2 gap-4">
+                          {themesData.map((theme) => (
                             <ListItem
-                              key={template.title}
-                              title={template.title}
-                              href={template.href}
-                              icon={template.icon}
+                              key={theme.title}
+                              title={theme.title}
+                              href={theme.href}
+                              icon={theme.icon}
                             >
-                              {template.description}
+                              {theme.description}
                             </ListItem>
                           ))}
                         </ul>
@@ -187,9 +199,9 @@ export default function Header() {
                       About
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="w-auto p-5 bg-[#F5F5F5] rounded-2xl border-2 border-gray-900">
-                        <p className="text-[11px] font-medium text-gray-600 uppercase tracking-wider mb-4">LEARN MORE</p>
-                        <ul className="flex gap-6">
+                      <div className="w-[600px] p-6 bg-white rounded-2xl border border-gray-200 shadow-xl">
+                        <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">LEARN MORE</p>
+                        <ul className="grid grid-cols-2 gap-4">
                           {aboutData.map((item) => (
                             <ListItem
                               key={item.title}
@@ -226,22 +238,24 @@ const ListItem = React.forwardRef<
   React.ComponentPropsWithoutRef<"a"> & { icon?: string }
 >(({ className, title, children, icon, ...props }, ref) => {
   return (
-    <li className="w-48">
+    <li className="w-full">
       <NavigationMenuLink asChild>
         <a
           ref={ref}
           className={cn(
-            "flex items-start gap-2 p-3 rounded-lg hover:bg-white/50 transition-colors",
+            "flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 group block",
             className
           )}
           {...props}
         >
-          <span className="material-icons-outlined text-gray-700 text-[18px] mt-0.5">{icon}</span>
-          <div className="flex-1">
-            <div className="text-sm font-semibold text-gray-900 leading-tight">{title}</div>
-            <p className="text-[11px] text-gray-600 leading-relaxed mt-0.5">
-              {children}
-            </p>
+          <div className="flex gap-3 w-full">
+            <span className="material-icons-outlined text-gray-600 group-hover:text-rose-600 text-[18px] mt-0.5 transition-colors flex-shrink-0">{icon}</span>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-gray-900 group-hover:text-rose-600 leading-tight mb-1 transition-colors">{title}</div>
+              <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                {children}
+              </p>
+            </div>
           </div>
         </a>
       </NavigationMenuLink>
