@@ -2,7 +2,6 @@
 
 import Header from "@/components/Header";
 import Image from "next/image";
-import { useEffect, useState, useRef } from "react";
 import { 
   Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin, 
   Heart, Camera, Instagram, Gift, Clock, Shield, Sparkles,
@@ -10,25 +9,6 @@ import {
 } from "lucide-react";
 
 export default function SmartCardPage() {
-  const [isVisible, setIsVisible] = useState(false);
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
   const features = [
     {
       icon: <QrCode className="w-8 h-8" />,
@@ -133,7 +113,7 @@ export default function SmartCardPage() {
       <Header />
       
       {/* Hero Section */}
-      <section ref={heroRef} className="relative pt-32 pb-24 bg-[rgb(254.7,255,235)] overflow-hidden">
+      <section className="relative min-h-screen lg:h-screen py-12 lg:py-16 bg-[rgb(254.7,255,235)] overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[rgb(254.7,255,235)] to-[rgb(252,250,230)]" />
@@ -141,10 +121,10 @@ export default function SmartCardPage() {
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-orange-100 rounded-full filter blur-3xl opacity-20" />
         </div>
         
-        <div className="relative container mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+        <div className="relative container mx-auto px-6 h-full">
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto h-full">
             {/* Left Column - Text Content */}
-            <div className="text-left">
+            <div className="text-center lg:text-left relative z-10">
               <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
                 <Sparkles className="w-4 h-4" />
                 <span>Smart Wedding Technology</span>
@@ -154,18 +134,18 @@ export default function SmartCardPage() {
                 SMART CARDS FOR YOUR WEDDING
               </h1>
               
-              <div className="space-y-3 mb-8">
-                <p className="text-gray-700 text-lg flex items-start gap-3">
+              <div className="space-y-3 mb-8 max-w-lg mx-auto lg:mx-0">
+                <p className="text-gray-700 text-lg flex items-start gap-3 justify-center lg:justify-start">
                   <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
                   <span>Tap or scan to instantly share wedding details</span>
                 </p>
                 
-                <p className="text-gray-700 text-lg flex items-start gap-3">
+                <p className="text-gray-700 text-lg flex items-start gap-3 justify-center lg:justify-start">
                   <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
                   <span>Personalized content for each guest</span>
                 </p>
                 
-                <p className="text-gray-700 text-lg flex items-start gap-3">
+                <p className="text-gray-700 text-lg flex items-start gap-3 justify-center lg:justify-start">
                   <span className="mt-1.5 w-1.5 h-1.5 bg-gray-600 rounded-full flex-shrink-0"></span>
                   <span>Works on all phones - no app needed</span>
                 </p>
@@ -184,91 +164,18 @@ export default function SmartCardPage() {
               
             </div>
             
-            {/* Right Column - Card Visual with Simple Text Annotations */}
-            <div className="relative flex items-center justify-center min-h-[600px]">
-              {/* Top Left Annotation */}
-              <div className={`absolute top-10 left-0 max-w-[180px] ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
-                   style={{animationDelay: '0.8s'}}>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Share wedding details instantly with tap or scan
-                </p>
-                {/* Curved arrow pointing to card */}
-                <svg className="absolute -bottom-2 right-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
-                  <path d="M10 10 Q 50 30 80 50" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead1)"/>
-                  <defs>
-                    <marker id="arrowhead1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
-                    </marker>
-                  </defs>
-                </svg>
-              </div>
-
-              {/* Top Right Annotation */}
-              <div className={`absolute top-10 right-0 max-w-[180px] text-right ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
-                   style={{animationDelay: '1s'}}>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Personalized content for each wedding guest
-                </p>
-                {/* Curved arrow pointing to card */}
-                <svg className="absolute -bottom-2 left-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
-                  <path d="M90 10 Q 50 30 20 50" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead2)"/>
-                  <defs>
-                    <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
-                    </marker>
-                  </defs>
-                </svg>
-              </div>
-
-              {/* Bottom Left Annotation */}
-              <div className={`absolute bottom-10 left-0 max-w-[180px] ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
-                   style={{animationDelay: '1.2s'}}>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Schedule content to appear at perfect moments
-                </p>
-                {/* Curved arrow pointing to card */}
-                <svg className="absolute -top-2 right-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
-                  <path d="M10 50 Q 50 30 80 10" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead3)"/>
-                  <defs>
-                    <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
-                    </marker>
-                  </defs>
-                </svg>
-              </div>
-
-              {/* Bottom Right Annotation */}
-              <div className={`absolute bottom-10 right-0 max-w-[180px] text-right ${isVisible ? 'animate-fadeInScale' : 'opacity-0'}`} 
-                   style={{animationDelay: '1.4s'}}>
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Works on every smartphone without any app
-                </p>
-                {/* Curved arrow pointing to card */}
-                <svg className="absolute -top-2 left-0 w-24 h-16" viewBox="0 0 100 60" fill="none">
-                  <path d="M90 50 Q 50 30 20 10" stroke="#9CA3AF" strokeWidth="1.5" fill="none" strokeLinecap="round" markerEnd="url(#arrowhead4)"/>
-                  <defs>
-                    <marker id="arrowhead4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-                      <polygon points="0 0, 10 3, 0 6" fill="#9CA3AF" />
-                    </marker>
-                  </defs>
-                </svg>
-              </div>
-
-              {/* Center Card with Animation */}
-              <div className={`relative z-10 ${isVisible ? 'animate-slideUpCard' : 'opacity-0'}`}>
-                <div className="relative transform hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src="/smart-card.svg"
-                    alt="Smart Wedding Card"
-                    width={350}
-                    height={220}
-                    className="w-full max-w-[350px] h-auto drop-shadow-xl"
-                    priority
-                  />
-                  
-                  {/* Subtle glow effect behind card */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-rose-300 to-pink-300 blur-2xl opacity-15 -z-10"></div>
-                </div>
+            {/* Right Column - Animated Video */}
+            <div className="relative flex items-end justify-center order-first lg:order-last h-full z-0 mt-8 lg:mt-0">
+              <div className="relative w-full max-w-[900px] lg:max-w-none lg:w-[250%] lg:scale-110 scale-100 -mb-8 lg:-mb-16 lg:-ml-48">
+                <video
+                  autoPlay
+                  muted
+                  playsInline
+                  className="w-full h-auto"
+                >
+                  <source src="/smart-card.webm" type="video/webm" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </div>
           </div>
