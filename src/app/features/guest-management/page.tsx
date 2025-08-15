@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Header from "@/components/Header";
 import { 
   UserPlus, Smartphone, Database, Zap, Users, BarChart3, 
   CheckCircle, MapPin, Phone, Mail, Calendar, Gift,
-  ArrowRight, Check, Sparkles, Upload, Download, Shield
+  ArrowRight, Check, Sparkles, Upload, Download, Shield, Play, X
 } from "lucide-react";
 
 // Shuffle array function for random order
@@ -95,6 +95,7 @@ const guestCharacters = [
 export default function GuestManagementPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const charactersRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (heroRef.current) {
@@ -191,7 +192,7 @@ export default function GuestManagementPage() {
           gsap.to(element, {
             x: 0,
             y: 0,
-            opacity: 0.7,
+            opacity: 1,
             scale: 1,
             duration: 0.7,
             ease: "back.out(1.7)",
@@ -333,7 +334,7 @@ export default function GuestManagementPage() {
       {/* Hero Section */}
       <section 
         ref={heroRef}
-        className="relative min-h-[70vh] lg:h-[85vh] py-6 lg:py-12 bg-[rgb(254.7,255,235)] overflow-hidden"
+        className="relative h-[90vh] lg:h-[85vh] bg-[rgb(254.7,255,235)] overflow-hidden flex items-center justify-center"
       >
         {/* Background Pattern */}
         <div className="absolute inset-0">
@@ -361,61 +362,64 @@ export default function GuestManagementPage() {
 
         {/* Mobile Guest Characters */}
         <div className="lg:hidden absolute inset-0 pointer-events-none">
-          {/* Corner characters - smaller */}
-          <div className="absolute left-2 top-12 w-10 opacity-70 mobile-char-left-1">
+          {/* Corner characters - larger */}
+          <div className="absolute left-2 top-[20%] w-14 mobile-char-left-1">
             <img src="/guests/1.svg" alt="Guest" className="w-full h-auto transform rotate-90" />
           </div>
-          <div className="absolute left-2 bottom-12 w-10 opacity-70 mobile-char-left-2">
+          <div className="absolute left-2 bottom-[20%] w-14 mobile-char-left-2">
             <img src="/guests/2.svg" alt="Guest" className="w-full h-auto transform rotate-90" />
           </div>
-          <div className="absolute right-2 top-12 w-10 opacity-70 mobile-char-right-1">
+          <div className="absolute right-2 top-[20%] w-14 mobile-char-right-1">
             <img src="/guests/10.svg" alt="Guest" className="w-full h-auto transform -rotate-90" />
           </div>
-          <div className="absolute right-2 bottom-12 w-10 opacity-70 mobile-char-right-2">
+          <div className="absolute right-2 bottom-[20%] w-14 mobile-char-right-2">
             <img src="/guests/11.svg" alt="Guest" className="w-full h-auto transform -rotate-90" />
           </div>
           
           {/* Top characters - larger */}
-          <div className="absolute top-2 left-1/4 w-12 opacity-70 mobile-char-top-1">
+          <div className="absolute top-4 left-[20%] w-16 mobile-char-top-1">
             <img src="/guests/3.svg" alt="Guest" className="w-full h-auto transform rotate-180" />
           </div>
-          <div className="absolute top-2 right-1/4 w-12 opacity-70 mobile-char-top-2">
+          <div className="absolute top-4 right-[20%] w-16 mobile-char-top-2">
             <img src="/guests/4.svg" alt="Guest" className="w-full h-auto transform rotate-180" />
           </div>
           
           {/* Bottom characters - larger */}
-          <div className="absolute bottom-4 left-1/4 w-12 opacity-70 mobile-char-bottom-1">
+          <div className="absolute bottom-4 left-[20%] w-16 mobile-char-bottom-1">
             <img src="/guests/8.svg" alt="Guest" className="w-full h-auto" />
           </div>
-          <div className="absolute bottom-4 right-1/4 w-12 opacity-70 mobile-char-bottom-2">
+          <div className="absolute bottom-4 right-[20%] w-16 mobile-char-bottom-2">
             <img src="/guests/9.svg" alt="Guest" className="w-full h-auto" />
           </div>
         </div>
 
-        {/* Center Content */}
-        <div className="relative z-10 container mx-auto px-6 h-full flex items-center justify-center">
-          <div className="hero-content text-center max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-3">
+        {/* Center Content - Complete Rewrite */}
+        <div className="relative z-10 w-full px-4">
+          <div className="hero-content flex flex-col items-center justify-center text-center">
+            <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
               <Sparkles className="w-4 h-4" />
               <span>Smart Guest Management</span>
             </div>
             
-            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 lg:mb-3 leading-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
               GUESTS MANAGER
             </h1>
             
-            <p className="text-xs lg:text-lg text-gray-600 mb-3 lg:mb-5 max-w-sm lg:max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm lg:text-lg text-gray-600 mb-6 max-w-sm lg:max-w-2xl leading-relaxed">
               <span className="lg:hidden">Automate guest management, from invite to check-in.</span>
               <span className="hidden lg:inline">Automate guest management, from invite to check-in. Smart technology that handles everything so you can focus on celebrating.</span>
             </p>
             
-            <div className="flex flex-row gap-2 lg:gap-3 justify-center px-2 lg:px-0">
-              <button className="group bg-rose-600 hover:bg-rose-700 text-white px-3 lg:px-8 py-2 lg:py-3 rounded-full font-medium text-xs lg:text-base transition-all shadow-lg hover:shadow-xl hover:scale-105 flex-1 lg:flex-none">
+            <div className="flex flex-row gap-3 w-full max-w-sm sm:max-w-none sm:w-auto">
+              <button className="group bg-rose-600 hover:bg-rose-700 text-white px-6 lg:px-8 py-3 rounded-full font-medium text-sm lg:text-base transition-all shadow-lg hover:shadow-xl hover:scale-105 w-full sm:w-auto">
                 <span className="hidden lg:inline">Start Managing Guests</span>
                 <span className="lg:hidden">Start Managing</span>
-                <ArrowRight className="w-3 lg:w-4 h-3 lg:h-4 ml-1 lg:ml-2 inline group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 ml-2 inline group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-3 lg:px-8 py-2 lg:py-3 rounded-full font-medium text-xs lg:text-base transition-all hover:bg-white flex-1 lg:flex-none">
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className="border-2 border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 px-6 lg:px-8 py-3 rounded-full font-medium text-sm lg:text-base transition-all hover:bg-white w-full sm:w-auto flex items-center justify-center gap-2">
+                <Play className="w-4 h-4" />
                 <span className="hidden lg:inline">See How It Works</span>
                 <span className="lg:hidden">How It Works</span>
               </button>
@@ -423,6 +427,30 @@ export default function GuestManagementPage() {
           </div>
         </div>
       </section>
+
+      {/* Video Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-black/40">
+          <div className="relative w-full max-w-4xl bg-white rounded-2xl overflow-hidden shadow-2xl">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm text-gray-700 hover:text-gray-900 rounded-full p-2 transition-all hover:bg-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="relative pt-[56.25%] bg-gray-100">
+              <iframe
+                className="absolute inset-0 w-full h-full"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="Guest Management Tutorial"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* How It Works */}
       <section className="py-20 bg-white">

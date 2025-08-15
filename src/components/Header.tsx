@@ -29,7 +29,7 @@ const featuresData = [
   },
   {
     title: "Guest Management",
-    href: "/features/guest-data-collection",
+    href: "/features/guest-management",
     description: "Automate guest management, from invite to check-in",
     icon: "groups",
   },
