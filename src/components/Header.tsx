@@ -28,9 +28,9 @@ const featuresData = [
     icon: "language",
   },
   {
-    title: "Guest Data Collection",
+    title: "Guest Management",
     href: "/features/guest-data-collection",
-    description: "Automatically collect guest information",
+    description: "Automate guest management, from invite to check-in",
     icon: "groups",
   },
   {
