@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import WorkspaceHeroSection from "@/components/WorkspaceHeroSection";
-import PhoneInputSection from "@/components/PhoneInputSection";
 import CardCatalogSection from "@/components/CardCatalogSection";
 import AutoInvitationsSection from "@/components/AutoInvitationsSection";
 import SmartCardSection from "@/components/SmartCardSection";
@@ -13,7 +12,6 @@ export default function Home() {
     <>
       <Header />
       <WorkspaceHeroSection />
-      <PhoneInputSection />
       <AutoInvitationsSection />
       <SmartCardSection />
       <CardCatalogSection />

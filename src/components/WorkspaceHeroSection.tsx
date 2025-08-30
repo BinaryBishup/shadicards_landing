@@ -5,12 +5,14 @@ import Image from "next/image";
 import { 
   Users, Calendar, MessageSquare, CheckSquare, HelpCircle,
   Camera, Palette, Bell, BarChart3, Database, Mail,
-  UserCheck, Check
+  UserCheck, Check, ArrowRight
 } from "lucide-react";
 
 export default function WorkspaceHeroSection() {
   const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set(["guests"]));
   const [lastSelected, setLastSelected] = useState("guests");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const workspaceFeatures = [
     {
@@ -115,19 +117,39 @@ export default function WorkspaceHeroSection() {
     return feature?.dashboardImage || "/dashboard/wedding_details.png";
   };
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneNumber = e.target.value.replace(/[^\d]/g, "");
+    setPhoneNumber(phoneNumber);
+    setPhoneError("");
+  };
+
+  const handlePhoneSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (phoneNumber.length < 10) {
+      setPhoneError("Please enter a valid phone number");
+      return;
+    }
+
+    console.log("Phone submitted:", phoneNumber);
+  };
+
   return (
-    <section className="min-h-screen py-16 bg-[rgb(254.7,255,235)] overflow-hidden">
+    <section className="min-h-screen pt-24 pb-16 bg-[rgb(254.7,255,235)] overflow-hidden">
       <div className="container mx-auto px-6">
-        {/* Header Text */}
+        {/* Header Text with Tag */}
         <div className="text-center mb-12">
+          <div className="inline-block px-4 py-2 bg-rose-100 text-rose-700 text-sm font-semibold rounded-full mb-4">
+            🎊 India's First Smart Wedding Cards
+          </div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-4">
-            Stop the Chaos
+            One Card, Infinite Memories
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-2">
-            All your wedding planning, guest management, and smart cards. One unified platform.
+            Track RSVPs in real-time • Share live wedding moments • Automated reminders
           </p>
           <p className="text-lg text-gray-500 max-w-3xl mx-auto">
-            A single dashboard for managing every aspect of your wedding—together.
+            Digital guest management that makes your wedding planning effortless
           </p>
         </div>
 
@@ -137,7 +159,7 @@ export default function WorkspaceHeroSection() {
           <div className="lg:hidden">
             {/* Dashboard Preview */}
             <div className="mb-8">
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ aspectRatio: "16/10" }}>
                 {/* Browser Header */}
                 <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
                   <div className="flex items-center gap-3">
@@ -160,10 +182,10 @@ export default function WorkspaceHeroSection() {
                     priority
                   />
                   
-                  {/* Bottom Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-4">
+                  {/* Bottom Overlay - Fixed for mobile */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-4">
                     <div className="text-white">
-                      <p className="text-xs uppercase tracking-wide opacity-80 mb-1">Currently viewing</p>
+                      <p className="text-xs uppercase tracking-wide opacity-90 mb-1">Currently viewing</p>
                       <h3 className="text-xl font-bold mb-1">
                         {workspaceFeatures.find(f => f.id === lastSelected)?.title}
                       </h3>
@@ -179,11 +201,8 @@ export default function WorkspaceHeroSection() {
             {/* Setup Card for Mobile - Below Dashboard */}
             <div className="px-4">
               <div className="bg-white/30 backdrop-blur-2xl rounded-2xl shadow-2xl p-5 border border-white/40">
-                {/* Tag and Heading */}
+                {/* Simple Heading */}
                 <div className="mb-5 text-center">
-                  <span className="inline-block px-3 py-1 text-xs font-semibold text-rose-600 bg-rose-50/80 rounded-full mb-3">
-                    ✨ Your Wedding Command Center
-                  </span>
                   <h2 className="text-xl font-bold text-gray-900 mb-2">
                     Set up your Wedding Hub
                   </h2>
@@ -251,6 +270,35 @@ export default function WorkspaceHeroSection() {
                     <p className="text-xs text-gray-600">Support</p>
                   </div>
                 </div>
+
+                {/* Phone Input */}
+                <div className="mt-4">
+                  <form onSubmit={handlePhoneSubmit} className="relative">
+                    <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-full shadow-md overflow-hidden border border-gray-200">
+                      <div className="flex items-center px-3 text-gray-500">
+                        <span className="text-lg mr-2">🇮🇳</span>
+                        <span className="text-gray-600 font-medium text-sm">+91</span>
+                      </div>
+                      <input
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={handlePhoneChange}
+                        placeholder="Enter mobile number"
+                        className="pl-2 pr-3 py-3 text-base flex-1 focus:outline-none bg-transparent"
+                        maxLength={10}
+                      />
+                      <button
+                        type="submit"
+                        className="bg-gray-100 hover:bg-gray-200 p-2.5 mr-2 rounded-full transition-all duration-200"
+                      >
+                        <ArrowRight className="w-5 h-5 text-gray-600" />
+                      </button>
+                    </div>
+                    {phoneError && (
+                      <p className="absolute -bottom-6 left-4 text-red-500 text-sm">{phoneError}</p>
+                    )}
+                  </form>
+                </div>
               </div>
             </div>
           </div>
@@ -260,7 +308,7 @@ export default function WorkspaceHeroSection() {
             {/* Dashboard Preview - Main Background */}
             <div className="relative mx-auto" style={{ maxWidth: '1100px' }}>
               <div className="relative w-full">
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ aspectRatio: "16/9" }}>
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden" style={{ aspectRatio: "16/10" }}>
                   {/* Browser Header */}
                   <div className="bg-gray-100 px-4 py-3 border-b border-gray-200">
                     <div className="flex items-center gap-3">
@@ -284,9 +332,9 @@ export default function WorkspaceHeroSection() {
                     />
                     
                     {/* Bottom Overlay */}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-8">
                       <div className="text-white">
-                        <p className="text-sm uppercase tracking-wide opacity-80 mb-2">Currently viewing</p>
+                        <p className="text-sm uppercase tracking-wide opacity-90 mb-2">Currently viewing</p>
                         <h3 className="text-3xl font-bold mb-2">
                           {workspaceFeatures.find(f => f.id === lastSelected)?.title}
                         </h3>
@@ -303,11 +351,8 @@ export default function WorkspaceHeroSection() {
             {/* Glass Effect Feature Selection Card - Overlapping for Desktop */}
             <div className="absolute bottom-4 right-10 z-10" style={{ maxWidth: '420px' }}>
               <div className="bg-white/20 backdrop-blur-3xl rounded-2xl shadow-2xl p-5 border border-white/30">
-                {/* Tag and Heading */}
+                {/* Simple Heading */}
                 <div className="mb-5 text-center">
-                  <span className="inline-block px-3 py-1 text-xs font-semibold text-rose-600 bg-rose-50/80 rounded-full mb-3">
-                    ✨ Your Wedding Command Center
-                  </span>
                   <h2 className="text-xl font-bold text-gray-900 mb-2">
                     Set up your Wedding Hub
                   </h2>
@@ -374,6 +419,35 @@ export default function WorkspaceHeroSection() {
                     <p className="text-xl font-bold text-gray-900">24/7</p>
                     <p className="text-xs text-gray-600">Support</p>
                   </div>
+                </div>
+
+                {/* Phone Input */}
+                <div className="mt-4">
+                  <form onSubmit={handlePhoneSubmit} className="relative">
+                    <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-full shadow-md overflow-hidden border border-gray-200">
+                      <div className="flex items-center px-3 text-gray-500">
+                        <span className="text-lg mr-2">🇮🇳</span>
+                        <span className="text-gray-600 font-medium text-sm">+91</span>
+                      </div>
+                      <input
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={handlePhoneChange}
+                        placeholder="Enter mobile number"
+                        className="pl-2 pr-3 py-3 text-base flex-1 focus:outline-none bg-transparent"
+                        maxLength={10}
+                      />
+                      <button
+                        type="submit"
+                        className="bg-gray-100 hover:bg-gray-200 p-2.5 mr-2 rounded-full transition-all duration-200"
+                      >
+                        <ArrowRight className="w-5 h-5 text-gray-600" />
+                      </button>
+                    </div>
+                    {phoneError && (
+                      <p className="absolute -bottom-6 left-4 text-red-500 text-sm">{phoneError}</p>
+                    )}
+                  </form>
                 </div>
               </div>
             </div>
