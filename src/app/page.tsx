@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
-import NewHeroSection from "@/components/NewHeroSection";
+import WorkspaceHeroSection from "@/components/WorkspaceHeroSection";
+import PhoneInputSection from "@/components/PhoneInputSection";
 import CardCatalogSection from "@/components/CardCatalogSection";
 import AutoInvitationsSection from "@/components/AutoInvitationsSection";
 import SmartCardSection from "@/components/SmartCardSection";
@@ -11,7 +12,8 @@ export default function Home() {
   return (
     <>
       <Header />
-      <NewHeroSection />
+      <WorkspaceHeroSection />
+      <PhoneInputSection />
       <AutoInvitationsSection />
       <SmartCardSection />
       <CardCatalogSection />
