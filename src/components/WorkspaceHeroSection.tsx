@@ -212,27 +212,26 @@ export default function WorkspaceHeroSection() {
         </div>
 
         {/* Spacing */}
-        <div className="h-32 md:h-40 lg:h-48"></div>
+        <div className="h-12 md:h-20 lg:h-24"></div>
 
         {/* Features Grid */}
-        <div className="w-full lg:px-6 xl:px-12 lg:py-8">
-          <div className="flex flex-col lg:flex-row gap-0 lg:overflow-hidden lg:border-0">
-            {/* Left Side - Heading */}
-            <div className="lg:w-1/4 flex-shrink-0 bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-10 py-12 md:py-16 lg:py-20 flex items-center">
-              <div>
-                <h2 className="text-2xl md:text-3xl lg:text-4xl font-normal text-gray-900 mb-4 md:mb-6 leading-tight">
-                  Create your perfect{" "}
-                  <span className="font-semibold text-rose-600">wedding experience</span>
-                </h2>
-                <p className="text-sm md:text-base text-gray-600 font-normal">
-                  Smart cards, beautiful websites, and seamless guest management
-                </p>
-              </div>
+        <div className="w-full">
+          {/* Heading Section */}
+          <div className="bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-16 xl:px-24 py-8 md:py-10 lg:py-12 text-center">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 md:mb-6 leading-tight">
+                Create your perfect{" "}
+                <span className="font-semibold text-rose-600">wedding experience</span>
+              </h2>
+              <p className="text-sm md:text-base lg:text-lg text-gray-600 font-normal">
+                Smart cards, beautiful websites, and seamless guest management
+              </p>
             </div>
+          </div>
 
-            {/* Right Side - Feature Grid */}
-            <div className="lg:w-3/4 flex-grow bg-[rgb(254.7,255,235)]">
-              <div className="grid grid-cols-2 lg:grid-cols-3 border-l border-gray-400">
+          {/* Feature Grid */}
+          <div className="bg-[rgb(254.7,255,235)]">
+            <div className="grid grid-cols-2 lg:grid-cols-3 border-l border-t border-gray-400">
                 {features.map((feature, index) => (
                   <div
                     key={feature.id}
@@ -293,7 +292,6 @@ export default function WorkspaceHeroSection() {
                     </div>
                   </div>
                 ))}
-              </div>
             </div>
           </div>
         </div>
