@@ -212,13 +212,13 @@ export default function WorkspaceHeroSection() {
         </div>
 
         {/* Spacing */}
-        <div className="h-24 md:h-32"></div>
+        <div className="h-32 md:h-40 lg:h-48"></div>
 
         {/* Features Grid */}
-        <div className="w-full">
-          <div className="flex flex-col lg:flex-row gap-0">
+        <div className="w-full lg:px-6 xl:px-12 lg:py-8">
+          <div className="flex flex-col lg:flex-row gap-0 lg:overflow-hidden lg:border-0">
             {/* Left Side - Heading */}
-            <div className="lg:w-1/4 flex-shrink-0 bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-10 py-12 md:py-16 lg:py-20 flex items-center border-r border-gray-400">
+            <div className="lg:w-1/4 flex-shrink-0 bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-10 py-12 md:py-16 lg:py-20 flex items-center">
               <div>
                 <h2 className="text-2xl md:text-3xl lg:text-4xl font-normal text-gray-900 mb-4 md:mb-6 leading-tight">
                   Create your perfect{" "}
@@ -236,10 +236,53 @@ export default function WorkspaceHeroSection() {
                 {features.map((feature, index) => (
                   <div
                     key={feature.id}
-                    className="group bg-white overflow-hidden hover:shadow-lg transition-all duration-300 border-r border-b border-t border-gray-400 flex flex-col"
+                    className="group bg-white overflow-hidden hover:shadow-lg transition-all duration-300 border-b border-t border-gray-400 border-r border-r-gray-400 flex flex-col"
                   >
-                    {/* Feature Header */}
-                    <div className="p-4 md:p-6 lg:p-8 pb-3 md:pb-4">
+                    {/* Feature Image - Mobile First */}
+                    <div className="relative bg-white overflow-hidden px-4 md:px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8 pb-4 md:pb-6 lg:pb-8 lg:hidden">
+                      <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
+                        <Image
+                          src={feature.image}
+                          alt={feature.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+                          unoptimized
+                        />
+                      </div>
+                    </div>
+
+                    {/* Feature Header - Mobile Only */}
+                    <div className="p-4 md:p-6 lg:p-8 pb-3 md:pb-4 lg:hidden">
+                      <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-2">
+                        {feature.title}
+                        <ArrowRight className="w-3 h-3 text-gray-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                      </h3>
+                    </div>
+
+                    {/* Feature Description - Mobile Only */}
+                    <div className="lg:hidden px-4 pb-4">
+                      <p className="text-gray-600 text-xs leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+
+                    {/* Feature Image - Desktop */}
+                    <div className="hidden lg:block relative bg-white overflow-hidden px-4 md:px-6 lg:px-8 pb-4 md:pb-6 lg:pb-8 pt-4 md:pt-6 lg:pt-8">
+                      <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/10' }}>
+                        <Image
+                          src={feature.image}
+                          alt={feature.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
+                          unoptimized
+                        />
+                      </div>
+                    </div>
+
+                    {/* Feature Header - Desktop */}
+                    <div className="hidden lg:block p-4 md:p-6 lg:p-8 pb-3 md:pb-4 lg:pt-0">
                       <h3 className="text-sm md:text-base lg:text-lg font-semibold text-gray-900 flex items-center gap-2 mb-2">
                         {feature.title}
                         <ArrowRight className="w-3 h-3 md:w-4 md:h-4 text-gray-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
@@ -247,20 +290,6 @@ export default function WorkspaceHeroSection() {
                       <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
                         {feature.description}
                       </p>
-                    </div>
-
-                    {/* Feature Image - Horizontal/Landscape orientation */}
-                    <div className="relative bg-white overflow-hidden px-4 md:px-6 lg:px-8 pb-6 md:pb-8 flex-grow">
-                      <div className="relative w-full h-full min-h-[140px] md:min-h-[180px] lg:min-h-[200px] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
-                        <Image
-                          src={feature.image}
-                          alt={feature.title}
-                          fill
-                          className="object-contain group-hover:scale-105 transition-transform duration-300 p-2"
-                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 33vw"
-                          unoptimized
-                        />
-                      </div>
                     </div>
                   </div>
                 ))}
