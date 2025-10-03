@@ -13,6 +13,9 @@ export function mapDatabaseToTemplateData(
   const storyItems = website.story_items as any[] || [];
   const galleryImages = website.gallery_images as any[] || [];
 
+  console.log("DEBUG wedding-data-mapper - Raw gallery_images:", website.gallery_images);
+  console.log("DEBUG wedding-data-mapper - Parsed galleryImages:", galleryImages);
+
   // Handle different possible structures for families
   const brideFamilies = website.bride_families as any || {};
   const brideFamilyMembers = Array.isArray(brideFamilies) ? brideFamilies :
@@ -31,10 +34,15 @@ export function mapDatabaseToTemplateData(
   const groomsmen = Array.isArray(groomsmenData) ? groomsmenData :
                      (groomsmenData?.members || groomsmenData?.party || []);
 
+  console.log("DEBUG wedding-data-mapper - brideFamilyMembers:", brideFamilyMembers);
+  console.log("DEBUG wedding-data-mapper - groomFamilyMembers:", groomFamilyMembers);
+  console.log("DEBUG wedding-data-mapper - bridesmaids:", bridesmaids);
+  console.log("DEBUG wedding-data-mapper - groomsmen:", groomsmen);
+
   // Extract first names from full names
   const getFirstName = (fullName: string) => fullName?.split(' ')[0] || fullName || '';
 
-  return {
+  const mappedData = {
     hero: {
       brideName: getFirstName(wedding.bride_name),
       groomName: getFirstName(wedding.groom_name),
@@ -132,6 +140,12 @@ export function mapDatabaseToTemplateData(
       }
     }
   };
+
+  console.log("DEBUG wedding-data-mapper - Final mapped gallery:", mappedData.gallery);
+  console.log("DEBUG wedding-data-mapper - Final mapped gallery images count:", mappedData.gallery.images.length);
+  console.log("DEBUG wedding-data-mapper - Final mapped weddingParty:", mappedData.weddingParty);
+
+  return mappedData;
 }
 
 /**
