@@ -61,7 +61,7 @@ export default function WebsiteControlSection() {
     },
     {
       title: "Your Website Address",
-      subtitle: "Use youandme.shaadicards.in or connect your own domain in two clicks.",
+      subtitle: "Use youandme.shadicards.in or connect your own domain in two clicks.",
       icon: <Globe className="w-6 h-6" />,
       iconBg: "bg-rose-500",
       stats: "Custom URL"
@@ -288,7 +288,7 @@ export default function WebsiteControlSection() {
                 setTimeout(() => {
                   const urlText = card.querySelector(".font-mono");
                   if (urlText) {
-                    const fullText = "youandme.shaadicards.in";
+                    const fullText = "youandme.shadicards.in";
                     urlText.textContent = "";
                     
                     // Type out the URL character by character
@@ -610,7 +610,7 @@ export default function WebsiteControlSection() {
                 {index === 5 && (
                   <div className="flex flex-col items-center justify-center h-full p-4">
                     <div className="url-container bg-white rounded-lg px-4 py-3 shadow-md border border-gray-200 mb-3">
-                      <p className="text-sm font-mono text-gray-700">youandme.shaadicards.in</p>
+                      <p className="text-sm font-mono text-gray-700">youandme.shadicards.in</p>
                     </div>
                     <div className="flex items-center gap-2 text-gray-500">
                       <div className="w-8 h-px bg-gray-300" />

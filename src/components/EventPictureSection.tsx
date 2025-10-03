@@ -330,7 +330,7 @@ export default function EventPictureSection() {
               {
                 step: "1",
                 title: "Upload Photos",
-                description: "Upload all event photos to ShaadiCards after your wedding",
+                description: "Upload all event photos to ShadiCards after your wedding",
                 icon: <CloudUpload className="w-6 h-6" />
               },
               {

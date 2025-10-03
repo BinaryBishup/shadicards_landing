@@ -82,28 +82,28 @@ const themesData = [
 
 const aboutData = [
   {
-    title: "Our Story",
-    href: "/about/story",
+    title: "About Us",
+    href: "/about",
     description: "How ShadiCards is revolutionizing Indian weddings",
     icon: "menu_book",
   },
   {
-    title: "Team",
-    href: "/about/team",
-    description: "Meet the people behind ShadiCards",
-    icon: "diversity_3",
-  },
-  {
-    title: "Press",
-    href: "/about/press",
-    description: "ShadiCards in the news",
-    icon: "newspaper",
-  },
-  {
-    title: "Contact",
-    href: "/about/contact",
-    description: "Get in touch with us",
+    title: "Contact Us",
+    href: "/contact",
+    description: "Get in touch with our team",
     icon: "phone",
+  },
+  {
+    title: "Privacy Policy",
+    href: "/privacy-policy",
+    description: "How we protect your data",
+    icon: "security",
+  },
+  {
+    title: "Terms of Service",
+    href: "/terms-of-service",
+    description: "Our terms and conditions",
+    icon: "gavel",
   },
 ];
 
@@ -116,9 +116,9 @@ export default function Header() {
           Read Article →
         </Link>
       </div>
-      <header className="bg-transparent relative z-50">
+      <header className="bg-transparent sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-          <div className="bg-transparent rounded-2xl border border-gray-200 px-6 py-3">
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-200 px-6 py-3">
             <nav className="flex items-center justify-between">
               <Link href="/" className="flex items-center">
                 <Image

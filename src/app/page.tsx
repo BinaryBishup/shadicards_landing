@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import WorkspaceHeroSection from "@/components/WorkspaceHeroSection";
 import CardCatalogSection from "@/components/CardCatalogSection";
 import AutoInvitationsSection from "@/components/AutoInvitationsSection";
@@ -18,6 +19,7 @@ export default function Home() {
       <WebsiteControlSection />
       <DeliverySection />
       <EventPictureSection />
+      <Footer />
     </>
   );
 }

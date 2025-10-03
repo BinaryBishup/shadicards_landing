@@ -264,7 +264,7 @@ export default function DeliverySection() {
                   : 'text-gray-400 hover:text-white'
               }`}
             >
-              ShaadiCards Delivery
+              ShadiCards Delivery
             </button>
             <button
               onClick={() => setActiveTab('routes')}
@@ -279,7 +279,7 @@ export default function DeliverySection() {
           </div>
         </div>
 
-        {/* ShaadiCards Delivery Tab Content */}
+        {/* ShadiCards Delivery Tab Content */}
         {activeTab === 'delivery' && (
           <div className="direct-delivery-section">
             <div className="text-center mb-8">
@@ -562,7 +562,7 @@ export default function DeliverySection() {
                       </div>
                     </div>
                     
-                    {/* Benefits with ShaadiCards */}
+                    {/* Benefits with ShadiCards */}
                     <div className="space-y-2 pt-4 border-t border-gray-700">
                       <div className="flex items-center gap-2">
                         <Check className="w-4 h-4 text-green-500" />
@@ -598,7 +598,7 @@ export default function DeliverySection() {
         <div className="mt-16">
           <div className="max-w-6xl mx-auto">
             <h3 className="text-3xl md:text-4xl font-light text-white text-center mb-10">
-              Why Choose <span className="font-medium">{activeTab === 'delivery' ? 'ShaadiCards Delivery' : 'Smart Routes'}</span>?
+              Why Choose <span className="font-medium">{activeTab === 'delivery' ? 'ShadiCards Delivery' : 'Smart Routes'}</span>?
             </h3>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

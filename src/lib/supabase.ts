@@ -180,3 +180,16 @@ export interface EventInvitation {
   plus_ones: number | null;
   message: string | null;
 }
+
+export interface CustomerQuery {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  subject?: string | null;
+  message: string;
+  order_number?: string | null;
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
+}
