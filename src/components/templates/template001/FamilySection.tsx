@@ -10,6 +10,12 @@ interface FamilySectionProps {
 }
 
 export default function FamilySection({ data, primaryColor = '#ec4899' }: FamilySectionProps) {
+  // Don't render if both sides have no members
+  const hasBrideSide = data.brideSide.members && data.brideSide.members.length > 0;
+  const hasGroomSide = data.groomSide.members && data.groomSide.members.length > 0;
+
+  if (!hasBrideSide && !hasGroomSide) return null;
+
   return (
     <>
       <style jsx global>{`
@@ -39,8 +45,9 @@ export default function FamilySection({ data, primaryColor = '#ec4899' }: Family
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          <div className={`grid ${hasBrideSide && hasGroomSide ? 'lg:grid-cols-2' : 'lg:grid-cols-1'} gap-12 lg:gap-16 ${!hasBrideSide || !hasGroomSide ? 'max-w-4xl mx-auto' : ''}`}>
             {/* Bride's Family */}
+            {hasBrideSide && (
             <div className="relative">
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 mb-3">
@@ -98,8 +105,10 @@ export default function FamilySection({ data, primaryColor = '#ec4899' }: Family
                 ))}
               </div>
             </div>
+            )}
 
             {/* Groom's Family */}
+            {hasGroomSide && (
             <div className="relative">
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 mb-3">
@@ -157,6 +166,7 @@ export default function FamilySection({ data, primaryColor = '#ec4899' }: Family
                 ))}
               </div>
             </div>
+            )}
           </div>
 
           {/* Decorative Divider */}

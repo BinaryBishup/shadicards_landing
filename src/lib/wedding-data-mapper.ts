@@ -12,15 +12,32 @@ export function mapDatabaseToTemplateData(
   // Parse JSONB data with fallbacks
   const storyItems = website.story_items as any[] || [];
   const galleryImages = website.gallery_images as any[] || [];
+
+  // Handle different possible structures for families
   const brideFamilies = website.bride_families as any || {};
+  const brideFamilyMembers = Array.isArray(brideFamilies) ? brideFamilies :
+                              (brideFamilies.members || brideFamilies.family || []);
+
   const groomFamilies = website.groom_families as any || {};
-  const bridesmaids = website.bridesmaids as any[] || [];
-  const groomsmen = website.groomsmen as any[] || [];
+  const groomFamilyMembers = Array.isArray(groomFamilies) ? groomFamilies :
+                              (groomFamilies.members || groomFamilies.family || []);
+
+  // Handle different possible structures for wedding party
+  const bridesmaidsData = website.bridesmaids as any;
+  const bridesmaids = Array.isArray(bridesmaidsData) ? bridesmaidsData :
+                       (bridesmaidsData?.members || bridesmaidsData?.party || []);
+
+  const groomsmenData = website.groomsmen as any;
+  const groomsmen = Array.isArray(groomsmenData) ? groomsmenData :
+                     (groomsmenData?.members || groomsmenData?.party || []);
+
+  // Extract first names from full names
+  const getFirstName = (fullName: string) => fullName?.split(' ')[0] || fullName || '';
 
   return {
     hero: {
-      brideName: wedding.bride_name,
-      groomName: wedding.groom_name,
+      brideName: getFirstName(wedding.bride_name),
+      groomName: getFirstName(wedding.groom_name),
       coupleImage: wedding.couple_picture || undefined,
       weddingDate: wedding.wedding_date || '',
       weddingTime: events?.[0]?.start_time || undefined,
@@ -63,21 +80,21 @@ export function mapDatabaseToTemplateData(
     family: {
       brideSide: {
         title: "Bride's Family",
-        members: (brideFamilies.members || []).map((member: any, index: number) => ({
+        members: brideFamilyMembers.map((member: any, index: number) => ({
           id: member.id || `bride-family-${index}`,
           name: member.name || '',
-          relation: member.relation || '',
-          image: member.image || undefined,
+          relation: member.relation || member.relationship || '',
+          image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
       },
       groomSide: {
         title: "Groom's Family",
-        members: (groomFamilies.members || []).map((member: any, index: number) => ({
+        members: groomFamilyMembers.map((member: any, index: number) => ({
           id: member.id || `groom-family-${index}`,
           name: member.name || '',
-          relation: member.relation || '',
-          image: member.image || undefined,
+          relation: member.relation || member.relationship || '',
+          image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
       }
@@ -86,10 +103,10 @@ export function mapDatabaseToTemplateData(
       title: 'Our Memories',
       images: galleryImages.map((img: any, index: number) => ({
         id: img.id || `gallery-${index}`,
-        url: img.url || img.src || '',
-        caption: img.caption || undefined,
+        url: img.url || img.src || img.image || '',
+        caption: img.caption || img.alt || undefined,
         category: img.category || 'All'
-      })),
+      })).filter((img: any) => img.url), // Filter out images without URLs
       categories: Array.from(new Set(galleryImages.map((img: any) => img.category).filter(Boolean)))
     },
     weddingParty: {
@@ -98,8 +115,8 @@ export function mapDatabaseToTemplateData(
         members: bridesmaids.map((member: any, index: number) => ({
           id: member.id || `bridesmaid-${index}`,
           name: member.name || '',
-          role: member.role || 'Bridesmaid',
-          image: member.image || undefined,
+          role: member.role || member.position || 'Bridesmaid',
+          image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
       },
@@ -108,8 +125,8 @@ export function mapDatabaseToTemplateData(
         members: groomsmen.map((member: any, index: number) => ({
           id: member.id || `groomsman-${index}`,
           name: member.name || '',
-          role: member.role || 'Groomsman',
-          image: member.image || undefined,
+          role: member.role || member.position || 'Groomsman',
+          image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
       }

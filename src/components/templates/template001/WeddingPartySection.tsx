@@ -10,6 +10,12 @@ interface WeddingPartySectionProps {
 }
 
 export default function WeddingPartySection({ data, primaryColor = '#ec4899' }: WeddingPartySectionProps) {
+  // Don't render if both sides have no members
+  const hasBridesmaids = data.bridesmaids.members && data.bridesmaids.members.length > 0;
+  const hasGroomsmen = data.groomsmen.members && data.groomsmen.members.length > 0;
+
+  if (!hasBridesmaids && !hasGroomsmen) return null;
+
   return (
     <>
       <style jsx global>{`

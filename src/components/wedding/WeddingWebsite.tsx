@@ -28,9 +28,15 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
   // Map database data to template format
   console.log("Debug - Wedding data:", website.wedding);
   console.log("Debug - Website data:", website);
+  console.log("Debug - gallery_images:", website.gallery_images);
   console.log("Debug - bride_families:", website.bride_families);
+  console.log("Debug - groom_families:", website.groom_families);
   console.log("Debug - bridesmaids:", website.bridesmaids);
+  console.log("Debug - groomsmen:", website.groomsmen);
   const weddingData = mapDatabaseToTemplateData(website.wedding, website, events);
+  console.log("Debug - Mapped gallery data:", weddingData.gallery);
+  console.log("Debug - Mapped family data:", weddingData.family);
+  console.log("Debug - Mapped wedding party data:", weddingData.weddingParty);
   
 
   return (
@@ -95,17 +101,17 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
       </div>
 
       {/* Template Content */}
-      <TemplateComponent 
+      <TemplateComponent
         data={weddingData}
         primaryColor={website.primary_color || "#ec4899"}
         secondaryColor={website.secondary_color || "#f97316"}
         visibility={{
-          show_hero: website.show_hero ?? undefined,
-          show_about: website.show_about ?? undefined,
-          show_story: website.show_story ?? undefined,
-          show_families: website.show_families ?? undefined,
-          show_gallery: website.show_gallery ?? undefined,
-          show_wedding_party: website.show_wedding_party ?? undefined
+          show_hero: website.show_hero ?? true,
+          show_about: website.show_about ?? true,
+          show_story: website.show_story ?? true,
+          show_families: website.show_families ?? true,
+          show_gallery: website.show_gallery ?? true,
+          show_wedding_party: website.show_wedding_party ?? true
         }}
       />
 
