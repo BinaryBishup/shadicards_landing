@@ -246,7 +246,7 @@ export default function WorkspaceHeroSection() {
       </div>
 
       {/* Features Grid - Full Width on Mobile */}
-      <div className="w-full">
+      <div className="w-full lg:px-6 xl:px-12">
         {/* Heading Section */}
         <div className="bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-16 xl:px-24 py-8 md:py-10 lg:py-12 text-center">
           <div className="max-w-4xl mx-auto">
