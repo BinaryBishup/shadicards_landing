@@ -1,15 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Globe, Calendar, MessageSquare, CheckSquare, ArrowRight, Sparkles, Play } from "lucide-react";
 
 export default function WorkspaceHeroSection() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
   const [currentFeatureIndex, setCurrentFeatureIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPlayButton, setShowPlayButton] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const featureTexts = [
     "Create your wedding website",
@@ -106,8 +110,21 @@ export default function WorkspaceHeroSection() {
       return;
     }
 
-    // Redirect to dashboard or handle signup
-    window.location.href = `https://dashboard.shadicards.in/auth/signup?phone=${phoneNumber}`;
+    // Redirect to dashboard login with prefilled number
+    window.location.href = `https://dashboard.shadicards.in/auth/login?number=${countryCode}${phoneNumber}`;
+  };
+
+  const handleVideoEnd = () => {
+    setIsPlaying(false);
+    setShowPlayButton(true);
+  };
+
+  const handlePlayClick = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+      setShowPlayButton(false);
+    }
   };
 
   return (
@@ -152,17 +169,27 @@ export default function WorkspaceHeroSection() {
               <div className="flex flex-col sm:flex-row items-stretch gap-2">
                 <div className="flex-1 w-full">
                   <div className="flex items-center bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 focus-within:border-rose-500 transition-colors h-12">
-                    <div className="flex items-center px-3 text-gray-500">
-                      <span className="text-lg mr-1.5">🇮🇳</span>
-                      <span className="text-gray-700 font-semibold text-sm">+91</span>
-                    </div>
+                    <select
+                      value={countryCode}
+                      onChange={(e) => setCountryCode(e.target.value)}
+                      className="flex items-center px-3 py-2 text-sm font-semibold text-gray-700 bg-transparent focus:outline-none cursor-pointer"
+                    >
+                      <option value="+91">🇮🇳 +91</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+61">🇦🇺 +61</option>
+                      <option value="+971">🇦🇪 +971</option>
+                      <option value="+65">🇸🇬 +65</option>
+                      <option value="+60">🇲🇾 +60</option>
+                    </select>
+                    <div className="w-px h-6 bg-gray-300"></div>
                     <input
                       type="tel"
                       value={phoneNumber}
                       onChange={handlePhoneChange}
                       placeholder="Enter mobile number"
                       className="flex-1 px-3 py-2 text-sm focus:outline-none bg-transparent"
-                      maxLength={10}
+                      maxLength={15}
                       required
                     />
                   </div>
@@ -182,30 +209,33 @@ export default function WorkspaceHeroSection() {
             </form>
           </div>
 
-          {/* Right Column - Video/Image */}
+          {/* Right Column - Video */}
           <div className="relative">
             <div className="relative w-full bg-white rounded-3xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-200">
               <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-                <Image
-                  src="/dashboard/wedding_website.png"
-                  alt="ShadiCards Dashboard Preview"
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  unoptimized
-                />
+                <video
+                  ref={videoRef}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  playsInline
+                  onEnded={handleVideoEnd}
+                >
+                  <source src="/introduction_video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
 
-                {/* Video Play Button */}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/20 transition-colors group">
-                  <button
-                    className="w-20 h-20 bg-rose-600 hover:bg-rose-700 rounded-full flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all"
-                    onClick={() => {
-                      console.log("Open demo video");
-                    }}
-                  >
-                    <Play className="w-10 h-10 text-white ml-1" fill="white" />
-                  </button>
-                </div>
+                {/* Video Play Button - Shows after video ends */}
+                {showPlayButton && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group">
+                    <button
+                      className="w-20 h-20 bg-rose-600 hover:bg-rose-700 rounded-full flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all"
+                      onClick={handlePlayClick}
+                    >
+                      <Play className="w-10 h-10 text-white ml-1" fill="white" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
