@@ -129,7 +129,7 @@ export default function WorkspaceHeroSection() {
 
   return (
     <section className="min-h-screen pt-24 pb-16 bg-[rgb(254.7,255,235)] overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 lg:px-6">
         {/* Two Column Hero Section */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
           {/* Left Column - Text Content */}
@@ -243,33 +243,36 @@ export default function WorkspaceHeroSection() {
 
         {/* Spacing */}
         <div className="h-12 md:h-20 lg:h-24"></div>
+      </div>
 
-        {/* Features Grid */}
-        <div className="w-full">
-          {/* Heading Section */}
-          <div className="bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-16 xl:px-24 py-8 md:py-10 lg:py-12 text-center">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 md:mb-6 leading-tight">
-                Create your perfect{" "}
-                <span className="font-semibold text-rose-600">wedding experience</span>
-              </h2>
-              <p className="text-sm md:text-base lg:text-lg text-gray-600 font-normal">
-                Smart cards, beautiful websites, and seamless guest management
-              </p>
-            </div>
+      {/* Features Grid - Full Width on Mobile */}
+      <div className="w-full">
+        {/* Heading Section */}
+        <div className="bg-[rgb(254.7,255,235)] px-6 md:px-8 lg:px-16 xl:px-24 py-8 md:py-10 lg:py-12 text-center">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-normal text-gray-900 mb-4 md:mb-6 leading-tight">
+              Create your perfect{" "}
+              <span className="font-semibold text-rose-600">wedding experience</span>
+            </h2>
+            <p className="text-sm md:text-base lg:text-lg text-gray-600 font-normal">
+              Smart cards, beautiful websites, and seamless guest management
+            </p>
           </div>
+        </div>
 
-          {/* Feature Grid */}
-          <div className="bg-[rgb(254.7,255,235)]">
-            <div className="grid grid-cols-2 lg:grid-cols-3 border-l border-t border-gray-400">
+        {/* Feature Grid */}
+        <div className="bg-[rgb(254.7,255,235)]">
+          <div className="grid grid-cols-2 lg:grid-cols-3 lg:border-l border-t border-gray-400">
                 {features.map((feature, index) => (
                   <div
                     key={feature.id}
-                    className="group bg-white overflow-hidden hover:shadow-lg transition-all duration-300 border-b border-t border-gray-400 border-r border-r-gray-400 flex flex-col"
+                    className={`group bg-white overflow-hidden hover:shadow-lg transition-all duration-300 border-b border-t border-gray-400 lg:border-r lg:border-r-gray-400 flex flex-col ${
+                      index % 2 === 0 ? 'border-r border-r-gray-400' : ''
+                    }`}
                   >
                     {/* Feature Image - Mobile First */}
-                    <div className="relative bg-white overflow-hidden px-4 md:px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8 pb-4 md:pb-6 lg:pb-8 lg:hidden">
-                      <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
+                    <div className="relative bg-white overflow-hidden px-2 md:px-6 lg:px-8 pt-2 md:pt-6 lg:pt-8 pb-2 md:pb-6 lg:pb-8 lg:hidden">
+                      <div className="relative w-full rounded-lg overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100" style={{ aspectRatio: '16/9' }}>
                         <Image
                           src={feature.image}
                           alt={feature.title}
@@ -282,7 +285,7 @@ export default function WorkspaceHeroSection() {
                     </div>
 
                     {/* Feature Header - Mobile Only */}
-                    <div className="p-4 md:p-6 lg:p-8 pb-3 md:pb-4 lg:hidden">
+                    <div className="px-2 pt-2 md:p-6 lg:p-8 pb-2 md:pb-4 lg:hidden">
                       <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2 mb-2">
                         {feature.title}
                         <ArrowRight className="w-3 h-3 text-gray-400 group-hover:text-rose-600 group-hover:translate-x-1 transition-all flex-shrink-0" />
@@ -290,7 +293,7 @@ export default function WorkspaceHeroSection() {
                     </div>
 
                     {/* Feature Description - Mobile Only */}
-                    <div className="lg:hidden px-4 pb-4">
+                    <div className="lg:hidden px-2 pb-3">
                       <p className="text-gray-600 text-xs leading-relaxed">
                         {feature.description}
                       </p>
@@ -322,11 +325,8 @@ export default function WorkspaceHeroSection() {
                     </div>
                   </div>
                 ))}
-            </div>
           </div>
         </div>
-
-
       </div>
     </section>
   );
