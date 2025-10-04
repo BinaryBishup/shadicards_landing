@@ -106,12 +106,14 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
         primaryColor={website.primary_color || "#ec4899"}
         secondaryColor={website.secondary_color || "#f97316"}
         visibility={{
-          show_hero: website.show_hero ?? true,
-          show_about: website.show_about ?? true,
-          show_story: website.show_story ?? true,
-          show_families: website.show_families ?? true,
-          show_gallery: website.show_gallery ?? true,
-          show_wedding_party: website.show_wedding_party ?? true
+          show_hero: website.show_hero !== false,  // Show if true or null
+          show_about: website.show_about !== false,
+          show_story: website.show_story !== false,
+          show_families: website.show_families !== false,
+          show_gallery: website.show_gallery !== false,
+          show_wedding_party: website.show_wedding_party !== false,
+          show_events: website.show_events !== false,
+          show_chat: website.show_chat === true  // Only show if explicitly true
         }}
       />
 
