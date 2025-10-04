@@ -22,8 +22,10 @@ export const supabase = createClient(supabaseUrl, apiKey);
 export interface Weddings {
   id: string;
   // Wedding Information
-  bride_name: string;
-  groom_name: string;
+  bride_first_name: string;
+  bride_last_name: string | null;
+  groom_first_name: string;
+  groom_last_name: string | null;
   wedding_date: string | null;
   venue_name: string | null;
   venue_address: string | null;
@@ -59,8 +61,8 @@ export interface Weddings {
   gallery_images: any | null;
   bride_families: any | null;
   groom_families: any | null;
-  bridesmaids: any | null;
-  groomsmen: any | null;
+  bride_friends: any | null;  // Wedding party - bride's side
+  groom_friends: any | null;  // Wedding party - groom's side
   // SEO & Meta
   meta_title: string | null;
   meta_description: string | null;
@@ -79,8 +81,10 @@ export interface Weddings {
 // Legacy interfaces for backwards compatibility
 export interface Wedding {
   id: string;
-  bride_name: string;
-  groom_name: string;
+  bride_first_name: string;
+  bride_last_name: string | null;
+  groom_first_name: string;
+  groom_last_name: string | null;
   wedding_date: string | null;
   venue_name: string | null;
   venue_address: string | null;
@@ -119,8 +123,8 @@ export interface WeddingWebsite {
   gallery_images: any | null;
   bride_families: any | null;
   groom_families: any | null;
-  bridesmaids: any | null;
-  groomsmen: any | null;
+  bride_friends: any | null;  // Wedding party - bride's side
+  groom_friends: any | null;  // Wedding party - groom's side
   meta_title: string | null;
   meta_description: string | null;
   og_image: string | null;

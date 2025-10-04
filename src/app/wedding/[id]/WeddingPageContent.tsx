@@ -119,8 +119,8 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     gallery_images: wedding.gallery_images,
     bride_families: wedding.bride_families,
     groom_families: wedding.groom_families,
-    bridesmaids: wedding.bridesmaids,
-    groomsmen: wedding.groomsmen,
+    bride_friends: wedding.bride_friends,
+    groom_friends: wedding.groom_friends,
     meta_title: wedding.meta_title,
     meta_description: wedding.meta_description,
     og_image: wedding.og_image,
@@ -128,8 +128,10 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     last_viewed_at: wedding.last_viewed_at,
     wedding: {
       id: wedding.id,
-      bride_name: wedding.bride_name,
-      groom_name: wedding.groom_name,
+      bride_first_name: wedding.bride_first_name,
+      bride_last_name: wedding.bride_last_name,
+      groom_first_name: wedding.groom_first_name,
+      groom_last_name: wedding.groom_last_name,
       wedding_date: wedding.wedding_date,
       venue_name: wedding.venue_name,
       venue_address: wedding.venue_address,
@@ -161,7 +163,7 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
       {!guest && (
         <div className="min-h-screen bg-[rgb(254.7,255,235)] flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">{wedding.bride_name} & {wedding.groom_name}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">{wedding.bride_first_name} & {wedding.groom_first_name}</h1>
             <p className="text-gray-600 mb-6">Please provide your guest ID to access the wedding page.</p>
             <p className="text-sm text-gray-500">URL format: /wedding/{wedding.id}?guest=YOUR_GUEST_ID</p>
           </div>

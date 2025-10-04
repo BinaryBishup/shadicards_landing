@@ -25,27 +25,28 @@ export function mapDatabaseToTemplateData(
   const groomFamilyMembers = Array.isArray(groomFamilies) ? groomFamilies :
                               (groomFamilies.members || groomFamilies.family || []);
 
-  // Handle different possible structures for wedding party
-  const bridesmaidsData = website.bridesmaids as any;
-  const bridesmaids = Array.isArray(bridesmaidsData) ? bridesmaidsData :
-                       (bridesmaidsData?.members || bridesmaidsData?.party || []);
+  // Handle different possible structures for wedding party (bride_friends and groom_friends)
+  const brideFriendsData = website.bride_friends as any;
+  const brideFriends = Array.isArray(brideFriendsData) ? brideFriendsData :
+                       (brideFriendsData?.members || brideFriendsData?.friends || []);
 
-  const groomsmenData = website.groomsmen as any;
-  const groomsmen = Array.isArray(groomsmenData) ? groomsmenData :
-                     (groomsmenData?.members || groomsmenData?.party || []);
+  const groomFriendsData = website.groom_friends as any;
+  const groomFriends = Array.isArray(groomFriendsData) ? groomFriendsData :
+                       (groomFriendsData?.members || groomFriendsData?.friends || []);
 
   console.log("DEBUG wedding-data-mapper - brideFamilyMembers:", brideFamilyMembers);
   console.log("DEBUG wedding-data-mapper - groomFamilyMembers:", groomFamilyMembers);
-  console.log("DEBUG wedding-data-mapper - bridesmaids:", bridesmaids);
-  console.log("DEBUG wedding-data-mapper - groomsmen:", groomsmen);
+  console.log("DEBUG wedding-data-mapper - brideFriends (wedding party):", brideFriends);
+  console.log("DEBUG wedding-data-mapper - groomFriends (wedding party):", groomFriends);
 
-  // Extract first names from full names
-  const getFirstName = (fullName: string) => fullName?.split(' ')[0] || fullName || '';
+  // Helper to create full name
+  const getFullName = (firstName: string, lastName: string | null) =>
+    `${firstName}${lastName ? ' ' + lastName : ''}`;
 
   const mappedData = {
     hero: {
-      brideName: getFirstName(wedding.bride_name),
-      groomName: getFirstName(wedding.groom_name),
+      brideName: wedding.bride_first_name,  // Use first name directly
+      groomName: wedding.groom_first_name,  // Use first name directly
       coupleImage: wedding.couple_picture || undefined,
       weddingDate: wedding.wedding_date || '',
       weddingTime: events?.[0]?.start_time || undefined,
@@ -54,7 +55,7 @@ export function mapDatabaseToTemplateData(
     },
     about: {
       bride: {
-        name: wedding.bride_name,
+        name: getFullName(wedding.bride_first_name, wedding.bride_last_name),
         image: wedding.bride_photo_url || undefined,
         description: wedding.about_bride || undefined,
         profession: undefined, // Could be added to wedding table
@@ -64,7 +65,7 @@ export function mapDatabaseToTemplateData(
         }
       },
       groom: {
-        name: wedding.groom_name,
+        name: getFullName(wedding.groom_first_name, wedding.groom_last_name),
         image: wedding.groom_photo_url || undefined,
         description: wedding.about_groom || undefined,
         profession: undefined, // Could be added to wedding table
@@ -119,21 +120,21 @@ export function mapDatabaseToTemplateData(
     },
     weddingParty: {
       bridesmaids: {
-        title: 'Bridesmaids',
-        members: bridesmaids.map((member: any, index: number) => ({
-          id: member.id || `bridesmaid-${index}`,
+        title: "Bride's Friends",
+        members: brideFriends.map((member: any, index: number) => ({
+          id: member.id || `bride-friend-${index}`,
           name: member.name || '',
-          role: member.role || member.position || 'Bridesmaid',
+          role: member.role || member.position || 'Friend',
           image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
       },
       groomsmen: {
-        title: 'Groomsmen',
-        members: groomsmen.map((member: any, index: number) => ({
-          id: member.id || `groomsman-${index}`,
+        title: "Groom's Friends",
+        members: groomFriends.map((member: any, index: number) => ({
+          id: member.id || `groom-friend-${index}`,
           name: member.name || '',
-          role: member.role || member.position || 'Groomsman',
+          role: member.role || member.position || 'Friend',
           image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
