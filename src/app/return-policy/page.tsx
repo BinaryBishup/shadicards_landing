@@ -44,22 +44,40 @@ export default function ReturnPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Order Cancellation</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Order Cancellation & Refund Policy</h2>
 
-              <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Before Production</h3>
-              <p className="text-gray-700">
-                You may cancel your order and receive a full refund if:
-              </p>
-              <ul className="list-disc pl-6 space-y-2 text-gray-700 mt-2">
-                <li>The cancellation is requested within 2 hours of placing the order</li>
-                <li>Production has not yet begun</li>
-                <li>No proof has been approved</li>
-              </ul>
+              <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Cancellation Within 24 Hours</h3>
+              <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                <p className="text-gray-700">
+                  <strong>90% Refund Available:</strong> If you cancel your order within 24 hours of placing it,
+                  you will receive a 90% refund of the order amount. A 10% processing fee will be deducted to
+                  cover administrative costs.
+                </p>
+              </div>
 
-              <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">After Proof Approval</h3>
-              <p className="text-gray-700">
-                Once you have approved the final proof and production has begun, orders cannot be cancelled
-                and are non-refundable.
+              <h3 className="text-xl font-semibold text-gray-800 mt-4 mb-2">Cancellation After 24-48 Hours</h3>
+              <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-4">
+                <p className="text-gray-700">
+                  <strong>No Refund - Production Begins:</strong> Printing typically begins within 48 hours of
+                  order placement. Once printing has started, orders cannot be cancelled and no refund will be
+                  provided. The product will be completed and delivered as ordered.
+                </p>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                <p className="text-gray-700 mb-2">
+                  <strong>Timeline Summary:</strong>
+                </p>
+                <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                  <li><strong>0-24 hours:</strong> Cancellation possible with 90% refund</li>
+                  <li><strong>After 24 hours:</strong> Production process initiated</li>
+                  <li><strong>After 48 hours:</strong> Printing starts - No cancellation or refund possible</li>
+                </ul>
+              </div>
+
+              <p className="text-gray-700 mt-4">
+                To request a cancellation, please contact us immediately at <strong>orders@shadicards.com</strong> or
+                call <strong>+91 98765 43210</strong> with your order number.
               </p>
             </section>
 
