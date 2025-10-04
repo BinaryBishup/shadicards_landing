@@ -35,7 +35,6 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
     show_families: website.show_families,
     show_gallery: website.show_gallery,
     show_wedding_party: website.show_wedding_party,
-    show_events: website.show_events,
     show_chat: website.show_chat
   });
   const weddingData = mapDatabaseToTemplateData(website.wedding, website, events);
@@ -117,7 +116,6 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
           show_families: website.show_families !== false,
           show_gallery: website.show_gallery !== false,
           show_wedding_party: website.show_wedding_party !== false,
-          show_events: website.show_events !== false,
           show_chat: website.show_chat === true  // Only show if explicitly true
         }}
       />

@@ -166,7 +166,6 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     show_about: wedding.show_about,
     show_story: wedding.show_story,
     show_gallery: wedding.show_gallery,
-    show_events: wedding.show_events,
     show_families: wedding.show_families,
     show_wedding_party: wedding.show_wedding_party,
     show_chat: wedding.show_chat,
