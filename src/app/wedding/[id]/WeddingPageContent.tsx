@@ -180,6 +180,7 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     show_families: wedding.show_families,
     show_wedding_party: wedding.show_wedding_party,
     show_chat: wedding.show_chat,
+    show_events: wedding.show_events,
     story_items: wedding.story_items,
     gallery_images: wedding.gallery_images,
     bride_families: wedding.bride_families,
