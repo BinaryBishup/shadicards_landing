@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import WeddingWebsite from "@/components/wedding/WeddingWebsite";
 import LoadingScreen from "@/components/wedding/LoadingScreen";
+import PasswordProtection from "@/components/wedding/PasswordProtection";
 import { supabase } from "@/lib/supabase";
 import type { Weddings, Guest, Event } from "@/lib/supabase";
 
@@ -17,6 +18,8 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
   const [guest, setGuest] = useState<Guest | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isPasswordVerified, setIsPasswordVerified] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
   useEffect(() => {
     loadWeddingData();
@@ -90,6 +93,17 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     }
   };
 
+  const handlePasswordSubmit = (password: string) => {
+    if (!wedding) return;
+
+    if (password === wedding.password) {
+      setIsPasswordVerified(true);
+      setPasswordError(null);
+    } else {
+      setPasswordError("Incorrect password. Please try again.");
+    }
+  };
+
   // Loading state with improved experience
   if (loading) {
     return <LoadingScreen guestName={guest?.first_name || guest?.last_name} />;
@@ -104,6 +118,35 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
           <p className="text-gray-600">{error || "The wedding you're looking for doesn't exist."}</p>
         </div>
       </div>
+    );
+  }
+
+  // Check if website is inactive or draft
+  if (wedding.status === 'inactive' || wedding.status === 'draft') {
+    const isHidden = wedding.status === 'inactive';
+    return (
+      <PasswordProtection
+        coupleName={`${wedding.bride_first_name} & ${wedding.groom_first_name}`}
+        coupleImage={wedding.couple_picture || '/couple_image.jpg'}
+        weddingDate={wedding.wedding_date || ''}
+        isHidden={isHidden}
+        onPasswordSubmit={handlePasswordSubmit}
+        passwordError={passwordError}
+      />
+    );
+  }
+
+  // Check if password protected
+  if (wedding.is_password_protected && !isPasswordVerified) {
+    return (
+      <PasswordProtection
+        coupleName={`${wedding.bride_first_name} & ${wedding.groom_first_name}`}
+        coupleImage={wedding.couple_picture || '/couple_image.jpg'}
+        weddingDate={wedding.wedding_date || ''}
+        isHidden={false}
+        onPasswordSubmit={handlePasswordSubmit}
+        passwordError={passwordError}
+      />
     );
   }
 

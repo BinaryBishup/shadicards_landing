@@ -14,38 +14,36 @@ interface PasswordProtectionProps {
   weddingDate?: string;
   isHidden?: boolean;
   onPasswordSubmit?: (password: string) => void;
+  passwordError?: string | null;
 }
 
-export default function PasswordProtection({ 
+export default function PasswordProtection({
   coupleName = "Priya & Arjun",
   coupleImage = "/couple_image.jpg",
   weddingDate = "December 2024",
   isHidden = false,
-  onPasswordSubmit
+  onPasswordSubmit,
+  passwordError = null
 }: PasswordProtectionProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+
+    if (!password || password.length === 0) {
+      return;
+    }
+
     setIsLoading(true);
 
-    // Simulate password verification
-    setTimeout(() => {
-      if (password.length < 4) {
-        setError("Password must be at least 4 characters");
-        setIsLoading(false);
-        return;
-      }
-      
-      if (onPasswordSubmit) {
-        onPasswordSubmit(password);
-      }
-      setIsLoading(false);
-    }, 1000);
+    if (onPasswordSubmit) {
+      onPasswordSubmit(password);
+    }
+
+    // Reset loading after a short delay
+    setTimeout(() => setIsLoading(false), 500);
   };
 
   return (
@@ -141,10 +139,10 @@ export default function PasswordProtection({
               </div>
 
               {/* Error Message */}
-              {error && (
+              {passwordError && (
                 <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <p className="text-sm">{error}</p>
+                  <p className="text-sm">{passwordError}</p>
                 </div>
               )}
 
