@@ -94,6 +94,18 @@ const aboutData = [
     icon: "phone",
   },
   {
+    title: "Shipping Policy",
+    href: "/shipping-policy",
+    description: "Delivery timelines and shipping information",
+    icon: "local_shipping",
+  },
+  {
+    title: "Return Policy",
+    href: "/return-policy",
+    description: "Cancellation and refund policy",
+    icon: "assignment_return",
+  },
+  {
     title: "Privacy Policy",
     href: "/privacy-policy",
     description: "How we protect your data",
