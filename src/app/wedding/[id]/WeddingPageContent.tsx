@@ -42,15 +42,20 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
       }
 
       // Load wedding website settings (visibility toggles, etc.)
-      const { data: websiteSettings } = await supabase
+      const { data: websiteSettings, error: websiteError } = await supabase
         .from("wedding_website")
         .select("*")
         .eq("wedding_id", weddingId)
         .single();
 
+      console.log("DEBUG - Website settings query result:", websiteSettings);
+      console.log("DEBUG - Website settings error:", websiteError);
+
       // Merge website settings into wedding data
       if (websiteSettings) {
         Object.assign(weddingData, websiteSettings);
+        console.log("DEBUG - Merged wedding data status:", weddingData.status);
+        console.log("DEBUG - Merged wedding data is_password_protected:", weddingData.is_password_protected);
       }
 
       setWedding(weddingData);
@@ -122,7 +127,11 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
   }
 
   // Check if website is inactive - redirect to homepage
+  console.log("DEBUG - Checking wedding status:", wedding.status);
+  console.log("DEBUG - Is inactive?:", wedding.status === 'inactive');
+
   if (wedding.status === 'inactive') {
+    console.log("DEBUG - Status is inactive, redirecting to homepage");
     if (typeof window !== 'undefined') {
       window.location.href = '/';
     }
