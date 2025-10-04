@@ -159,8 +159,10 @@ export default async function EventPage({ params, searchParams }: PageProps) {
     last_viewed_at: wedding.last_viewed_at,
     wedding: {
       id: wedding.id,
-      bride_name: wedding.bride_name,
-      groom_name: wedding.groom_name,
+      bride_first_name: wedding.bride_first_name,
+      bride_last_name: wedding.bride_last_name,
+      groom_first_name: wedding.groom_first_name,
+      groom_last_name: wedding.groom_last_name,
       wedding_date: wedding.wedding_date,
       venue_name: wedding.venue_name,
       venue_address: wedding.venue_address,

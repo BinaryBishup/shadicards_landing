@@ -315,7 +315,7 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
             <div>
               <h2 className="text-2xl font-semibold">Update Your Details</h2>
               <p className="text-rose-100 text-sm mt-1">
-                {wedding?.bride_name} & {wedding?.groom_name}'s Wedding
+                {wedding?.bride_first_name} & {wedding?.groom_first_name}'s Wedding
               </p>
             </div>
             <button

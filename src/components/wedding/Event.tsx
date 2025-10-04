@@ -474,7 +474,7 @@ export default function UpcomingEventMinimal({
                 />
                 <Image
                   src={website.wedding.couple_picture}
-                  alt={`${website.wedding.bride_name} & ${website.wedding.groom_name}`}
+                  alt={`${website.wedding.bride_first_name} & ${website.wedding.groom_first_name}`}
                   width={128}
                   height={128}
                   className="object-cover"
@@ -511,7 +511,7 @@ export default function UpcomingEventMinimal({
                 }}>{`${guest.first_name} ${guest.last_name}`.trim()}</span>
               </p>
               <p className="text-white/80 text-base">
-                {website.wedding.bride_name} & {website.wedding.groom_name} invite you to celebrate
+                {website.wedding.bride_first_name} & {website.wedding.groom_first_name} invite you to celebrate
               </p>
             </div>
 

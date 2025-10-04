@@ -11,8 +11,10 @@ export async function getWeddingWebsiteByUrl(url: string) {
         *,
         wedding:wedding_id (
           id,
-          bride_name,
-          groom_name,
+          bride_first_name,
+          bride_last_name,
+          groom_first_name,
+          groom_last_name,
           wedding_date,
           couple_picture,
           bride_photo_url,

@@ -304,7 +304,7 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
               
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h1>
               <h2 className="text-xl text-rose-600 mb-6 font-semibold">
-                {wedding.bride_name} & {wedding.groom_name}
+                {wedding.bride_first_name} & {wedding.groom_first_name}
               </h2>
               
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">
@@ -368,7 +368,7 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Update Your Details</h1>
           <h2 className="text-xl text-rose-600 mb-4 font-semibold">
-            {wedding.bride_name} & {wedding.groom_name}'s Wedding
+            {wedding.bride_first_name} & {wedding.groom_first_name}'s Wedding
           </h2>
           <p className="text-gray-600">Help us make your experience perfect</p>
         </div>
