@@ -38,6 +38,18 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
         throw new Error("Wedding not found");
       }
 
+      // Load wedding website settings (visibility toggles, etc.)
+      const { data: websiteSettings } = await supabase
+        .from("wedding_website")
+        .select("*")
+        .eq("wedding_id", weddingId)
+        .single();
+
+      // Merge website settings into wedding data
+      if (websiteSettings) {
+        Object.assign(weddingData, websiteSettings);
+      }
+
       setWedding(weddingData);
 
       // Load guest data if guestId is provided

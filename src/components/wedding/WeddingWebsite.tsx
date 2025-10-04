@@ -28,11 +28,16 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
   // Map database data to template format
   console.log("Debug - Wedding data:", website.wedding);
   console.log("Debug - Website data:", website);
-  console.log("Debug - gallery_images:", website.gallery_images);
-  console.log("Debug - bride_families:", website.bride_families);
-  console.log("Debug - groom_families:", website.groom_families);
-  console.log("Debug - bridesmaids:", website.bridesmaids);
-  console.log("Debug - groomsmen:", website.groomsmen);
+  console.log("Debug - Visibility toggles:", {
+    show_hero: website.show_hero,
+    show_about: website.show_about,
+    show_story: website.show_story,
+    show_families: website.show_families,
+    show_gallery: website.show_gallery,
+    show_wedding_party: website.show_wedding_party,
+    show_events: website.show_events,
+    show_chat: website.show_chat
+  });
   const weddingData = mapDatabaseToTemplateData(website.wedding, website, events);
   console.log("Debug - Mapped gallery data:", weddingData.gallery);
   console.log("Debug - Mapped family data:", weddingData.family);
