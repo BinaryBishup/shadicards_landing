@@ -121,15 +121,29 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     );
   }
 
-  // Check if website is inactive or draft
-  if (wedding.status === 'inactive' || wedding.status === 'draft') {
-    const isHidden = wedding.status === 'inactive';
+  // Check if website is inactive - redirect to homepage
+  if (wedding.status === 'inactive') {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+    return (
+      <div className="min-h-screen bg-[rgb(254.7,255,235)] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Redirecting...</h1>
+          <p className="text-gray-600">This wedding page is currently inactive.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if website is draft - show password protection
+  if (wedding.status === 'draft') {
     return (
       <PasswordProtection
         coupleName={`${wedding.bride_first_name} & ${wedding.groom_first_name}`}
         coupleImage={wedding.couple_picture || '/couple_image.jpg'}
         weddingDate={wedding.wedding_date || ''}
-        isHidden={isHidden}
+        isHidden={false}
         onPasswordSubmit={handlePasswordSubmit}
         passwordError={passwordError}
       />
