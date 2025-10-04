@@ -9,19 +9,17 @@ async function resetToActive() {
   const weddingId = 'f406f574-10b5-4dba-a386-8f0d18bf4c29';
 
   const { data, error } = await supabase
-    .from('wedding_website')
+    .from('weddings')
     .update({
-      status: 'active',
-      is_password_protected: false,
-      password: null
+      is_active: true
     })
-    .eq('wedding_id', weddingId)
+    .eq('id', weddingId)
     .select();
 
   if (error) {
     console.error('Error:', error);
   } else {
-    console.log('✅ Wedding reset to ACTIVE (no password)');
+    console.log('✅ Wedding set to ACTIVE (is_active = true)');
     console.log('URL: http://localhost:3000/wedding/' + weddingId + '?guest=4500be3b-f078-4f2f-bec8-9861609f82dd');
     console.log('Expected: Wedding page loads normally');
   }

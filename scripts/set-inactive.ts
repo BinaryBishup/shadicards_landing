@@ -9,19 +9,19 @@ async function setInactive() {
   const weddingId = 'f406f574-10b5-4dba-a386-8f0d18bf4c29';
 
   const { data, error } = await supabase
-    .from('wedding_website')
+    .from('weddings')
     .update({
-      status: 'inactive'
+      is_active: false
     })
-    .eq('wedding_id', weddingId)
+    .eq('id', weddingId)
     .select();
 
   if (error) {
     console.error('Error:', error);
   } else {
-    console.log('✅ Wedding status set to INACTIVE');
+    console.log('✅ Wedding set to INACTIVE (is_active = false)');
     console.log('URL: http://localhost:3000/wedding/' + weddingId + '?guest=4500be3b-f078-4f2f-bec8-9861609f82dd');
-    console.log('Expected: Shows "This Page is Hidden" message');
+    console.log('Expected: Redirects to homepage');
   }
 }
 

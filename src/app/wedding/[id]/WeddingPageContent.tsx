@@ -41,6 +41,9 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
         throw new Error("Wedding not found");
       }
 
+      // Check if wedding is active - if not, redirect will happen in render
+      console.log("DEBUG - Wedding is_active:", weddingData.is_active);
+
       // Load wedding website settings (visibility toggles, etc.)
       const { data: websiteSettings, error: websiteError } = await supabase
         .from("wedding_website")
@@ -54,7 +57,6 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
       // Merge website settings into wedding data
       if (websiteSettings) {
         Object.assign(weddingData, websiteSettings);
-        console.log("DEBUG - Merged wedding data status:", weddingData.status);
         console.log("DEBUG - Merged wedding data is_password_protected:", weddingData.is_password_protected);
       }
 
@@ -126,12 +128,12 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
     );
   }
 
-  // Check if website is inactive - redirect to homepage
-  console.log("DEBUG - Checking wedding status:", wedding.status);
-  console.log("DEBUG - Is inactive?:", wedding.status === 'inactive');
+  // Check if wedding is inactive - redirect to homepage
+  console.log("DEBUG - Wedding is_active:", wedding.is_active);
+  console.log("DEBUG - Is inactive?:", wedding.is_active === false);
 
-  if (wedding.status === 'inactive') {
-    console.log("DEBUG - Status is inactive, redirecting to homepage");
+  if (wedding.is_active === false) {
+    console.log("DEBUG - Wedding is inactive, redirecting to homepage");
     if (typeof window !== 'undefined') {
       window.location.href = '/';
     }
@@ -142,20 +144,6 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
           <p className="text-gray-600">This wedding page is currently inactive.</p>
         </div>
       </div>
-    );
-  }
-
-  // Check if website is draft - show password protection
-  if (wedding.status === 'draft') {
-    return (
-      <PasswordProtection
-        coupleName={`${wedding.bride_first_name} & ${wedding.groom_first_name}`}
-        coupleImage={wedding.couple_picture || '/couple_image.jpg'}
-        weddingDate={wedding.wedding_date || ''}
-        isHidden={false}
-        onPasswordSubmit={handlePasswordSubmit}
-        passwordError={passwordError}
-      />
     );
   }
 
