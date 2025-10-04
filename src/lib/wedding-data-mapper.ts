@@ -117,13 +117,27 @@ export function mapDatabaseToTemplateData(
     },
     gallery: {
       title: 'Our Memories',
-      images: galleryImages.map((img: any, index: number) => ({
-        id: img.id || `gallery-${index}`,
-        url: img.url || img.src || img.image || '',
-        caption: img.caption || img.alt || undefined,
-        category: img.category || 'All'
-      })).filter((img: any) => img.url), // Filter out images without URLs
-      categories: Array.from(new Set(galleryImages.map((img: any) => img.category).filter(Boolean)))
+      images: galleryImages.map((img: any, index: number) => {
+        // Handle both string URLs and object formats
+        if (typeof img === 'string') {
+          return {
+            id: `gallery-${index}`,
+            url: img,
+            caption: undefined,
+            category: 'All'
+          };
+        } else {
+          return {
+            id: img.id || `gallery-${index}`,
+            url: img.url || img.src || img.image || '',
+            caption: img.caption || img.alt || undefined,
+            category: img.category || 'All'
+          };
+        }
+      }).filter((img: any) => img.url), // Filter out images without URLs
+      categories: Array.from(new Set(galleryImages.map((img: any) =>
+        typeof img === 'string' ? 'All' : (img.category || 'All')
+      ).filter(Boolean)))
     },
     weddingParty: {
       bridesmaids: {
@@ -131,7 +145,7 @@ export function mapDatabaseToTemplateData(
         members: brideFriends.map((member: any, index: number) => ({
           id: member.id || `bride-friend-${index}`,
           name: member.name || '',
-          role: member.role || member.position || 'Friend',
+          role: member.role || member.relation || member.position || 'Friend',
           image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
@@ -141,7 +155,7 @@ export function mapDatabaseToTemplateData(
         members: groomFriends.map((member: any, index: number) => ({
           id: member.id || `groom-friend-${index}`,
           name: member.name || '',
-          role: member.role || member.position || 'Friend',
+          role: member.role || member.relation || member.position || 'Friend',
           image: member.image || member.photo || member.picture || undefined,
           description: member.description || undefined
         }))
