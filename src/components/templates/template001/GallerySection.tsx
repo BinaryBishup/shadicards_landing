@@ -13,7 +13,16 @@ interface GallerySectionProps {
 export default function GallerySection({ data, primaryColor = '#ec4899' }: GallerySectionProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  if (!data.images || data.images.length === 0) return null;
+  console.log("DEBUG GallerySection - Received data:", data);
+  console.log("DEBUG GallerySection - Images array:", data.images);
+  console.log("DEBUG GallerySection - Images count:", data.images?.length || 0);
+
+  if (!data.images || data.images.length === 0) {
+    console.log("DEBUG GallerySection - No images to display, returning null");
+    return null;
+  }
+
+  console.log("DEBUG GallerySection - Rendering gallery with", data.images.length, "images");
 
   return (
     <>

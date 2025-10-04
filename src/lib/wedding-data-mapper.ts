@@ -14,7 +14,14 @@ export function mapDatabaseToTemplateData(
   const galleryImages = website.gallery_images as any[] || [];
 
   console.log("DEBUG wedding-data-mapper - Raw gallery_images:", website.gallery_images);
+  console.log("DEBUG wedding-data-mapper - Type of gallery_images:", typeof website.gallery_images);
+  console.log("DEBUG wedding-data-mapper - Is array?:", Array.isArray(website.gallery_images));
   console.log("DEBUG wedding-data-mapper - Parsed galleryImages:", galleryImages);
+  console.log("DEBUG wedding-data-mapper - galleryImages length:", galleryImages.length);
+  if (galleryImages.length > 0) {
+    console.log("DEBUG wedding-data-mapper - First gallery item structure:", galleryImages[0]);
+    console.log("DEBUG wedding-data-mapper - First gallery item keys:", Object.keys(galleryImages[0]));
+  }
 
   // Handle different possible structures for families
   const brideFamilies = website.bride_families as any || {};
@@ -144,6 +151,10 @@ export function mapDatabaseToTemplateData(
 
   console.log("DEBUG wedding-data-mapper - Final mapped gallery:", mappedData.gallery);
   console.log("DEBUG wedding-data-mapper - Final mapped gallery images count:", mappedData.gallery.images.length);
+  if (mappedData.gallery.images.length > 0) {
+    console.log("DEBUG wedding-data-mapper - First mapped gallery image:", mappedData.gallery.images[0]);
+    console.log("DEBUG wedding-data-mapper - First mapped image URL:", mappedData.gallery.images[0].url);
+  }
   console.log("DEBUG wedding-data-mapper - Final mapped weddingParty:", mappedData.weddingParty);
 
   return mappedData;
