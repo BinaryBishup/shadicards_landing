@@ -13,9 +13,16 @@ import {
   Nfc,
   Package,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!;
@@ -125,12 +132,126 @@ function ImageCarousel({ images, cardName }: { images: string[], cardName: strin
   );
 }
 
+// Card Details Modal Component
+function CardDetailsModal({ card, isOpen, onClose }: { card: Card | null, isOpen: boolean, onClose: () => void }) {
+  if (!card) return null;
+
+  const discount = card.original_price && card.original_price > card.price
+    ? Math.round(((card.original_price - card.price) / card.original_price) * 100)
+    : null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-gray-900">
+            {card.name}
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="grid md:grid-cols-2 gap-8 mt-4">
+          {/* Left: Image Carousel */}
+          <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+            <ImageCarousel images={card.images || []} cardName={card.name} />
+
+            {/* Badges */}
+            <div className="absolute top-4 left-4 flex flex-col gap-2">
+              {card.is_new && (
+                <span className="bg-rose-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  NEW
+                </span>
+              )}
+              {card.has_nfc && (
+                <span className="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                  <Nfc className="w-3 h-3" />
+                  NFC
+                </span>
+              )}
+              {discount && (
+                <span className="bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  {discount}% OFF
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Right: Details */}
+          <div className="flex flex-col">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">{card.category}</p>
+                {card.rating && (
+                  <div className="flex items-center gap-1 text-sm">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <span className="font-medium">{card.rating}</span>
+                    {card.reviews_count && (
+                      <span className="text-gray-500">({card.reviews_count} reviews)</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {card.description && (
+              <p className="text-gray-600 mb-6">{card.description}</p>
+            )}
+
+            {/* Features */}
+            {card.features && card.features.length > 0 && (
+              <div className="mb-6">
+                <h3 className="font-semibold text-gray-900 mb-3">Features:</h3>
+                <div className="space-y-2">
+                  {card.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-sm text-gray-700">
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Price */}
+            <div className="mb-6 pb-6 border-b border-gray-200">
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-gray-900">
+                  ₹{card.price}
+                </span>
+                {card.original_price && card.original_price > card.price && (
+                  <span className="text-xl text-gray-500 line-through">
+                    ₹{card.original_price}
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
+                Minimum order: {card.min_order} {card.min_order === 1 ? 'card' : 'cards'}
+              </p>
+            </div>
+
+            {/* CTA */}
+            <a
+              href="https://dashboard.shadicards.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-rose-600 hover:text-rose-700 underline text-sm font-medium"
+            >
+              Order this card →
+            </a>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 export default function ShopPage() {
   const [cards, setCards] = useState<Card[]>([]);
   const [filteredCards, setFilteredCards] = useState<Card[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchCards();
@@ -254,7 +375,11 @@ export default function ShopPage() {
                 return (
                   <div
                     key={card.id}
-                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
+                    onClick={() => {
+                      setSelectedCard(card);
+                      setIsModalOpen(true);
+                    }}
+                    className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer"
                   >
                     {/* Card Image Carousel */}
                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
@@ -336,15 +461,15 @@ export default function ShopPage() {
                         </p>
                       </div>
 
-                      {/* CTA Button */}
+                      {/* Subtle CTA */}
                       <a
                         href="https://dashboard.shadicards.in"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/btn w-full bg-rose-600 hover:bg-rose-700 text-white px-6 py-3 rounded-full font-medium text-center transition-all flex items-center justify-center gap-2"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-rose-600 hover:text-rose-700 underline text-sm font-medium inline-block"
                       >
-                        Order This Card
-                        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                        Order this card →
                       </a>
                     </div>
                   </div>
@@ -378,6 +503,16 @@ export default function ShopPage() {
           </div>
         </div>
       </section>
+
+      {/* Card Details Modal */}
+      <CardDetailsModal
+        card={selectedCard}
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedCard(null);
+        }}
+      />
 
       <Footer />
     </>
