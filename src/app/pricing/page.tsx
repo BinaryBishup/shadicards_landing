@@ -24,14 +24,14 @@ export default function PricingPage() {
   const paidFeatures = [
     {
       name: "WhatsApp Messages",
-      price: "₹0.50/message",
+      price: "₹1/message",
       description: "Automated WhatsApp invitations and reminders",
       icon: <MessageCircle className="w-6 h-6" />
     },
     {
-      name: "Physical Wedding Cards",
-      price: "Starting ₹15/card",
-      description: "Premium printed cards with NFC technology",
+      name: "Smart Wedding Cards",
+      price: "Starting ₹50/card",
+      description: "Premium smart cards with NFC - each guest gets personalized access control",
       icon: <Mail className="w-6 h-6" />
     }
   ];
@@ -147,11 +147,15 @@ export default function PricingPage() {
                     <div className="mt-4 pt-4 border-t border-gray-200">
                       <p className="text-sm text-gray-500">
                         <Check className="w-4 h-4 inline text-green-600 mr-1" />
-                        Premium quality with NFC technology
+                        Each guest gets their own unique smart card
                       </p>
                       <p className="text-sm text-gray-500 mt-2">
                         <Check className="w-4 h-4 inline text-green-600 mr-1" />
-                        Free design customization
+                        Control event access for individual guests
+                      </p>
+                      <p className="text-sm text-gray-500 mt-2">
+                        <Check className="w-4 h-4 inline text-green-600 mr-1" />
+                        NFC technology connects card to wedding website
                       </p>
                     </div>
                   )}
@@ -186,11 +190,11 @@ export default function PricingPage() {
                   <h3 className="text-xl font-bold mb-4 text-green-400">ShadiCards</h3>
                   <div className="space-y-3">
                     {[
-                      "₹0 for digital (₹15+ for physical)",
+                      "₹0 for digital (₹50+ for smart cards)",
                       "Unlimited design changes",
                       "Advanced guest management",
                       "Automated RSVP tracking",
-                      "Digital + Physical options"
+                      "Individual guest access control"
                     ].map((item, index) => (
                       <div key={index} className="flex items-start space-x-2">
                         <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
@@ -214,15 +218,19 @@ export default function PricingPage() {
                 },
                 {
                   q: "When do I need to pay?",
-                  a: "You only pay when you choose to send WhatsApp messages (₹0.50/message) or order physical wedding cards (starting ₹15/card). Everything else is completely free."
+                  a: "You only pay when you choose to send WhatsApp messages (₹1/message) or order premium smart cards (starting ₹50/card). Everything else is completely free."
                 },
                 {
                   q: "Are there any hidden charges?",
                   a: "Absolutely not. We believe in transparent pricing. What you see is what you pay. No setup fees, no monthly charges, no hidden costs."
                 },
                 {
-                  q: "Can I try before ordering physical cards?",
-                  a: "Yes! Create your entire wedding website, design your cards digitally, and test all features for free. Order physical cards only when you're ready."
+                  q: "Can I try before ordering smart cards?",
+                  a: "Yes! Create your entire wedding website, design your cards digitally, and test all features for free. Order smart cards only when you're ready."
+                },
+                {
+                  q: "What makes the smart cards special?",
+                  a: "Each guest receives their own unique smart card with NFC technology. You can control which events each guest can access, making it perfect for managing different ceremonies and guest categories."
                 }
               ].map((faq, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-md">
@@ -244,7 +252,9 @@ export default function PricingPage() {
               No credit card required. Get started in minutes.
             </p>
             <Link
-              href="/"
+              href="https://dashboard.shadicards.in"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-white text-rose-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors text-lg"
             >
               Get Started Free

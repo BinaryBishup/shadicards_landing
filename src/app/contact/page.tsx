@@ -33,7 +33,7 @@ export default function ContactPage() {
       const { supabase } = await import("@/lib/supabase");
 
       // Insert the query into Supabase
-      const { error } = await supabase.from("customer_queries").insert([
+      const { error } = await supabase.from("contact_submissions").insert([
         {
           name: formData.name,
           email: formData.email,

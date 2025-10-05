@@ -1,15 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TalkToExpertModal from "@/components/TalkToExpertModal";
 import Image from "next/image";
-import { 
-  Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin, 
+import {
+  Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin,
   Heart, Camera, Instagram, Gift, Clock, Shield, Sparkles,
   ArrowRight, Check, Star, Scan, Wifi, CreditCard
 } from "lucide-react";
 
 export default function SmartCardPage() {
+  const [showExpertModal, setShowExpertModal] = useState(false);
   const features = [
     {
       icon: <QrCode className="w-8 h-8" />,
@@ -329,14 +332,27 @@ export default function SmartCardPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-rose-600 hover:text-rose-700 px-8 py-4 rounded-full font-medium text-lg transition-all shadow-lg hover:shadow-xl">
+              <a
+                href="https://dashboard.shadicards.in"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white text-rose-600 hover:text-rose-700 px-8 py-4 rounded-full font-medium text-lg transition-all shadow-lg hover:shadow-xl inline-flex items-center justify-center"
+              >
                 Start Your Order
-                <ArrowRight className="w-5 h-5 ml-2 inline" />
-              </button>
-              <button className="border-2 border-white text-white hover:bg-white hover:text-rose-600 px-8 py-4 rounded-full font-medium text-lg transition-all">
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
+              <button
+                onClick={() => setShowExpertModal(true)}
+                className="border-2 border-white text-white hover:bg-white hover:text-rose-600 px-8 py-4 rounded-full font-medium text-lg transition-all"
+              >
                 Talk to Expert
               </button>
             </div>
+
+            <TalkToExpertModal
+              isOpen={showExpertModal}
+              onClose={() => setShowExpertModal(false)}
+            />
             
             <div className="mt-12 flex items-center justify-center gap-8 text-rose-100">
               <div className="flex items-center gap-2">
