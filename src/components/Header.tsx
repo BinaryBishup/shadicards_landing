@@ -200,8 +200,8 @@ export default function Header() {
                   
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
-                      <Link href="/gallery" className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent")}>
-                        Gallery
+                      <Link href="/shop" className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent")}>
+                        Shop
                       </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
