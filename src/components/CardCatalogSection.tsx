@@ -43,7 +43,6 @@ const cardTypes = [
     subtitle: "800GSM Premium",
     image: "/paper_smart_card.jpg",
     features: ["Eco-friendly", "Premium texture", "Customizable"],
-    price: "₹15/card",
   },
   {
     id: "pvc",
@@ -51,7 +50,6 @@ const cardTypes = [
     subtitle: "Waterproof & Durable",
     image: "/pvc_smart_card.jpg",
     features: ["Waterproof", "Long-lasting", "Vibrant colors"],
-    price: "₹25/card",
   },
   {
     id: "wooden",
@@ -59,7 +57,6 @@ const cardTypes = [
     subtitle: "Natural Elegance",
     image: "/wooden_smart_card.jpg",
     features: ["Sustainable", "Unique texture", "Premium feel"],
-    price: "₹45/card",
   },
   {
     id: "metallic",
@@ -67,7 +64,6 @@ const cardTypes = [
     subtitle: "Super Luxury",
     image: "/metal_smart_card.jpg",
     features: ["Premium metal", "Engraved details", "Lifetime keepsake"],
-    price: "₹95/card",
   },
 ];
 
@@ -300,8 +296,6 @@ export default function CardCatalogSection() {
                       </p>
                     ))}
                   </div>
-                  
-                  <p className="text-sm font-bold text-white mt-3">{type.price}</p>
                 </button>
               );
             })}
