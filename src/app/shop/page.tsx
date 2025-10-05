@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Image from "next/image";
 import {
   Star,
   Sparkles,
@@ -71,11 +70,10 @@ function ImageCarousel({ images, cardName }: { images: string[], cardName: strin
 
   return (
     <div className="relative w-full h-full group">
-      <Image
+      <img
         src={images[currentIndex]}
         alt={`${cardName} - Image ${currentIndex + 1}`}
-        fill
-        className="object-cover"
+        className="w-full h-full object-cover"
       />
 
       {images.length > 1 && (
