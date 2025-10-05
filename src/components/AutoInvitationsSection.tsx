@@ -23,6 +23,8 @@ export default function AutoInvitationsSection() {
   const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const [demoStarted, setDemoStarted] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const languages = [
     { value: "en", label: "English", script: "English" },
@@ -115,6 +117,49 @@ export default function AutoInvitationsSection() {
       updateDemo();
     }
   }, [language, demoStarted]);
+
+  const sendWhatsAppMessage = async () => {
+    setIsLoading(true);
+    setStatusMessage(null);
+
+    try {
+      const response = await fetch('/api/send-whatsapp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phoneNumber,
+          countryCode,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatusMessage({
+          type: 'success',
+          text: 'WhatsApp message sent successfully! Check your phone.',
+        });
+        setPhoneNumber('');
+      } else {
+        console.error('WhatsApp error:', data);
+        const errorText = data.error || 'Failed to send message. Please try again.';
+        const errorCode = data.errorCode ? ` (${data.errorCode})` : '';
+        setStatusMessage({
+          type: 'error',
+          text: errorText + errorCode,
+        });
+      }
+    } catch (error) {
+      setStatusMessage({
+        type: 'error',
+        text: 'Failed to send message. Please check your connection.',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -217,13 +262,24 @@ export default function AutoInvitationsSection() {
                     </div>
                   </div>
 
-                  <Button 
-                    disabled={!phoneNumber || phoneNumber.length < 10}
+                  <Button
+                    onClick={sendWhatsAppMessage}
+                    disabled={!phoneNumber || phoneNumber.length < 10 || isLoading}
                     className="w-full bg-rose-500 hover:bg-rose-600 text-white py-5"
                   >
-                    Experience Live Demo
-                    <ChevronRight className="ml-2 w-5 h-5" />
+                    {isLoading ? 'Sending...' : 'Experience Live Demo'}
+                    {!isLoading && <ChevronRight className="ml-2 w-5 h-5" />}
                   </Button>
+
+                  {statusMessage && (
+                    <div className={`text-sm text-center p-3 rounded-lg ${
+                      statusMessage.type === 'success'
+                        ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                        : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                    }`}>
+                      {statusMessage.text}
+                    </div>
+                  )}
 
                   <p className="text-xs text-gray-400 text-center">
                     Free demo • No spam • Your data is safe
