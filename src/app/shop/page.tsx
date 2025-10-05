@@ -11,7 +11,9 @@ import {
   Filter,
   Check,
   Nfc,
-  Package
+  Package,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
 
@@ -34,6 +36,93 @@ interface Card {
   has_nfc: boolean;
   description: string | null;
   is_active: boolean;
+}
+
+// Image Carousel Component for Card Images
+function ImageCarousel({ images, cardName }: { images: string[], cardName: string }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  if (!images || images.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <Package className="w-16 h-16 text-gray-300" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full group">
+      <Image
+        src={images[currentIndex]}
+        alt={`${cardName} - Image ${currentIndex + 1}`}
+        fill
+        className="object-cover"
+      />
+
+      {images.length > 1 && (
+        <>
+          {/* Navigation Arrows */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              goToPrevious();
+            }}
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Previous image"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              goToNext();
+            }}
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Next image"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentIndex(idx);
+                }}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  idx === currentIndex
+                    ? 'bg-white w-6'
+                    : 'bg-white/50 hover:bg-white/75'
+                }`}
+                aria-label={`Go to image ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Image Counter */}
+          <div className="absolute top-3 right-3 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+            {currentIndex + 1} / {images.length}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default function ShopPage() {
@@ -167,20 +256,9 @@ export default function ShopPage() {
                     key={card.id}
                     className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300"
                   >
-                    {/* Card Image */}
+                    {/* Card Image Carousel */}
                     <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                      {card.images && card.images.length > 0 ? (
-                        <Image
-                          src={card.images[0]}
-                          alt={card.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Package className="w-16 h-16 text-gray-300" />
-                        </div>
-                      )}
+                      <ImageCarousel images={card.images || []} cardName={card.name} />
 
                       {/* Badges */}
                       <div className="absolute top-4 left-4 flex flex-col gap-2">
