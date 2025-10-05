@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -422,14 +423,9 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Back to Home */}
-          <div className="mt-12 text-center">
-            <Link href="/" className="text-rose-600 hover:text-rose-700 font-medium">
-              ← Back to Home
-            </Link>
-          </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

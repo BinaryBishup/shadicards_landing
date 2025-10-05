@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Link from "next/link";
 import { Truck, Package, Clock, Globe, CheckCircle, AlertTriangle } from "lucide-react";
 
@@ -350,6 +351,7 @@ export default function ShippingPolicyPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

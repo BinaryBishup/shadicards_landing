@@ -19,30 +19,21 @@ export default function Footer() {
     company: [
       { name: "About Us", href: "/about" },
       { name: "Contact Us", href: "/contact" },
-      { name: "Careers", href: "/careers" },
-      { name: "Blog", href: "/blog" },
-      { name: "Press", href: "/press" }
+      { name: "Pricing", href: "/pricing" }
     ],
-    products: [
-      { name: "Wedding Invitations", href: "/features" },
-      { name: "Save the Dates", href: "/save-the-dates" },
-      { name: "Thank You Cards", href: "/thank-you-cards" },
-      { name: "Digital Invitations", href: "/digital" },
-      { name: "Custom Designs", href: "/custom" }
+    features: [
+      { name: "Wedding Website", href: "/features/wedding-website" },
+      { name: "Smart Card", href: "/features/smart-card" },
+      { name: "Event Invitations", href: "/features/event-invitations" },
+      { name: "Guest Management", href: "/features/guest-management" },
+      { name: "WhatsApp Broadcasting", href: "/features/whatsapp-broadcasting" },
+      { name: "Event Pictures", href: "/features/event-pictures" }
     ],
-    support: [
-      { name: "Help Center", href: "/help" },
-      { name: "FAQs", href: "/faq" },
-      { name: "Track Order", href: "/track" },
-      { name: "Size Guide", href: "/size-guide" },
-      { name: "Design Tips", href: "/design-tips" }
-    ],
-    legal: [
+    policies: [
       { name: "Terms of Service", href: "/terms-of-service" },
       { name: "Privacy Policy", href: "/privacy-policy" },
       { name: "Return Policy", href: "/return-policy" },
-      { name: "Shipping Policy", href: "/shipping-policy" },
-      { name: "Cookie Policy", href: "/cookie-policy" }
+      { name: "Shipping Policy", href: "/shipping-policy" }
     ]
   };
 
@@ -79,9 +70,9 @@ export default function Footer() {
         </div>
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
+          <div>
             <Link href="/" className="inline-block mb-4">
               <Image
                 src="/Shadiards_logo.svg"
@@ -130,28 +121,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Products Links */}
+          {/* Features Links */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Products</h4>
+            <h4 className="font-semibold text-gray-900 mb-4">Features</h4>
             <ul className="space-y-2">
-              {footerLinks.products.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-600 hover:text-rose-600 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Support Links */}
-          <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
-            <ul className="space-y-2">
-              {footerLinks.support.map((link) => (
+              {footerLinks.features.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
@@ -190,10 +164,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Legal Links */}
+        {/* Policy Links */}
         <div className="border-t border-gray-200 pt-8">
           <div className="flex flex-wrap justify-center gap-4 mb-6">
-            {footerLinks.legal.map((link, index) => (
+            {footerLinks.policies.map((link, index) => (
               <span key={link.name} className="flex items-center">
                 <Link
                   href={link.href}
@@ -201,7 +175,7 @@ export default function Footer() {
                 >
                   {link.name}
                 </Link>
-                {index < footerLinks.legal.length - 1 && (
+                {index < footerLinks.policies.length - 1 && (
                   <span className="text-gray-400 ml-4">|</span>
                 )}
               </span>

@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronRight, Heart, Users, Globe, Shield, Zap, Target, Lightbulb, Sparkles } from "lucide-react";
@@ -300,13 +301,8 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Back to Home */}
-        <div className="container mx-auto px-4 py-8">
-          <Link href="/" className="text-rose-600 hover:text-rose-700 font-medium">
-            ← Back to Home
-          </Link>
-        </div>
       </div>
+      <Footer />
     </>
   );
 }

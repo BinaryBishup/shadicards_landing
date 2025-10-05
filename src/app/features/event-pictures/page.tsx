@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { 
   Camera, Share2, Download, Zap, Users, Shield, 
   CheckCircle, Calendar, Heart, MapPin, Smartphone, Cloud,
@@ -479,6 +480,7 @@ export default function EventPicturesPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { 
   UserPlus, Smartphone, Database, Zap, Users, BarChart3, 
   CheckCircle, MapPin, Phone, Mail, Calendar, Gift,
@@ -641,6 +642,7 @@ export default function GuestManagementPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

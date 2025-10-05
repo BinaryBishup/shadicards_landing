@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { 
   MessageSquare, Send, Users, Zap, Clock, Target, 
   CheckCircle, Calendar, Camera, MapPin, Gift, Heart,
@@ -415,6 +416,7 @@ export default function WhatsAppBroadcastingPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

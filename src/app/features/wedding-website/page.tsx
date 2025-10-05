@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { 
   Globe, Palette, Smartphone, Zap, Users, Calendar, Camera, 
   Heart, MapPin, Gift, Music, Star, Eye, Settings,
@@ -456,6 +457,7 @@ export default function WeddingWebsitePage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

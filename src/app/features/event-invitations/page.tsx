@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { 
   Calendar, Users, Target, Zap, Clock, UserCheck, 
   CheckCircle, MapPin, Gift, Heart, Music, Camera,
@@ -491,6 +492,7 @@ export default function EventInvitationsPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }
