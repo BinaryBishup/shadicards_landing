@@ -5,20 +5,22 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'gicvribyqmexntgfahji.supabase.co',
-        port: '',
-        pathname: '/storage/v1/object/**',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'api.dicebear.com',
-        port: '',
-        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.stockcake.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.supabase.co',
       },
     ],
   },
