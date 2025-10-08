@@ -302,6 +302,9 @@ export default function AboutPage() {
         </div>
 
       </div>
+      <div className="text-center py-4 bg-stone-50">
+        <p className="text-gray-600">ShadiCards powered by Zbaan</p>
+      </div>
       <Footer />
     </>
   );
