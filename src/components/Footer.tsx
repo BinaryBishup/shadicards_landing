@@ -48,19 +48,19 @@ export default function Footer() {
     <footer className="bg-gradient-to-b from-rose-600 via-rose-700 to-rose-800 pt-16 pb-8">
       <div className="container mx-auto px-4">
         {/* Newsletter Section */}
-        <div className="bg-gradient-to-r from-rose-700 to-rose-900 rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
-          <div className="text-center text-white">
-            <h3 className="text-2xl font-bold mb-2">Stay Updated with ShadiCards</h3>
-            <p className="mb-6">Get exclusive offers, design tips, and wedding planning insights</p>
+        <div className="bg-white rounded-2xl p-8 mb-12 max-w-4xl mx-auto shadow-lg">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-2 text-gray-900">Stay Updated with ShadiCards</h3>
+            <p className="mb-6 text-gray-600">Get exclusive offers, design tips, and wedding planning insights</p>
             <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                className="flex-1 px-4 py-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-500 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent"
               />
               <button
                 type="submit"
-                className="bg-white text-rose-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center"
+                className="bg-gradient-to-r from-rose-600 to-rose-800 text-white px-6 py-3 rounded-lg font-semibold hover:from-rose-700 hover:to-rose-900 transition-all shadow-md hover:shadow-lg flex items-center justify-center"
               >
                 Subscribe
                 <ChevronRight className="w-4 h-4 ml-1" />
