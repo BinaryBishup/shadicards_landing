@@ -107,7 +107,7 @@ export default function Header() {
       const { data, error } = await supabase
         .from('website_themes')
         .select('*')
-        .eq('is_active', true)
+        .eq('status', 'active')
         .order('created_at', { ascending: false })
         .limit(5);
 
@@ -198,10 +198,10 @@ export default function Header() {
                                 className="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 group block"
                               >
                                 <div className="flex gap-3 w-full">
-                                  {theme.thumbnail_url ? (
+                                  {theme.preview_image ? (
                                     <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                                       <Image
-                                        src={theme.thumbnail_url}
+                                        src={theme.preview_image}
                                         alt={theme.name}
                                         fill
                                         className="object-cover"
@@ -213,14 +213,9 @@ export default function Header() {
                                     <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 flex-shrink-0" />
                                   )}
                                   <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-semibold text-gray-900 group-hover:text-rose-600 leading-tight mb-1 transition-colors">
+                                    <div className="text-sm font-semibold text-gray-900 group-hover:text-rose-600 leading-tight transition-colors">
                                       {theme.name}
                                     </div>
-                                    {theme.description && (
-                                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
-                                        {theme.description}
-                                      </p>
-                                    )}
                                   </div>
                                 </div>
                               </a>
@@ -387,10 +382,10 @@ export default function Header() {
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                          {theme.thumbnail_url ? (
+                          {theme.preview_image ? (
                             <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                               <Image
-                                src={theme.thumbnail_url}
+                                src={theme.preview_image}
                                 alt={theme.name}
                                 fill
                                 className="object-cover"
@@ -405,11 +400,6 @@ export default function Header() {
                             <div className="text-sm font-medium text-gray-900">
                               {theme.name}
                             </div>
-                            {theme.description && (
-                              <div className="text-xs text-gray-600 line-clamp-1">
-                                {theme.description}
-                              </div>
-                            )}
                           </div>
                         </a>
                       ))}

@@ -200,15 +200,13 @@ export interface CustomerQuery {
 
 export interface WebsiteTheme {
   id: string;
+  theme_id: string;
   name: string;
-  description: string | null;
-  thumbnail_url: string | null;
+  preview_image: string | null;
   preview_url: string | null;
-  preview_image_url: string | null;
-  style: string | null;
-  is_active: boolean | null;
+  status: string;
+  account_type: string | null;
   created_at?: string;
-  updated_at?: string;
 }
 
 // Fetch all active website themes
@@ -216,7 +214,7 @@ export async function getWebsiteThemes(limit?: number) {
   let query = supabase
     .from('website_themes')
     .select('*')
-    .eq('is_active', true)
+    .eq('status', 'active')
     .order('created_at', { ascending: false });
 
   if (limit) {

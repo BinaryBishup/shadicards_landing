@@ -261,10 +261,10 @@ export default async function WeddingWebsitePage() {
             {themes.map((theme) => (
               <div key={theme.id} className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-rose-200 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                 {/* Preview Image */}
-                {theme.preview_image_url && (
+                {theme.preview_image && (
                   <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                     <Image
-                      src={theme.preview_image_url}
+                      src={theme.preview_image}
                       alt={theme.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -276,20 +276,9 @@ export default async function WeddingWebsitePage() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-rose-600 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-4 group-hover:text-rose-600 transition-colors">
                     {theme.name}
                   </h3>
-                  {theme.description && (
-                    <p className="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-2">
-                      {theme.description}
-                    </p>
-                  )}
-                  {theme.style && (
-                    <div className="inline-flex items-center gap-2 bg-gray-100 group-hover:bg-rose-50 text-gray-700 group-hover:text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium mb-4 transition-all duration-300">
-                      <div className="w-1.5 h-1.5 bg-current rounded-full" />
-                      {theme.style}
-                    </div>
-                  )}
 
                   {/* Preview Button */}
                   {theme.preview_url && (
