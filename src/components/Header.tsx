@@ -141,25 +141,27 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-gray-200 px-6 py-3">
             <nav className="flex items-center justify-between">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/Shadiards_logo.svg"
-                  alt="ShadiCards Logo"
-                  width={360}
-                  height={100}
-                  className="h-12 w-auto"
-                />
-              </Link>
+              <div className="flex items-center gap-4">
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Open menu"
+                >
+                  <Menu className="w-6 h-6 text-gray-700" />
+                </button>
 
-              {/* Mobile Menu Button */}
-              <button
-                onClick={() => setIsMobileMenuOpen(true)}
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                aria-label="Open menu"
-              >
-                <Menu className="w-6 h-6 text-gray-700" />
-              </button>
-              
+                <Link href="/" className="flex items-center">
+                  <Image
+                    src="/Shadiards_logo.svg"
+                    alt="ShadiCards Logo"
+                    width={360}
+                    height={100}
+                    className="h-12 w-auto"
+                  />
+                </Link>
+              </div>
+
               <NavigationMenu className="hidden md:flex relative z-50">
                 <NavigationMenuList>
                   <NavigationMenuItem>
@@ -251,7 +253,7 @@ export default function Header() {
               
               <Link
                 href="https://dashboard.shadicards.in/auth/login"
-                className="px-6 py-2.5 rounded-full bg-rose-600 text-white hover:bg-rose-700 transition-all duration-300 font-medium text-sm shadow-md hover:shadow-lg"
+                className="hidden md:block px-6 py-2.5 rounded-full bg-rose-600 text-white hover:bg-rose-700 transition-all duration-300 font-medium text-sm shadow-md hover:shadow-lg"
               >
                 Create Your Card
               </Link>
