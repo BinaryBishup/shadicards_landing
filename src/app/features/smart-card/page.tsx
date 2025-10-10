@@ -8,7 +8,7 @@ import Image from "next/image";
 import {
   Smartphone, QrCode, Nfc, Zap, Users, Calendar, MapPin,
   Heart, Camera, Instagram, Gift, Clock, Shield, Sparkles,
-  ArrowRight, Check, Star, Scan, Wifi, CreditCard
+  ArrowRight, Check, Star, Scan, Wifi, CreditCard, Truck, Package, Home, CheckCircle
 } from "lucide-react";
 
 export default function SmartCardPage() {
@@ -316,6 +316,116 @@ export default function SmartCardPage() {
                 <p className="text-gray-600">{useCase.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Doorstep Delivery Section */}
+      <section id="delivery" className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
+              Direct Doorstep Delivery
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              We deliver personalized smart cards directly to each guest's preferred location
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            {/* How Delivery Works */}
+            <div className="grid md:grid-cols-3 gap-8 mb-16">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <MapPin className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Guest Provides Address</h3>
+                <p className="text-gray-600">Each guest shares their preferred delivery location through their personalized link or when they register.</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Package className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">We Prepare & Package</h3>
+                <p className="text-gray-600">Your beautiful smart cards are carefully packaged with personalized details for each guest.</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-rose-500 to-rose-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Truck className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Direct Delivery</h3>
+                <p className="text-gray-600">Cards arrive at each guest's doorstep with tracking and delivery confirmation.</p>
+              </div>
+            </div>
+
+            {/* Delivery Benefits */}
+            <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl p-8 md:p-12">
+              <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-8 text-center">
+                Why Guests Love Doorstep Delivery
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex gap-4 bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-rose-600 rounded-lg flex items-center justify-center">
+                      <Home className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Ultimate Convenience</h4>
+                    <p className="text-gray-600 text-sm">No need to collect cards in person - everything arrives at their preferred location.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Flexible Locations</h4>
+                    <p className="text-gray-600 text-sm">Guests can choose home, office, or any preferred delivery address.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Safe & Secure</h4>
+                    <p className="text-gray-600 text-sm">Trackable delivery with confirmation ensures every card reaches safely.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4 bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                      <CheckCircle className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Saves You Time</h4>
+                    <p className="text-gray-600 text-sm">No more coordinating meetups or mailing cards yourself - we handle it all.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 bg-white rounded-xl p-6 border-2 border-rose-200">
+                <div className="flex items-start gap-4">
+                  <Sparkles className="w-6 h-6 text-rose-600 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="text-gray-900 font-medium mb-2">Perfect for Destination Weddings</p>
+                    <p className="text-gray-600 text-sm">Whether your guests are local or scattered across the globe, we deliver to their current location before they travel to your wedding.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

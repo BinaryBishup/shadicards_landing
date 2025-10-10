@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Globe, Calendar, MessageSquare, CheckSquare, ArrowRight, Sparkles, Play } from "lucide-react";
 
 export default function WorkspaceHeroSection() {
@@ -57,42 +58,48 @@ export default function WorkspaceHeroSection() {
       title: "Free Wedding Website",
       icon: <Globe className="w-6 h-6" />,
       description: "Create beautiful wedding websites at no cost.",
-      image: "/dashboard/wedding_website.jpg"
+      image: "/dashboard/wedding_website.jpg",
+      href: "/features/wedding-website"
     },
     {
       id: "whatsapp",
       title: "Automated Whatsapp Reminders",
       icon: <MessageSquare className="w-6 h-6" />,
       description: "Send automated reminders to your guests.",
-      image: "/dashboard/whatsapp_reminders.jpg"
+      image: "/dashboard/whatsapp_reminders.jpg",
+      href: "/features/whatsapp-broadcasting"
     },
     {
       id: "delivery",
       title: "Direct Cards Delivery to guests",
       icon: <Calendar className="w-6 h-6" />,
       description: "Deliver cards directly to your guests' doorstep.",
-      image: "/dashboard/direct_delivery.jpg"
+      image: "/dashboard/direct_delivery.jpg",
+      href: "/features/smart-card#delivery"
     },
     {
       id: "events",
       title: "Event Wise Pages",
       icon: <Calendar className="w-6 h-6" />,
       description: "Create separate pages for each wedding event.",
-      image: "/dashboard/events.jpg"
+      image: "/dashboard/events.jpg",
+      href: "/features/event-invitations"
     },
     {
       id: "guests",
       title: "Guest Data Collection",
       icon: <MessageSquare className="w-6 h-6" />,
       description: "Collect and manage guest information effortlessly.",
-      image: "/dashboard/guests_data.jpg"
+      image: "/dashboard/guests_data.jpg",
+      href: "/features/guest-management"
     },
     {
       id: "rsvp",
       title: "RSVP",
       icon: <CheckSquare className="w-6 h-6" />,
       description: "Track guest responses and attendance.",
-      image: "/dashboard/rsvp.jpg"
+      image: "/dashboard/rsvp.jpg",
+      href: "/features/guest-management"
     }
   ];
 
@@ -264,8 +271,9 @@ export default function WorkspaceHeroSection() {
         <div className="bg-[rgb(254.7,255,235)]">
           <div className="grid grid-cols-2 lg:grid-cols-3 lg:border-l border-t border-gray-400">
                 {features.map((feature, index) => (
-                  <div
+                  <Link
                     key={feature.id}
+                    href={feature.href}
                     className={`group bg-white overflow-hidden hover:shadow-lg transition-all duration-300 border-b border-t border-gray-400 lg:border-r lg:border-r-gray-400 flex flex-col ${
                       index % 2 === 0 ? 'border-r border-r-gray-400' : ''
                     }`}
@@ -323,7 +331,7 @@ export default function WorkspaceHeroSection() {
                         {feature.description}
                       </p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
           </div>
         </div>

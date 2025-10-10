@@ -548,6 +548,287 @@ export default function GuestManagementPage() {
         </div>
       </section>
 
+      {/* Guest Data Collection Section */}
+      <section className="py-20 bg-gradient-to-b from-blue-50 to-blue-50/30">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
+              Smart Guest Data Collection
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Collect comprehensive guest information effortlessly and accurately
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            {/* Data Collection Process */}
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white mb-6">
+                  <Smartphone className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">One-Tap Registration</h3>
+                <p className="text-gray-600">Guests tap their smart card and instantly access a personalized registration form.</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mb-6">
+                  <Database className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Complete Profiles</h3>
+                <p className="text-gray-600">Collect contact info, dietary preferences, plus-one details, and any custom information you need.</p>
+              </div>
+
+              <div className="bg-white rounded-2xl p-8 shadow-sm">
+                <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl flex items-center justify-center text-white mb-6">
+                  <Zap className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Real-time Sync</h3>
+                <p className="text-gray-600">All data syncs instantly to your dashboard, accessible from any device, anytime.</p>
+              </div>
+            </div>
+
+            {/* What You Can Collect */}
+            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm">
+              <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-8 text-center">
+                Information You Can Collect
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Contact Details</h4>
+                    <p className="text-gray-600 text-sm">Phone numbers, email addresses, and emergency contacts</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Address Information</h4>
+                    <p className="text-gray-600 text-sm">Delivery addresses for invitations and smart cards</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Gift className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Dietary Preferences</h4>
+                    <p className="text-gray-600 text-sm">Allergies, dietary restrictions, and meal preferences</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-rose-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Users className="w-5 h-5 text-rose-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Plus-One Details</h4>
+                    <p className="text-gray-600 text-sm">Partner information and additional guest details</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Event Preferences</h4>
+                    <p className="text-gray-600 text-sm">Which events they plan to attend, accommodation needs</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-5 h-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Custom Fields</h4>
+                    <p className="text-gray-600 text-sm">Any additional information specific to your wedding</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Benefits */}
+            <div className="grid md:grid-cols-3 gap-6 mt-12">
+              <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-blue-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <h4 className="font-semibold text-gray-900">99% Accuracy</h4>
+                </div>
+                <p className="text-gray-600 text-sm">Guests provide their own information, eliminating errors and typos</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-blue-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <Zap className="w-6 h-6 text-yellow-600" />
+                  <h4 className="font-semibold text-gray-900">Instant Updates</h4>
+                </div>
+                <p className="text-gray-600 text-sm">Changes reflect immediately in your dashboard, no manual updates needed</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-6 shadow-sm border-2 border-blue-100">
+                <div className="flex items-center gap-3 mb-3">
+                  <Download className="w-6 h-6 text-blue-600" />
+                  <h4 className="font-semibold text-gray-900">Easy Export</h4>
+                </div>
+                <p className="text-gray-600 text-sm">Download all guest data in Excel, CSV, or integrate with your tools</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RSVP Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
+              Smart RSVP Management
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Track responses in real-time with automated reminders and insights
+            </p>
+          </div>
+
+          <div className="max-w-6xl mx-auto">
+            {/* RSVP Features */}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl flex items-center justify-center text-white mb-6">
+                  <CheckCircle className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Real-time RSVP Tracking</h3>
+                <p className="text-gray-600 mb-6">See who's confirmed, declined, or hasn't responded yet. All updates appear instantly in your dashboard.</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Live attendance counters by event</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Track responses for each ceremony</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Monitor plus-one confirmations</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white mb-6">
+                  <Zap className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">Automated Reminders</h3>
+                <p className="text-gray-600 mb-6">Set up automatic WhatsApp or email reminders for guests who haven't responded yet.</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Schedule reminders at custom intervals</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Personalized message templates</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">Track reminder delivery status</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* RSVP Dashboard Preview */}
+            <div className="bg-gray-900 rounded-3xl p-8 md:p-12 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/20 rounded-full filter blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/20 rounded-full filter blur-3xl"></div>
+
+              <div className="relative z-10">
+                <h3 className="text-2xl md:text-3xl font-semibold mb-4">
+                  Powerful RSVP Dashboard
+                </h3>
+                <p className="text-gray-300 mb-8 max-w-2xl">
+                  Get instant insights into your guest responses with our comprehensive analytics dashboard
+                </p>
+
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                    <div className="text-3xl font-bold mb-2">156</div>
+                    <div className="text-gray-300 text-sm">Total Guests</div>
+                  </div>
+                  <div className="bg-green-500/20 backdrop-blur-sm rounded-xl p-6 border border-green-500/30">
+                    <div className="text-3xl font-bold mb-2 text-green-400">124</div>
+                    <div className="text-gray-300 text-sm">Confirmed</div>
+                  </div>
+                  <div className="bg-red-500/20 backdrop-blur-sm rounded-xl p-6 border border-red-500/30">
+                    <div className="text-3xl font-bold mb-2 text-red-400">18</div>
+                    <div className="text-gray-300 text-sm">Declined</div>
+                  </div>
+                  <div className="bg-yellow-500/20 backdrop-blur-sm rounded-xl p-6 border border-yellow-500/30">
+                    <div className="text-3xl font-bold mb-2 text-yellow-400">14</div>
+                    <div className="text-gray-300 text-sm">Pending</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Event-wise RSVP */}
+            <div className="mt-12 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 md:p-12">
+              <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-6 text-center">
+                Event-wise RSVP Tracking
+              </h3>
+              <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
+                Track attendance separately for each wedding event - Mehendi, Sangeet, Wedding Ceremony, Reception, and more
+              </p>
+
+              <div className="grid md:grid-cols-3 gap-4">
+                <div className="bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-gray-900">Mehendi Ceremony</h4>
+                    <span className="text-sm text-green-600 font-medium">95%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-green-500 h-2 rounded-full" style={{width: '95%'}}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">142 of 150 confirmed</p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-gray-900">Wedding Ceremony</h4>
+                    <span className="text-sm text-green-600 font-medium">88%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-green-500 h-2 rounded-full" style={{width: '88%'}}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">176 of 200 confirmed</p>
+                </div>
+
+                <div className="bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="font-semibold text-gray-900">Reception</h4>
+                    <span className="text-sm text-yellow-600 font-medium">72%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-yellow-500 h-2 rounded-full" style={{width: '72%'}}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-2">216 of 300 confirmed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Benefits Section */}
       <section className="py-20 bg-gradient-to-b from-rose-50 to-rose-50/30">
         <div className="container mx-auto px-6">
