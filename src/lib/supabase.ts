@@ -197,3 +197,38 @@ export interface CustomerQuery {
   created_at?: string;
   updated_at?: string;
 }
+
+export interface WebsiteTheme {
+  id: string;
+  name: string;
+  description: string | null;
+  thumbnail_url: string | null;
+  preview_url: string | null;
+  preview_image_url: string | null;
+  style: string | null;
+  is_active: boolean | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+// Fetch all active website themes
+export async function getWebsiteThemes(limit?: number) {
+  let query = supabase
+    .from('website_themes')
+    .select('*')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false });
+
+  if (limit) {
+    query = query.limit(limit);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error('Error fetching website themes:', error);
+    return [];
+  }
+
+  return data as WebsiteTheme[];
+}

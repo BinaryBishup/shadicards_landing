@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
+import { supabase, type WebsiteTheme } from "@/lib/supabase";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -55,32 +56,6 @@ const featuresData = [
   },
 ];
 
-const themesData = [
-  {
-    title: "Traditional",
-    href: "/themes/traditional",
-    description: "Classic Indian wedding invitation designs",
-    icon: "temple_hindu",
-  },
-  {
-    title: "Modern",
-    href: "/themes/modern",
-    description: "Contemporary and minimalist wedding cards",
-    icon: "auto_awesome",
-  },
-  {
-    title: "Royal",
-    href: "/themes/royal",
-    description: "Luxurious designs for grand celebrations",
-    icon: "workspace_premium",
-  },
-  {
-    title: "Floral",
-    href: "/themes/floral",
-    description: "Beautiful floral themed invitations",
-    icon: "local_florist",
-  },
-];
 
 const aboutData = [
   {
@@ -124,6 +99,25 @@ const aboutData = [
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
+  const [themes, setThemes] = useState<WebsiteTheme[]>([]);
+
+  useEffect(() => {
+    // Fetch themes from Supabase
+    const fetchThemes = async () => {
+      const { data, error } = await supabase
+        .from('website_themes')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (!error && data) {
+        setThemes(data as WebsiteTheme[]);
+      }
+    };
+
+    fetchThemes();
+  }, []);
 
   const toggleMobileSection = (section: string) => {
     setOpenMobileSection(openMobileSection === section ? null : section);
@@ -192,20 +186,56 @@ export default function Header() {
                       Themes
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <div className="w-[600px] p-6 bg-white rounded-2xl border border-gray-200 shadow-xl">
+                      <div className="w-[700px] p-6 bg-white rounded-2xl border border-gray-200 shadow-xl">
                         <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">CHOOSE YOUR STYLE</p>
-                        <ul className="grid grid-cols-2 gap-4">
-                          {themesData.map((theme) => (
-                            <ListItem
-                              key={theme.title}
-                              title={theme.title}
-                              href={theme.href}
-                              icon={theme.icon}
-                            >
-                              {theme.description}
-                            </ListItem>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          {themes.map((theme) => (
+                            <NavigationMenuLink asChild key={theme.id}>
+                              <a
+                                href={theme.preview_url || '#'}
+                                target={theme.preview_url ? "_blank" : undefined}
+                                rel={theme.preview_url ? "noopener noreferrer" : undefined}
+                                className="flex items-start gap-3 p-4 rounded-xl hover:bg-gray-50 transition-all duration-200 group block"
+                              >
+                                <div className="flex gap-3 w-full">
+                                  {theme.thumbnail_url ? (
+                                    <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                                      <Image
+                                        src={theme.thumbnail_url}
+                                        alt={theme.name}
+                                        fill
+                                        className="object-cover"
+                                        sizes="48px"
+                                        unoptimized
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 flex-shrink-0" />
+                                  )}
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-semibold text-gray-900 group-hover:text-rose-600 leading-tight mb-1 transition-colors">
+                                      {theme.name}
+                                    </div>
+                                    {theme.description && (
+                                      <p className="text-xs text-gray-600 leading-relaxed line-clamp-2">
+                                        {theme.description}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </a>
+                            </NavigationMenuLink>
                           ))}
-                        </ul>
+                        </div>
+                        <div className="border-t border-gray-200 pt-4">
+                          <Link
+                            href="/features/wedding-website#themes"
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white rounded-lg font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md"
+                          >
+                            <span>View All Themes</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </Link>
+                        </div>
                       </div>
                     </NavigationMenuContent>
                   </NavigationMenuItem>
@@ -348,26 +378,49 @@ export default function Header() {
                   </button>
                   {openMobileSection === "themes" && (
                     <div className="pb-4 space-y-2">
-                      {themesData.map((theme) => (
-                        <Link
-                          key={theme.title}
-                          href={theme.href}
+                      {themes.map((theme) => (
+                        <a
+                          key={theme.id}
+                          href={theme.preview_url || '#'}
+                          target={theme.preview_url ? "_blank" : undefined}
+                          rel={theme.preview_url ? "noopener noreferrer" : undefined}
                           onClick={() => setIsMobileMenuOpen(false)}
                           className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
                         >
-                          <span className="material-icons-outlined text-rose-600 text-[20px]">
-                            {theme.icon}
-                          </span>
+                          {theme.thumbnail_url ? (
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                              <Image
+                                src={theme.thumbnail_url}
+                                alt={theme.name}
+                                fill
+                                className="object-cover"
+                                sizes="48px"
+                                unoptimized
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-rose-500 to-rose-600 flex-shrink-0" />
+                          )}
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {theme.title}
+                              {theme.name}
                             </div>
-                            <div className="text-xs text-gray-600">
-                              {theme.description}
-                            </div>
+                            {theme.description && (
+                              <div className="text-xs text-gray-600 line-clamp-1">
+                                {theme.description}
+                              </div>
+                            )}
                           </div>
-                        </Link>
+                        </a>
                       ))}
+                      <Link
+                        href="/features/wedding-website#themes"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center justify-center gap-2 mt-3 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 text-white rounded-lg font-medium text-sm transition-all duration-300"
+                      >
+                        <span>View All Themes</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
                     </div>
                   )}
                 </div>

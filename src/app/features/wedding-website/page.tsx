@@ -1,12 +1,17 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { 
-  Globe, Palette, Smartphone, Zap, Users, Calendar, Camera, 
+import {
+  Globe, Palette, Smartphone, Zap, Users, Calendar, Camera,
   Heart, MapPin, Gift, Music, Star, Eye, Settings,
-  ArrowRight, Check, Sparkles, Layout, Share2, Lock
+  ArrowRight, Check, Sparkles, Layout, Share2, Lock, ExternalLink
 } from "lucide-react";
+import { getWebsiteThemes } from "@/lib/supabase";
+import Image from "next/image";
+import Link from "next/link";
 
-export default function WeddingWebsitePage() {
+export default async function WeddingWebsitePage() {
+  // Fetch all themes from Supabase
+  const themes = await getWebsiteThemes();
   const features = [
     {
       icon: <Palette className="w-8 h-8" />,
@@ -97,38 +102,12 @@ export default function WeddingWebsitePage() {
     }
   ];
 
-  const themes = [
-    {
-      name: "Classic Elegance",
-      description: "Timeless design with sophisticated typography",
-      colors: ["#8B5A5A", "#D4B5A0", "#F5F5DC"],
-      style: "Traditional"
-    },
-    {
-      name: "Modern Romance",
-      description: "Clean lines with romantic color palettes", 
-      colors: ["#FF6B8A", "#FF8FA3", "#FFE5E5"],
-      style: "Contemporary"
-    },
-    {
-      name: "Garden Party",
-      description: "Nature-inspired with floral elements",
-      colors: ["#7FB069", "#A7D0CD", "#F2E9E4"],
-      style: "Natural"
-    },
-    {
-      name: "Royal Grandeur",
-      description: "Luxurious design with rich colors and gold accents",
-      colors: ["#4A154B", "#D4AF37", "#FFE4B5"],
-      style: "Luxury"
-    }
-  ];
 
   const stats = [
     { number: "50,000+", label: "Websites Created", icon: <Globe className="w-6 h-6" /> },
     { number: "99.9%", label: "Uptime Guaranteed", icon: <Zap className="w-6 h-6" /> },
     { number: "24/7", label: "Support Available", icon: <Heart className="w-6 h-6" /> },
-    { number: "15+", label: "Beautiful Themes", icon: <Palette className="w-6 h-6" /> }
+    { number: `${themes.length}+`, label: "Beautiful Themes", icon: <Palette className="w-6 h-6" /> }
   ];
 
   return (
@@ -262,9 +241,9 @@ export default function WeddingWebsitePage() {
       </section>
 
       {/* Themes Showcase */}
-      <section className="py-24 bg-white relative overflow-hidden">
+      <section id="themes" className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-rose-50/50 via-transparent to-rose-50/50" />
-        
+
         <div className="relative container mx-auto px-6">
           <div className="text-center mb-20">
             <div className="inline-block bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
@@ -277,45 +256,63 @@ export default function WeddingWebsitePage() {
               Choose from professionally designed themes that match your wedding style
             </p>
           </div>
-          
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {themes.map((theme, index) => (
-              <div key={index} className="group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-rose-200 hover:-translate-y-2">
-                <div 
-                  className="absolute inset-0 opacity-5 group-hover:opacity-15 transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.colors[0]}, ${theme.colors[1]}, ${theme.colors[2]})`
-                  }}
-                />
-                
-                <div className="relative">
-                  <div className="flex gap-2 mb-6">
-                    {theme.colors.map((color, idx) => (
-                      <div 
-                        key={idx}
-                        className="w-8 h-8 rounded-full border-2 border-white shadow-lg group-hover:scale-110 transition-transform duration-300"
-                        style={{ backgroundColor: color, transitionDelay: `${idx * 100}ms` }}
-                      />
-                    ))}
+
+          <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {themes.map((theme) => (
+              <div key={theme.id} className="group relative bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-rose-200 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+                {/* Preview Image */}
+                {theme.preview_image_url && (
+                  <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                    <Image
+                      src={theme.preview_image_url}
+                      alt={theme.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      unoptimized
+                    />
                   </div>
-                  
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-rose-600 transition-colors">{theme.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4 leading-relaxed">{theme.description}</p>
-                  <div className="inline-flex items-center gap-2 bg-gray-100 group-hover:bg-rose-50 text-gray-700 group-hover:text-rose-700 text-xs px-3 py-2 rounded-full font-medium transition-all duration-300">
-                    <div className="w-1.5 h-1.5 bg-current rounded-full" />
-                    {theme.style}
-                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-rose-600 transition-colors">
+                    {theme.name}
+                  </h3>
+                  {theme.description && (
+                    <p className="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-2">
+                      {theme.description}
+                    </p>
+                  )}
+                  {theme.style && (
+                    <div className="inline-flex items-center gap-2 bg-gray-100 group-hover:bg-rose-50 text-gray-700 group-hover:text-rose-700 text-xs px-3 py-1.5 rounded-full font-medium mb-4 transition-all duration-300">
+                      <div className="w-1.5 h-1.5 bg-current rounded-full" />
+                      {theme.style}
+                    </div>
+                  )}
+
+                  {/* Preview Button */}
+                  {theme.preview_url && (
+                    <Link
+                      href={theme.preview_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 w-full justify-center px-4 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-700 hover:to-rose-800 text-white rounded-lg font-medium text-sm transition-all duration-300 shadow-md hover:shadow-lg group/btn"
+                    >
+                      <span>Preview</span>
+                      <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
           </div>
-          
-          <div className="text-center mt-16">
-            <button className="group bg-rose-600 hover:bg-rose-700 text-white px-10 py-4 rounded-full font-medium transition-all shadow-lg hover:shadow-xl hover:scale-105">
-              View All Themes
-              <Eye className="w-4 h-4 ml-2 inline group-hover:scale-110 transition-transform" />
-            </button>
-          </div>
+
+          {themes.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No themes available at the moment. Check back soon!</p>
+            </div>
+          )}
         </div>
       </section>
 
