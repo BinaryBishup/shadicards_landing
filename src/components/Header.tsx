@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import { Menu, X, ChevronDown, ChevronRight } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -120,6 +122,13 @@ const aboutData = [
 ];
 
 export default function Header() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
+
+  const toggleMobileSection = (section: string) => {
+    setOpenMobileSection(openMobileSection === section ? null : section);
+  };
+
   return (
     <>
       <div className="w-full bg-rose-600 text-white py-3 px-6 text-center text-sm">
@@ -141,6 +150,15 @@ export default function Header() {
                   className="h-12 w-auto"
                 />
               </Link>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Open menu"
+              >
+                <Menu className="w-6 h-6 text-gray-700" />
+              </button>
               
               <NavigationMenu className="hidden md:flex relative z-50">
                 <NavigationMenuList>
@@ -241,6 +259,189 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      {/* Mobile Sidebar */}
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 z-[60] md:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Sidebar Drawer */}
+          <div className="fixed top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white z-[70] md:hidden overflow-y-auto shadow-2xl">
+            <div className="p-6">
+              {/* Close Button */}
+              <div className="flex items-center justify-between mb-8">
+                <Image
+                  src="/Shadiards_logo.svg"
+                  alt="ShadiCards Logo"
+                  width={200}
+                  height={60}
+                  className="h-10 w-auto"
+                />
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6 text-gray-700" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="space-y-2">
+                {/* Features Accordion */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleMobileSection("features")}
+                    className="w-full flex items-center justify-between py-4 text-left font-semibold text-gray-900 hover:text-rose-600 transition-colors"
+                  >
+                    <span>Features</span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform ${
+                        openMobileSection === "features" ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openMobileSection === "features" && (
+                    <div className="pb-4 space-y-2">
+                      {featuresData.map((feature) => (
+                        <Link
+                          key={feature.title}
+                          href={feature.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <span className="material-icons-outlined text-rose-600 text-[20px]">
+                            {feature.icon}
+                          </span>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {feature.title}
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              {feature.description}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Themes Accordion */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleMobileSection("themes")}
+                    className="w-full flex items-center justify-between py-4 text-left font-semibold text-gray-900 hover:text-rose-600 transition-colors"
+                  >
+                    <span>Themes</span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform ${
+                        openMobileSection === "themes" ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openMobileSection === "themes" && (
+                    <div className="pb-4 space-y-2">
+                      {themesData.map((theme) => (
+                        <Link
+                          key={theme.title}
+                          href={theme.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <span className="material-icons-outlined text-rose-600 text-[20px]">
+                            {theme.icon}
+                          </span>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {theme.title}
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              {theme.description}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Pricing Link */}
+                <Link
+                  href="/pricing"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between py-4 font-semibold text-gray-900 hover:text-rose-600 transition-colors border-b border-gray-200"
+                >
+                  <span>Pricing</span>
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+
+                {/* Shop Link */}
+                <Link
+                  href="/shop"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between py-4 font-semibold text-gray-900 hover:text-rose-600 transition-colors border-b border-gray-200"
+                >
+                  <span>Shop</span>
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+
+                {/* About Accordion */}
+                <div className="border-b border-gray-200">
+                  <button
+                    onClick={() => toggleMobileSection("about")}
+                    className="w-full flex items-center justify-between py-4 text-left font-semibold text-gray-900 hover:text-rose-600 transition-colors"
+                  >
+                    <span>About</span>
+                    <ChevronDown
+                      className={`w-5 h-5 transition-transform ${
+                        openMobileSection === "about" ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {openMobileSection === "about" && (
+                    <div className="pb-4 space-y-2">
+                      {aboutData.map((item) => (
+                        <Link
+                          key={item.title}
+                          href={item.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <span className="material-icons-outlined text-rose-600 text-[20px]">
+                            {item.icon}
+                          </span>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.title}
+                            </div>
+                            <div className="text-xs text-gray-600">
+                              {item.description}
+                            </div>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* CTA Button */}
+              <Link
+                href="https://dashboard.shadicards.in/auth/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="mt-6 w-full block text-center px-6 py-3 rounded-full bg-rose-600 text-white hover:bg-rose-700 transition-all duration-300 font-medium text-sm shadow-md hover:shadow-lg"
+              >
+                Create Your Card
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
