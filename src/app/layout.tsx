@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Dancing_Script, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import MobileStickyCTA from "@/components/MobileStickyCTA";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,6 +44,7 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         {children}
+        <MobileStickyCTA />
       </body>
     </html>
   );
