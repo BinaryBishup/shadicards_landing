@@ -45,10 +45,10 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-gradient-to-b from-gray-50 to-gray-100 pt-16 pb-8">
+    <footer className="bg-gradient-to-b from-rose-600 via-rose-700 to-rose-800 pt-16 pb-8">
       <div className="container mx-auto px-4">
         {/* Newsletter Section */}
-        <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
+        <div className="bg-gradient-to-r from-rose-700 to-rose-900 rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
           <div className="text-center text-white">
             <h3 className="text-2xl font-bold mb-2">Stay Updated with ShadiCards</h3>
             <p className="mb-6">Get exclusive offers, design tips, and wedding planning insights</p>
@@ -82,7 +82,7 @@ export default function Footer() {
                 className="h-10 w-auto"
               />
             </Link>
-            <p className="text-gray-600 mb-4">
+            <p className="text-rose-100 mb-4">
               Creating beautiful beginnings with personalized wedding invitations since 2015.
             </p>
             <div className="flex space-x-3">
@@ -94,10 +94,10 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow hover:shadow-md transition-shadow"
+                    className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center shadow hover:bg-white hover:shadow-md transition-all"
                     aria-label={social.name}
                   >
-                    <Icon className="w-5 h-5 text-gray-600 hover:text-rose-600 transition-colors" />
+                    <Icon className="w-5 h-5 text-white hover:text-rose-600 transition-colors" />
                   </a>
                 );
               })}
@@ -106,13 +106,13 @@ export default function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
+            <h4 className="font-semibold text-white mb-4">Company</h4>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-rose-600 transition-colors"
+                    className="text-rose-100 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -123,13 +123,13 @@ export default function Footer() {
 
           {/* Features Links */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Features</h4>
+            <h4 className="font-semibold text-white mb-4">Features</h4>
             <ul className="space-y-2">
               {footerLinks.features.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 hover:text-rose-600 transition-colors"
+                    className="text-rose-100 hover:text-white transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -140,23 +140,23 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Contact Us</h4>
+            <h4 className="font-semibold text-white mb-4">Contact Us</h4>
             <div className="space-y-3">
               <a
                 href="tel:+918875332391"
-                className="flex items-start text-gray-600 hover:text-rose-600 transition-colors"
+                className="flex items-start text-rose-100 hover:text-white transition-colors"
               >
                 <Phone className="w-4 h-4 mt-1 mr-2 flex-shrink-0" />
                 <span>+91 8875332391</span>
               </a>
               <a
                 href="mailto:contact@shadicards.in"
-                className="flex items-start text-gray-600 hover:text-rose-600 transition-colors"
+                className="flex items-start text-rose-100 hover:text-white transition-colors"
               >
                 <Mail className="w-4 h-4 mt-1 mr-2 flex-shrink-0" />
                 <span>contact@shadicards.in</span>
               </a>
-              <div className="flex items-start text-gray-600">
+              <div className="flex items-start text-rose-100">
                 <MapPin className="w-4 h-4 mt-1 mr-2 flex-shrink-0" />
                 <span>Jaipur, Rajasthan, India</span>
               </div>
@@ -165,18 +165,18 @@ export default function Footer() {
         </div>
 
         {/* Policy Links */}
-        <div className="border-t border-gray-200 pt-8">
+        <div className="border-t border-rose-500/30 pt-8">
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             {footerLinks.policies.map((link, index) => (
               <span key={link.name} className="flex items-center">
                 <Link
                   href={link.href}
-                  className="text-sm text-gray-600 hover:text-rose-600 transition-colors"
+                  className="text-sm text-rose-100 hover:text-white transition-colors"
                 >
                   {link.name}
                 </Link>
                 {index < footerLinks.policies.length - 1 && (
-                  <span className="text-gray-400 ml-4">|</span>
+                  <span className="text-rose-300/50 ml-4">|</span>
                 )}
               </span>
             ))}
@@ -184,23 +184,23 @@ export default function Footer() {
 
           {/* Bottom Section */}
           <div className="text-center">
-            <p className="text-gray-600 mb-2">
+            <p className="text-rose-100 mb-2">
               © {currentYear} ShadiCards. All rights reserved.
             </p>
-            <p className="text-sm text-gray-500 flex items-center justify-center">
-              Made with <Heart className="w-4 h-4 mx-1 text-red-500" /> in India
+            <p className="text-sm text-rose-200 flex items-center justify-center">
+              Made with <Heart className="w-4 h-4 mx-1 text-white fill-white" /> in India
             </p>
           </div>
 
           {/* Payment Methods */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600 mb-3">Secure Payments</p>
-            <div className="flex justify-center gap-4 text-gray-400">
-              <span className="px-3 py-1 border border-gray-300 rounded text-xs">Visa</span>
-              <span className="px-3 py-1 border border-gray-300 rounded text-xs">Mastercard</span>
-              <span className="px-3 py-1 border border-gray-300 rounded text-xs">UPI</span>
-              <span className="px-3 py-1 border border-gray-300 rounded text-xs">Net Banking</span>
-              <span className="px-3 py-1 border border-gray-300 rounded text-xs">PayPal</span>
+            <p className="text-sm text-rose-100 mb-3">Secure Payments</p>
+            <div className="flex justify-center gap-4">
+              <span className="px-3 py-1 border border-white/30 rounded text-xs text-white">Visa</span>
+              <span className="px-3 py-1 border border-white/30 rounded text-xs text-white">Mastercard</span>
+              <span className="px-3 py-1 border border-white/30 rounded text-xs text-white">UPI</span>
+              <span className="px-3 py-1 border border-white/30 rounded text-xs text-white">Net Banking</span>
+              <span className="px-3 py-1 border border-white/30 rounded text-xs text-white">PayPal</span>
             </div>
           </div>
         </div>

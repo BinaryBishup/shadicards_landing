@@ -141,7 +141,7 @@ export default function WorkspaceHeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
           {/* Left Column - Text Content */}
           <div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-100 to-pink-100 text-rose-700 text-sm font-semibold rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-100 to-rose-200 text-rose-700 text-sm font-semibold rounded-full mb-6">
               <Sparkles className="w-4 h-4" />
               <span>India's First Smart Wedding Cards</span>
             </div>
@@ -162,7 +162,7 @@ export default function WorkspaceHeroSection() {
                 <span className="cursor-blink ml-1">|</span>
               </span>
               <br />
-              <span className="bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-rose-600 to-rose-800 bg-clip-text text-transparent">
                 absolutely free
               </span>
             </h1>
@@ -207,7 +207,7 @@ export default function WorkspaceHeroSection() {
 
                 <button
                   type="submit"
-                  className="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white px-6 h-12 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group whitespace-nowrap"
+                  className="w-full sm:w-auto bg-gradient-to-r from-rose-600 to-rose-800 hover:from-rose-700 hover:to-rose-900 text-white px-6 h-12 rounded-xl font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 group whitespace-nowrap"
                 >
                   <span>Get Started</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

@@ -77,7 +77,7 @@ export default function SmartCardSection() {
         hashtag: "#PriyaArjunForever",
         posts: "156 posts",
         followers: "2.4K followers",
-        color: "from-purple-500 to-pink-500"
+        color: "from-rose-500 to-rose-700"
       },
       taps: 892
     },
@@ -103,7 +103,7 @@ export default function SmartCardSection() {
         photos: "2,450+ Photos",
         access: "Download all photos",
         sharing: "Share with family",
-        color: "from-rose-500 to-pink-500"
+        color: "from-rose-500 to-rose-800"
       },
       taps: 1203
     },
@@ -142,7 +142,7 @@ export default function SmartCardSection() {
         url: "Add your custom URL",
         description: "Share any link you want",
         buttonText: "Open Link",
-        color: "from-indigo-500 to-purple-500"
+        color: "from-rose-700 to-rose-900"
       },
       taps: 45
     }
@@ -409,12 +409,12 @@ export default function SmartCardSection() {
 
                                 {features[currentFeature].type === 'social' && (
                                   <>
-                                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4">
+                                    <div className="bg-gradient-to-r from-rose-50 to-rose-100 rounded-xl p-4">
                                       <p className="font-medium text-gray-900 text-lg">{features[currentFeature].content.handle}</p>
                                       <p className="text-sm text-gray-600">{features[currentFeature].content.posts}</p>
                                     </div>
                                     <div className="bg-gray-50 rounded-xl p-4">
-                                      <p className="text-sm text-purple-600">{features[currentFeature].content.hashtag}</p>
+                                      <p className="text-sm text-rose-600">{features[currentFeature].content.hashtag}</p>
                                       <p className="text-xs text-gray-500 mt-1">{features[currentFeature].content.followers}</p>
                                     </div>
                                   </>
@@ -456,13 +456,13 @@ export default function SmartCardSection() {
                                 )}
 
                                 {features[currentFeature].type === 'custom' && (
-                                  <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4">
+                                  <div className="bg-gradient-to-r from-rose-50 to-rose-100 rounded-xl p-4">
                                     <div className="flex items-center gap-3 mb-3">
-                                      <Link2 className="w-5 h-5 text-indigo-600" />
+                                      <Link2 className="w-5 h-5 text-rose-600" />
                                       <p className="font-medium text-gray-900">{features[currentFeature].content.title}</p>
                                     </div>
                                     <p className="text-sm text-gray-600 mb-2">{features[currentFeature].content.description}</p>
-                                    <p className="text-xs text-indigo-600">{features[currentFeature].content.url}</p>
+                                    <p className="text-xs text-rose-600">{features[currentFeature].content.url}</p>
                                   </div>
                                 )}
                               </div>
@@ -485,7 +485,7 @@ export default function SmartCardSection() {
                   className="absolute -bottom-8 -right-12"
                 >
                   <div className="group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 blur-xl opacity-30" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-rose-600 blur-xl opacity-30" />
                     <div className="relative w-56 h-36 bg-gradient-to-br from-gray-900 to-black rounded-2xl p-5 shadow-2xl">
                       <div className="flex justify-between items-start h-full">
                         <div>
@@ -848,11 +848,11 @@ export default function SmartCardSection() {
                         <Wand2 className="w-4 h-4 inline mr-2" />
                         Automation
                       </label>
-                      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4">
+                      <div className="bg-gradient-to-r from-rose-50 to-rose-100 rounded-lg p-4">
                         <label className="flex items-center justify-between cursor-pointer">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                              <Zap className="w-5 h-5 text-purple-600" />
+                              <Zap className="w-5 h-5 text-rose-600" />
                             </div>
                             <div>
                               <p className="text-sm font-medium text-gray-900">Smart Automation</p>
@@ -862,7 +862,7 @@ export default function SmartCardSection() {
                           <button
                             onClick={() => setAutomationEnabled(!automationEnabled)}
                             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                              automationEnabled ? 'bg-purple-600' : 'bg-gray-300'
+                              automationEnabled ? 'bg-rose-600' : 'bg-gray-300'
                             }`}
                           >
                             <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
@@ -871,7 +871,7 @@ export default function SmartCardSection() {
                           </button>
                         </label>
                         {automationEnabled && (
-                          <div className="mt-3 pt-3 border-t border-purple-200">
+                          <div className="mt-3 pt-3 border-t border-rose-200">
                             <p className="text-xs text-gray-600">
                               Content will automatically update based on your wedding timeline
                             </p>

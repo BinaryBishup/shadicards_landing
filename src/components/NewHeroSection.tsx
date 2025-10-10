@@ -240,7 +240,7 @@ export default function NewHeroSection() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
             <div ref={cardRef} className="relative">
               {/* Card Shadow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-pink-400 blur-2xl opacity-20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-rose-400 to-rose-600 blur-2xl opacity-20" />
               
               {/* Portrait Identity Card Style */}
               <div className="relative rounded-2xl shadow-2xl overflow-hidden w-[220px] h-[320px] sm:w-[280px] sm:h-[400px]">
