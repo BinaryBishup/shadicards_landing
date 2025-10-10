@@ -10,7 +10,7 @@ export default function MobileStickyCTA() {
         href="https://dashboard.shadicards.in/auth/login"
         className="pointer-events-auto w-full flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-gradient-to-r from-rose-600 to-rose-800 hover:from-rose-700 hover:to-rose-900 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 group"
       >
-        <span>Let's Get Started</span>
+        <span>Get started for free</span>
         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
       </Link>
     </div>
