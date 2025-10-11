@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Script from "next/script";
 import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
 import {
@@ -16,6 +17,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
+
+// Google Maps type declaration
+declare global {
+  interface Window {
+    google: any;
+  }
+}
 
 interface ExtraField {
   id: string;
@@ -44,12 +52,14 @@ const travelModeIcons: { [key: string]: any } = {
 
 export default function EditPageContent({ weddingId, guestId }: EditPageContentProps) {
   const router = useRouter();
+  const addressInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [guest, setGuest] = useState<Guest | null>(null);
   const [wedding, setWedding] = useState<Weddings | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -89,6 +99,23 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
       setLoading(false);
     }
   }, [weddingId, guestId]);
+
+  // Initialize Google Places Autocomplete
+  useEffect(() => {
+    if (googleMapsLoaded && addressInputRef.current && typeof window !== 'undefined' && window.google) {
+      const autocomplete = new window.google.maps.places.Autocomplete(addressInputRef.current, {
+        types: ['address'],
+        fields: ['formatted_address', 'address_components']
+      });
+
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (place.formatted_address) {
+          setFormData(prev => ({ ...prev, address: place.formatted_address || '' }));
+        }
+      });
+    }
+  }, [googleMapsLoaded]);
 
   const loadGuestData = async () => {
     try {
@@ -409,37 +436,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     if (currentStepData.id === 'personal') {
       return (
         <div className="space-y-6">
-          {/* Profile Picture */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-pink-200 border-4 border-rose-300 shadow-xl">
-                {formData.profile_image ? (
-                  <Image
-                    src={formData.profile_image}
-                    alt="Profile"
-                    width={128}
-                    height={128}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <User className="w-12 h-12 text-rose-400" />
-                  </div>
-                )}
-              </div>
-
-              <label className="absolute bottom-0 right-0 w-10 h-10 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg">
-                <Camera className="w-5 h-5" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-lg font-medium">First Name *</Label>
@@ -468,44 +464,19 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
 
           <div className="space-y-2">
             <Label className="text-lg font-medium flex items-center gap-2">
-              <Mail className="w-5 h-5 text-rose-500" />
-              Email Address
-            </Label>
-            <Input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              placeholder="your.email@example.com"
-              className="h-12 text-lg"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label className="text-lg font-medium flex items-center gap-2">
-              <Phone className="w-5 h-5 text-rose-500" />
-              WhatsApp Number
-            </Label>
-            <Input
-              type="tel"
-              value={formData.whatsapp}
-              onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-              placeholder="+1 234 567 8900"
-              className="h-12 text-lg"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label className="text-lg font-medium flex items-center gap-2">
               <MapPin className="w-5 h-5 text-rose-500" />
-              Address
+              Address *
             </Label>
-            <Textarea
+            <Input
+              ref={addressInputRef}
+              type="text"
+              required
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
-              placeholder="Enter your address"
-              rows={3}
-              className="text-lg resize-none"
+              placeholder="Start typing your address..."
+              className="h-12 text-lg"
             />
+            <p className="text-sm text-gray-500">Start typing and select from suggestions</p>
           </div>
         </div>
       );
@@ -601,8 +572,14 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
 
   // Main multi-step form
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
+    <>
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        onLoad={() => setGoogleMapsLoaded(true)}
+        strategy="lazyOnload"
+      />
+      <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 py-8 px-4">
+        <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
@@ -733,5 +710,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
         </Card>
       </div>
     </div>
+    </>
   );
 }
