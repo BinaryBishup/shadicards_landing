@@ -4,13 +4,17 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
-import { User, Phone, MapPin, Mail, Save, X, Camera, Heart, Home, CheckCircle, ChevronDown, AlignLeft, Hash, CheckSquare, Type, Calendar, Upload, Radio } from "lucide-react";
+import {
+  User, Phone, MapPin, Mail, Camera, Home, CheckCircle,
+  ChevronRight, ChevronLeft, Plane, Train, Car, Bus, Bike,
+  Hotel, Bed, Users, Check, Calendar, Upload, Music, Star,
+  Utensils, FileText, X
+} from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ExtraField {
@@ -30,6 +34,14 @@ interface EditPageContentProps {
   guestId?: string;
 }
 
+const travelModeIcons: { [key: string]: any } = {
+  "Flight": Plane,
+  "Train": Train,
+  "Car": Car,
+  "Bus": Bus,
+  "Other": Bike
+};
+
 export default function EditPageContent({ weddingId, guestId }: EditPageContentProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -37,6 +49,7 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
   const [showSuccess, setShowSuccess] = useState(false);
   const [guest, setGuest] = useState<Guest | null>(null);
   const [wedding, setWedding] = useState<Weddings | null>(null);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -48,6 +61,25 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
   });
   const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Group fields by section
+  const getFieldsBySection = (section: string) => {
+    return extraFields.filter(f => f.section === section);
+  };
+
+  // Define steps based on available sections
+  const steps = [
+    { id: 'personal', title: 'Personal Info', icon: User },
+    { id: 'travel', title: 'Travel', icon: Plane },
+    { id: 'accommodation', title: 'Stay', icon: Hotel },
+    { id: 'transport', title: 'Transport', icon: Car },
+    { id: 'dietary', title: 'Food', icon: Utensils },
+    { id: 'documents', title: 'Documents', icon: FileText },
+    { id: 'entertainment', title: 'Entertainment', icon: Music },
+  ].filter(step => {
+    if (step.id === 'personal') return true;
+    return getFieldsBySection(step.id).length > 0;
+  });
 
   useEffect(() => {
     if (weddingId && guestId) {
@@ -63,7 +95,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
       setLoading(true);
       setError(null);
 
-      // Load guest data
       const { data: guestData, error: guestError } = await supabase
         .from("guests")
         .select("*")
@@ -75,7 +106,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
         throw new Error("Guest not found");
       }
 
-      // Load wedding data
       const { data: weddingData, error: weddingError } = await supabase
         .from("weddings")
         .select("*")
@@ -89,17 +119,14 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
       setGuest(guestData);
       setWedding(weddingData);
 
-      // Parse extra fields from wedding extra_information (defines what to collect)
       const weddingExtraInfo = weddingData.extra_information || {};
       const fields: ExtraField[] = Array.isArray(weddingExtraInfo.fields)
         ? weddingExtraInfo.fields.filter((f: ExtraField) => f.enabled !== false)
         : [];
       setExtraFields(fields);
 
-      // Parse guest's extra_information values
       const guestExtraInfo = guestData.extra_information || {};
 
-      // Set form data with guest's extra_information values
       setFormData({
         first_name: guestData.first_name || "",
         last_name: guestData.last_name || "",
@@ -118,8 +145,7 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setSaving(true);
     setError(null);
 
@@ -156,7 +182,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file
     if (!file.type.startsWith("image/")) {
       alert("Please select an image file");
       return;
@@ -168,7 +193,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     }
 
     try {
-      // Upload to Supabase Storage
       const fileExt = file.name.split(".").pop();
       const fileName = `profile-${Date.now()}.${fileExt}`;
 
@@ -181,7 +205,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
       const { data: urlData } = supabase.storage
         .from("guest-profiles")
         .getPublicUrl(fileName);
@@ -196,128 +219,135 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     }
   };
 
-  const renderExtraField = (field: ExtraField, index: number) => {
+  const updateExtraInfo = (fieldId: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      extra_information: {
+        ...prev.extra_information,
+        [fieldId]: value
+      }
+    }));
+  };
+
+  const renderIconCard = (field: ExtraField) => {
     const value = formData.extra_information[field.id] || "";
 
-    const handleChange = (newValue: any) => {
-      setFormData(prev => ({
-        ...prev,
-        extra_information: {
-          ...prev.extra_information,
-          [field.id]: newValue
-        }
-      }));
-    };
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        {field.options?.map((option, i) => {
+          const Icon = field.id === 'travel_mode' ? travelModeIcons[option] || Bike : null;
+          const isSelected = value === option;
 
-    switch (field.type) {
-      case "textarea":
-        return (
-          <Textarea
-            key={index}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={field.placeholder}
-            required={field.required}
-            rows={4}
-            className="resize-none transition-all"
-          />
-        );
+          return (
+            <button
+              key={i}
+              type="button"
+              onClick={() => updateExtraInfo(field.id, option)}
+              className={`
+                relative p-4 rounded-xl border-2 transition-all duration-200
+                ${isSelected
+                  ? 'border-rose-500 bg-rose-50 shadow-lg scale-105'
+                  : 'border-gray-200 bg-white hover:border-rose-300 hover:shadow-md'
+                }
+              `}
+            >
+              {isSelected && (
+                <div className="absolute top-2 right-2 w-6 h-6 bg-rose-500 rounded-full flex items-center justify-center">
+                  <Check className="w-4 h-4 text-white" />
+                </div>
+              )}
+              {Icon && (
+                <Icon className={`w-8 h-8 mx-auto mb-2 ${isSelected ? 'text-rose-600' : 'text-gray-400'}`} />
+              )}
+              <p className={`text-sm font-medium text-center ${isSelected ? 'text-rose-600' : 'text-gray-700'}`}>
+                {option}
+              </p>
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
 
-      case "select":
-        return (
-          <Select key={index} value={value} onValueChange={handleChange} required={field.required}>
-            <SelectTrigger className="transition-all">
-              <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
-            </SelectTrigger>
-            <SelectContent>
-              {field.options?.map((option, i) => (
-                <SelectItem key={i} value={option}>{option}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
+  const renderField = (field: ExtraField) => {
+    const value = formData.extra_information[field.id] || "";
 
-      case "checkbox":
-        return (
-          <div key={index} className="flex items-center space-x-3">
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={value || false}
-                onChange={(e) => handleChange(e.target.checked)}
-                className="peer sr-only"
-                id={`checkbox-${index}`}
-              />
-              <label
-                htmlFor={`checkbox-${index}`}
-                className="flex h-5 w-5 cursor-pointer items-center justify-center rounded border border-input ring-offset-background transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-checked:bg-rose-500 peer-checked:border-rose-500 peer-checked:text-white hover:bg-rose-50"
+    if (field.type === 'radio' && field.options) {
+      return renderIconCard(field);
+    }
+
+    if (field.type === 'date') {
+      return (
+        <Input
+          type="date"
+          value={value}
+          onChange={(e) => updateExtraInfo(field.id, e.target.value)}
+          className="h-12 text-lg"
+        />
+      );
+    }
+
+    if (field.type === 'number') {
+      return (
+        <Input
+          type="number"
+          value={value}
+          onChange={(e) => updateExtraInfo(field.id, parseInt(e.target.value) || 0)}
+          placeholder={field.placeholder}
+          className="h-12 text-lg"
+          min="0"
+        />
+      );
+    }
+
+    if (field.type === 'textarea') {
+      return (
+        <Textarea
+          value={value}
+          onChange={(e) => updateExtraInfo(field.id, e.target.value)}
+          placeholder={field.placeholder}
+          rows={4}
+          className="text-lg resize-none"
+        />
+      );
+    }
+
+    if (field.type === 'select') {
+      return (
+        <div className="grid grid-cols-1 gap-2">
+          {field.options?.map((option, i) => {
+            const isSelected = value === option;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => updateExtraInfo(field.id, option)}
+                className={`
+                  p-4 rounded-lg border-2 transition-all text-left
+                  ${isSelected
+                    ? 'border-rose-500 bg-rose-50 text-rose-600 font-medium'
+                    : 'border-gray-200 bg-white hover:border-rose-300'
+                  }
+                `}
               >
-                {value && (
-                  <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </label>
-            </div>
-            <label htmlFor={`checkbox-${index}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
-              {field.placeholder || `Yes, ${field.label.toLowerCase()}`}
-            </label>
-          </div>
-        );
+                <div className="flex items-center justify-between">
+                  <span>{option}</span>
+                  {isSelected && <Check className="w-5 h-5 text-rose-500" />}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      );
+    }
 
-      case "number":
-        return (
-          <Input
-            key={index}
-            type="number"
-            value={value}
-            onChange={(e) => handleChange(parseInt(e.target.value) || 0)}
-            placeholder={field.placeholder}
-            required={field.required}
-            min="0"
-            className="transition-all"
-          />
-        );
-
-      case "radio":
-        return (
-          <div key={index} className="flex gap-4">
-            {field.options?.map((option, i) => (
-              <div key={i} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id={`${field.id}-${i}`}
-                  name={field.id}
-                  value={option}
-                  checked={value === option}
-                  onChange={(e) => handleChange(e.target.value)}
-                  className="w-4 h-4 text-rose-600 focus:ring-rose-500 border-gray-300"
-                />
-                <label htmlFor={`${field.id}-${i}`} className="text-sm font-medium text-gray-700 cursor-pointer">
-                  {option}
-                </label>
-              </div>
-            ))}
-          </div>
-        );
-
-      case "date":
-        return (
-          <Input
-            key={index}
-            type="date"
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={field.placeholder}
-            required={field.required}
-            className="transition-all"
-          />
-        );
-
-      case "file":
-        return (
-          <div key={index} className="space-y-2">
-            <Input
+    if (field.type === 'file') {
+      return (
+        <div className="space-y-3">
+          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-rose-400 transition-colors bg-gray-50 hover:bg-rose-50">
+            <Upload className="w-8 h-8 text-gray-400 mb-2" />
+            <span className="text-sm text-gray-500">Click to upload</span>
+            <input
               type="file"
               accept="image/*,.pdf"
               onChange={async (e) => {
@@ -325,7 +355,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
                 if (!file) return;
 
                 try {
-                  // Upload to Supabase Storage
                   const fileExt = file.name.split(".").pop();
                   const fileName = `${field.id}-${Date.now()}.${fileExt}`;
 
@@ -338,81 +367,204 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
 
                   if (uploadError) throw uploadError;
 
-                  // Get public URL
                   const { data: urlData } = supabase.storage
                     .from("guest-documents")
                     .getPublicUrl(fileName);
 
                   if (urlData.publicUrl) {
-                    handleChange(urlData.publicUrl);
+                    updateExtraInfo(field.id, urlData.publicUrl);
                   }
                 } catch (error) {
                   console.error("Upload error:", error);
                   alert("Failed to upload file");
                 }
               }}
-              className="transition-all"
+              className="hidden"
             />
-            {value && (
-              <p className="text-xs text-gray-500 truncate">
-                Uploaded: <a href={value} target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">{value}</a>
-              </p>
-            )}
-          </div>
-        );
-
-      default:
-        return (
-          <Input
-            key={index}
-            type={field.type}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={field.placeholder}
-            required={field.required}
-            className="transition-all"
-          />
-        );
+          </label>
+          {value && (
+            <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
+              <span className="text-sm text-green-700 truncate flex-1">File uploaded</span>
+              <Check className="w-5 h-5 text-green-600" />
+            </div>
+          )}
+        </div>
+      );
     }
+
+    return (
+      <Input
+        type={field.type}
+        value={value}
+        onChange={(e) => updateExtraInfo(field.id, e.target.value)}
+        placeholder={field.placeholder}
+        className="h-12 text-lg"
+      />
+    );
+  };
+
+  const renderStepContent = () => {
+    const currentStepData = steps[currentStep];
+
+    if (currentStepData.id === 'personal') {
+      return (
+        <div className="space-y-6">
+          {/* Profile Picture */}
+          <div className="flex justify-center">
+            <div className="relative">
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-pink-200 border-4 border-rose-300 shadow-xl">
+                {formData.profile_image ? (
+                  <Image
+                    src={formData.profile_image}
+                    alt="Profile"
+                    width={128}
+                    height={128}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <User className="w-12 h-12 text-rose-400" />
+                  </div>
+                )}
+              </div>
+
+              <label className="absolute bottom-0 right-0 w-10 h-10 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg">
+                <Camera className="w-5 h-5" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-lg font-medium">First Name *</Label>
+              <Input
+                type="text"
+                required
+                value={formData.first_name}
+                onChange={(e) => setFormData({...formData, first_name: e.target.value})}
+                placeholder="Enter first name"
+                className="h-12 text-lg"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-lg font-medium">Last Name *</Label>
+              <Input
+                type="text"
+                required
+                value={formData.last_name}
+                onChange={(e) => setFormData({...formData, last_name: e.target.value})}
+                placeholder="Enter last name"
+                className="h-12 text-lg"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-lg font-medium flex items-center gap-2">
+              <Mail className="w-5 h-5 text-rose-500" />
+              Email Address
+            </Label>
+            <Input
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              placeholder="your.email@example.com"
+              className="h-12 text-lg"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-lg font-medium flex items-center gap-2">
+              <Phone className="w-5 h-5 text-rose-500" />
+              WhatsApp Number
+            </Label>
+            <Input
+              type="tel"
+              value={formData.whatsapp}
+              onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
+              placeholder="+1 234 567 8900"
+              className="h-12 text-lg"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-lg font-medium flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-rose-500" />
+              Address
+            </Label>
+            <Textarea
+              value={formData.address}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              placeholder="Enter your address"
+              rows={3}
+              className="text-lg resize-none"
+            />
+          </div>
+        </div>
+      );
+    }
+
+    const sectionFields = getFieldsBySection(currentStepData.id);
+
+    if (sectionFields.length === 0) {
+      return <p className="text-center text-gray-500 py-8">No additional information needed for this section.</p>;
+    }
+
+    return (
+      <div className="space-y-6">
+        {sectionFields.map((field, index) => (
+          <div key={index} className="space-y-3">
+            <Label className="text-lg font-medium">
+              {field.label}
+              {field.required && <span className="text-rose-500 ml-1">*</span>}
+            </Label>
+            {renderField(field)}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   // Success Page
   if (showSuccess && wedding) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
-        <div className="max-w-2xl w-full text-center">
-          <Card className="border-rose-100 shadow-xl">
-            <CardContent className="p-12">
-              <div className="w-20 h-20 bg-gradient-to-r from-rose-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="w-10 h-10 text-white" />
-              </div>
-              
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Thank You!</h1>
-              <h2 className="text-xl text-rose-600 mb-6 font-semibold">
-                {wedding.bride_first_name} & {wedding.groom_first_name}
-              </h2>
-              
-              <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                Your details have been successfully updated! We're excited to celebrate this special moment with you. 
-                Your preferences will help us make this celebration even more memorable for everyone.
-              </p>
-              
-              <div className="space-y-4">
-                <Button
-                  onClick={() => router.push(`/wedding/${weddingId}?guest=${guestId}`)}
-                  className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-8 py-3 text-lg"
-                >
-                  <Home className="w-5 h-5 mr-2" />
-                  Back to Wedding
-                </Button>
-                
-                <p className="text-sm text-gray-500 mt-4">
-                  See you at the celebration! 💕
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="max-w-2xl w-full border-rose-100 shadow-2xl">
+          <CardContent className="p-12 text-center">
+            <div className="w-24 h-24 bg-gradient-to-r from-rose-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <CheckCircle className="w-12 h-12 text-white" />
+            </div>
+
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">All Set!</h1>
+            <h2 className="text-2xl text-rose-600 mb-6 font-semibold">
+              {wedding.bride_first_name} & {wedding.groom_first_name}
+            </h2>
+
+            <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+              Thank you for completing your profile! We're excited to celebrate this special moment with you.
+              Your preferences will help us make this celebration unforgettable for everyone.
+            </p>
+
+            <Button
+              onClick={() => router.push(`/wedding/${weddingId}?guest=${guestId}`)}
+              className="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-8 py-6 text-lg"
+            >
+              <Home className="w-5 h-5 mr-2" />
+              Back to Wedding
+            </Button>
+
+            <p className="text-sm text-gray-500 mt-6">
+              See you at the celebration! 💕
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -422,8 +574,8 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-rose-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your details...</p>
+          <div className="w-20 h-20 border-4 border-rose-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading your details...</p>
         </div>
       </div>
     );
@@ -433,220 +585,150 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
   if (error || !wedding || !guest) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 flex items-center justify-center p-4">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Oops!</h1>
-          <p className="text-gray-600 mb-6">{error || "Something went wrong."}</p>
-          <Button onClick={() => router.push("/")}>Go Home</Button>
-        </div>
+        <Card className="max-w-md w-full">
+          <CardContent className="p-8 text-center">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <X className="w-8 h-8 text-red-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Oops!</h1>
+            <p className="text-gray-600 mb-6">{error || "Something went wrong."}</p>
+            <Button onClick={() => router.push("/")}>Go Home</Button>
+          </CardContent>
+        </Card>
       </div>
     );
   }
 
-  // Main edit page
+  // Main multi-step form
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-pink-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <User className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Update Your Details</h1>
-          <h2 className="text-xl text-rose-600 mb-4 font-semibold">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
+          <h2 className="text-xl md:text-2xl text-rose-600 mb-2 font-semibold">
             {wedding.bride_first_name} & {wedding.groom_first_name}'s Wedding
           </h2>
           <p className="text-gray-600">Help us make your experience perfect</p>
         </div>
 
-        {/* Form */}
-        <Card className="border-rose-100 shadow-xl">
-          <CardContent className="p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Profile Picture */}
-              <div className="text-center">
-                <div className="relative inline-block">
-                  <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-rose-100 to-pink-200 border-4 border-rose-300 mx-auto shadow-lg">
-                    {formData.profile_image ? (
-                      <Image
-                        src={formData.profile_image}
-                        alt="Profile"
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
+        {/* Progress Indicator */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            {steps.map((step, index) => {
+              const StepIcon = step.icon;
+              const isActive = index === currentStep;
+              const isCompleted = index < currentStep;
+
+              return (
+                <div key={step.id} className="flex flex-col items-center flex-1">
+                  <div className={`
+                    w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all duration-300
+                    ${isActive ? 'bg-rose-500 shadow-lg scale-110' : isCompleted ? 'bg-green-500' : 'bg-gray-200'}
+                  `}>
+                    {isCompleted ? (
+                      <Check className="w-6 h-6 text-white" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <User className="w-8 h-8 text-rose-400" />
-                      </div>
+                      <StepIcon className={`w-6 h-6 ${isActive ? 'text-white' : 'text-gray-500'}`} />
                     )}
                   </div>
-                  
-                  <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-rose-500 hover:bg-rose-600 text-white rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110 shadow-lg">
-                    <Camera className="w-4 h-4" />
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </label>
+                  <p className={`text-xs text-center hidden sm:block ${isActive ? 'text-rose-600 font-semibold' : 'text-gray-500'}`}>
+                    {step.title}
+                  </p>
                 </div>
-                <p className="text-sm text-gray-500 mt-2">Click camera to upload photo</p>
+              );
+            })}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="absolute h-full bg-gradient-to-r from-rose-500 to-pink-600 transition-all duration-500 ease-out"
+              style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Step Content Card */}
+        <Card className="border-rose-100 shadow-2xl">
+          <CardContent className="p-8">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                {(() => {
+                  const StepIcon = steps[currentStep].icon;
+                  return <StepIcon className="w-7 h-7 text-rose-500" />;
+                })()}
+                {steps[currentStep].title}
+              </h3>
+              <p className="text-gray-600">Step {currentStep + 1} of {steps.length}</p>
+            </div>
+
+            {/* Form Content */}
+            <div className="min-h-[400px]">
+              {renderStepContent()}
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-red-600 text-sm">{error}</p>
               </div>
+            )}
 
-              {/* Name Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-sm font-medium">
-                    <User className="w-4 h-4 text-rose-500" />
-                    First Name *
-                  </Label>
-                  <Input
-                    type="text"
-                    required
-                    value={formData.first_name}
-                    onChange={(e) => setFormData({...formData, first_name: e.target.value})}
-                    placeholder="First name"
-                    className="transition-all"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2 text-sm font-medium">
-                    <User className="w-4 h-4 text-rose-500" />
-                    Last Name *
-                  </Label>
-                  <Input
-                    type="text"
-                    required
-                    value={formData.last_name}
-                    onChange={(e) => setFormData({...formData, last_name: e.target.value})}
-                    placeholder="Last name"
-                    className="transition-all"
-                  />
-                </div>
-              </div>
+            {/* Navigation Buttons */}
+            <div className="flex gap-4 mt-8">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
+                disabled={currentStep === 0}
+                className="flex-1 h-14 text-lg border-2"
+              >
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Previous
+              </Button>
 
-              {/* Email */}
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium">
-                  <Mail className="w-4 h-4 text-rose-500" />
-                  Email Address
-                </Label>
-                <Input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  placeholder="Enter your email"
-                  className="transition-all"
-                />
-              </div>
-
-              {/* WhatsApp */}
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium">
-                  <Phone className="w-4 h-4 text-rose-500" />
-                  WhatsApp Number
-                </Label>
-                <Input
-                  type="tel"
-                  value={formData.whatsapp}
-                  onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
-                  placeholder="+1 234 567 8900"
-                  className="transition-all"
-                />
-              </div>
-
-              {/* Address */}
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium">
-                  <MapPin className="w-4 h-4 text-rose-500" />
-                  Address
-                </Label>
-                <Textarea
-                  value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
-                  placeholder="Enter your address"
-                  className="resize-none transition-all"
-                  rows={3}
-                />
-              </div>
-
-              {/* Extra Fields */}
-              {extraFields.length > 0 && (
-                <div className="mt-8">
-                  {/* Decorative Divider */}
-                  <div className="relative mb-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Additional Details</span>
-                    </div>
-                  </div>
-
-                  {/* Fields in same style as rest of form */}
-                  <div className="space-y-6">
-                    {extraFields.map((field, index) => (
-                      <div key={index} className="space-y-2">
-                        <Label className="flex items-center gap-2 text-sm font-medium">
-                          <div className="w-4 h-4 text-rose-500">
-                            {field.type === 'select' && <ChevronDown className="w-4 h-4" />}
-                            {field.type === 'textarea' && <AlignLeft className="w-4 h-4" />}
-                            {field.type === 'number' && <Hash className="w-4 h-4" />}
-                            {field.type === 'checkbox' && <CheckSquare className="w-4 h-4" />}
-                            {field.type === 'text' && <Type className="w-4 h-4" />}
-                            {field.type === 'radio' && <Radio className="w-4 h-4" />}
-                            {field.type === 'date' && <Calendar className="w-4 h-4" />}
-                            {field.type === 'file' && <Upload className="w-4 h-4" />}
-                          </div>
-                          {field.label}
-                          {field.required && <span className="text-rose-500">*</span>}
-                        </Label>
-                        {renderExtraField(field, index)}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Error Message */}
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-red-600 text-sm">{error}</p>
-                </div>
-              )}
-
-              {/* Submit Button */}
-              <div className="flex gap-3 pt-6">
+              {currentStep === steps.length - 1 ? (
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   disabled={saving}
-                  className="flex-1 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium py-6 px-6 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                  className="flex-1 h-14 text-lg bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-lg"
                 >
                   {saving ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                      <span>Saving...</span>
+                      Saving...
                     </>
                   ) : (
                     <>
-                      <Save className="w-5 h-5 mr-2" />
-                      <span>Save Details</span>
+                      <Check className="w-5 h-5 mr-2" />
+                      Complete
                     </>
                   )}
                 </Button>
-                
+              ) : (
                 <Button
                   type="button"
-                  variant="outline"
-                  onClick={() => router.push(`/wedding/${weddingId}?guest=${guestId}`)}
-                  className="px-6 py-6 border-2 border-rose-200 text-rose-600 font-medium hover:bg-rose-50 transition-all"
+                  onClick={() => setCurrentStep(prev => Math.min(steps.length - 1, prev + 1))}
+                  className="flex-1 h-14 text-lg bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white shadow-lg"
                 >
-                  Cancel
+                  Next
+                  <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
-              </div>
-            </form>
+              )}
+            </div>
+
+            {/* Skip to End */}
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                onClick={() => router.push(`/wedding/${weddingId}?guest=${guestId}`)}
+                className="text-sm text-gray-500 hover:text-gray-700 underline"
+              >
+                Skip for now
+              </button>
+            </div>
           </CardContent>
         </Card>
       </div>
