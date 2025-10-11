@@ -21,8 +21,12 @@ interface WeddingWebsiteProps {
 
 export default function WeddingWebsite({ website, guest, events = [], urlSlug, onEditProfile }: WeddingWebsiteProps) {
   // Get the template ID from the database
+  console.log("🎨 TEMPLATE DEBUG - Raw template_id from database:", website.template_id);
   const templateId = getTemplateIdFromDatabase(website.template_id);
+  console.log("🎨 TEMPLATE DEBUG - Resolved templateId:", templateId);
   const templateConfig = getTemplate(templateId);
+  console.log("🎨 TEMPLATE DEBUG - Template config:", templateConfig);
+  console.log("🎨 TEMPLATE DEBUG - Template name:", templateConfig.name);
   const TemplateComponent = templateConfig.component;
 
   // Map database data to template format

@@ -58,6 +58,8 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
       if (websiteSettings) {
         Object.assign(weddingData, websiteSettings);
         console.log("DEBUG - Merged wedding data is_password_protected:", weddingData.is_password_protected);
+        console.log("🔍 DEBUG - websiteSettings.template_id:", websiteSettings.template_id);
+        console.log("🔍 DEBUG - After merge, weddingData.template_id:", weddingData.template_id);
       }
 
       setWedding(weddingData);
@@ -162,6 +164,7 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
   }
 
   // Create a compatible website object for WeddingWebsite component
+  console.log("🔍 DEBUG - wedding.template_id before passing to WeddingWebsite:", wedding.template_id);
   const websiteData = {
     id: wedding.id,
     wedding_id: wedding.id,

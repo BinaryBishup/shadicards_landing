@@ -9,6 +9,8 @@ import GallerySection from './GallerySection';
 import WeddingPartySection from './WeddingPartySection';
 
 export default function Template001({ data, primaryColor = '#ec4899', secondaryColor = '#f97316', visibility }: TemplateComponentProps) {
+  console.log("🌸 TEMPLATE001 (Elegant Romance) IS RENDERING");
+
   // Default all sections to visible if not specified
   const {
     show_hero = true,
