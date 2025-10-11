@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
-import { User, Phone, MapPin, Mail, Save, X, Camera, Heart, Home, CheckCircle, ChevronDown, AlignLeft, Hash, CheckSquare, Type } from "lucide-react";
+import { User, Phone, MapPin, Mail, Save, X, Camera, Heart, Home, CheckCircle, ChevronDown, AlignLeft, Hash, CheckSquare, Type, Calendar, Upload, Radio } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,11 +14,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 
 interface ExtraField {
+  id: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'number' | 'email' | 'tel';
+  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'number' | 'email' | 'tel' | 'radio' | 'date' | 'file';
   options?: string[];
   required?: boolean;
   placeholder?: string;
+  enabled?: boolean;
+  section?: string;
+  order?: number;
 }
 
 interface EditPageContentProps {
@@ -39,7 +43,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
     email: "",
     whatsapp: "",
     address: "",
-    dietary_preferences: "",
     profile_image: "",
     extra_information: {} as { [key: string]: any }
   });
@@ -88,7 +91,9 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
 
       // Parse extra fields from wedding extra_information (defines what to collect)
       const weddingExtraInfo = weddingData.extra_information || {};
-      const fields: ExtraField[] = Array.isArray(weddingExtraInfo.fields) ? weddingExtraInfo.fields : [];
+      const fields: ExtraField[] = Array.isArray(weddingExtraInfo.fields)
+        ? weddingExtraInfo.fields.filter((f: ExtraField) => f.enabled !== false)
+        : [];
       setExtraFields(fields);
 
       // Parse guest's extra_information values
@@ -101,7 +106,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
         email: guestData.email || "",
         whatsapp: guestData.whatsapp || "",
         address: guestData.address || "",
-        dietary_preferences: guestData.dietary_preferences || "",
         profile_image: guestData.profile_image || "",
         extra_information: guestExtraInfo
       });
@@ -128,7 +132,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
           email: formData.email,
           whatsapp: formData.whatsapp,
           address: formData.address,
-          dietary_preferences: formData.dietary_preferences,
           profile_image: formData.profile_image,
           extra_information: formData.extra_information,
           updated_at: new Date().toISOString()
@@ -194,14 +197,14 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
   };
 
   const renderExtraField = (field: ExtraField, index: number) => {
-    const value = formData.extra_information[field.label] || "";
+    const value = formData.extra_information[field.id] || "";
 
     const handleChange = (newValue: any) => {
       setFormData(prev => ({
         ...prev,
         extra_information: {
           ...prev.extra_information,
-          [field.label]: newValue
+          [field.id]: newValue
         }
       }));
     };
@@ -274,6 +277,88 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
             min="0"
             className="transition-all"
           />
+        );
+
+      case "radio":
+        return (
+          <div key={index} className="flex gap-4">
+            {field.options?.map((option, i) => (
+              <div key={i} className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  id={`${field.id}-${i}`}
+                  name={field.id}
+                  value={option}
+                  checked={value === option}
+                  onChange={(e) => handleChange(e.target.value)}
+                  className="w-4 h-4 text-rose-600 focus:ring-rose-500 border-gray-300"
+                />
+                <label htmlFor={`${field.id}-${i}`} className="text-sm font-medium text-gray-700 cursor-pointer">
+                  {option}
+                </label>
+              </div>
+            ))}
+          </div>
+        );
+
+      case "date":
+        return (
+          <Input
+            key={index}
+            type="date"
+            value={value}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder={field.placeholder}
+            required={field.required}
+            className="transition-all"
+          />
+        );
+
+      case "file":
+        return (
+          <div key={index} className="space-y-2">
+            <Input
+              type="file"
+              accept="image/*,.pdf"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                try {
+                  // Upload to Supabase Storage
+                  const fileExt = file.name.split(".").pop();
+                  const fileName = `${field.id}-${Date.now()}.${fileExt}`;
+
+                  const { error: uploadError } = await supabase.storage
+                    .from("guest-documents")
+                    .upload(fileName, file, {
+                      cacheControl: "3600",
+                      upsert: false
+                    });
+
+                  if (uploadError) throw uploadError;
+
+                  // Get public URL
+                  const { data: urlData } = supabase.storage
+                    .from("guest-documents")
+                    .getPublicUrl(fileName);
+
+                  if (urlData.publicUrl) {
+                    handleChange(urlData.publicUrl);
+                  }
+                } catch (error) {
+                  console.error("Upload error:", error);
+                  alert("Failed to upload file");
+                }
+              }}
+              className="transition-all"
+            />
+            {value && (
+              <p className="text-xs text-gray-500 truncate">
+                Uploaded: <a href={value} target="_blank" rel="noopener noreferrer" className="text-rose-600 hover:underline">{value}</a>
+              </p>
+            )}
+          </div>
         );
 
       default:
@@ -487,21 +572,6 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
                 />
               </div>
 
-              {/* Dietary Preferences */}
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium">
-                  <Heart className="w-4 h-4 text-rose-500" />
-                  Dietary Preferences
-                </Label>
-                <Input
-                  type="text"
-                  value={formData.dietary_preferences}
-                  onChange={(e) => setFormData({...formData, dietary_preferences: e.target.value})}
-                  placeholder="Any dietary restrictions or preferences"
-                  className="transition-all"
-                />
-              </div>
-
               {/* Extra Fields */}
               {extraFields.length > 0 && (
                 <div className="mt-8">
@@ -526,6 +596,9 @@ export default function EditPageContent({ weddingId, guestId }: EditPageContentP
                             {field.type === 'number' && <Hash className="w-4 h-4" />}
                             {field.type === 'checkbox' && <CheckSquare className="w-4 h-4" />}
                             {field.type === 'text' && <Type className="w-4 h-4" />}
+                            {field.type === 'radio' && <Radio className="w-4 h-4" />}
+                            {field.type === 'date' && <Calendar className="w-4 h-4" />}
+                            {field.type === 'file' && <Upload className="w-4 h-4" />}
                           </div>
                           {field.label}
                           {field.required && <span className="text-rose-500">*</span>}
