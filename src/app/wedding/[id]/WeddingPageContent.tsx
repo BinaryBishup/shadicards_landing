@@ -220,12 +220,12 @@ export default function WeddingPageContent({ weddingId, guestId }: WeddingPageCo
   return (
     <>
       {guest && (
-        <WeddingWebsite 
+        <WeddingWebsite
           website={websiteData}
           guest={guest}
           events={events}
-          urlSlug={wedding.id}
-          onEditProfile={() => window.location.href = `/wedding/${wedding.id}/edit?guest=${guest.id}`}
+          urlSlug={weddingId}
+          onEditProfile={() => window.location.href = `/wedding/${weddingId}/edit?guest=${guest.id}`}
         />
       )}
 

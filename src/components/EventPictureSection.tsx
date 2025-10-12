@@ -148,26 +148,38 @@ export default function EventPictureSection() {
       <div className="container mx-auto px-6 relative z-10">
         {/* Section Header */}
         <div className="picture-header text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-rose-100 text-rose-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
-            <span>AI-Powered Photo Distribution</span>
+            <span>Coming Soon - AI-Powered Photo Distribution</span>
           </div>
-          
+
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 mb-6">
             <span className="font-normal">Every guest gets their photos</span>
             <br />
             <span className="text-gray-600">instantly with AI magic</span>
           </h2>
-          
+
           <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Upload event photos once. Our AI identifies faces and creates personal galleries 
+            Upload event photos once. Our AI identifies faces and creates personal galleries
             for each guest. No more WhatsApp chaos or missed memories.
           </p>
+
+          <div className="mt-6 inline-flex items-center gap-2 bg-gradient-to-r from-rose-50 to-amber-50 border-2 border-rose-200 text-gray-900 px-6 py-3 rounded-xl font-semibold shadow-sm">
+            <Zap className="w-5 h-5 text-rose-500" />
+            <span>This feature will be released in the upcoming version</span>
+          </div>
         </div>
 
         {/* Interactive Demo */}
-        <div className="demo-container max-w-6xl mx-auto mb-20">
-          <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100">
+        <div className="demo-container max-w-6xl mx-auto mb-20 relative">
+          {/* Coming Soon Overlay Badge */}
+          <div className="absolute top-8 right-8 z-20">
+            <div className="bg-gradient-to-r from-amber-400 to-orange-400 text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-lg border-2 border-white flex items-center gap-2">
+              <Sparkles className="w-4 h-4" />
+              Preview - Coming Soon
+            </div>
+          </div>
+          <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100 relative">
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Left: Photo Grid with Face Detection */}
               <div className="relative">
@@ -360,12 +372,16 @@ export default function EventPictureSection() {
 
         {/* CTA */}
         <div className="text-center mt-16">
-          <button 
-            onClick={() => window.location.href = 'https://dashboard.shadicards.in/auth/login'}
-            className="bg-rose-500 text-white py-4 px-10 rounded-full font-medium text-base hover:bg-rose-600 transition-colors shadow-lg hover:shadow-xl">
-            Enable AI Photo Distribution
+          <button
+            disabled
+            className="bg-gray-300 text-gray-600 py-4 px-10 rounded-full font-medium text-base cursor-not-allowed shadow-lg relative">
+            <span className="flex items-center gap-2 justify-center">
+              AI Photo Distribution - Coming Soon
+            </span>
           </button>
-          <p className="text-sm text-gray-500 mt-4">Available with Premium plans</p>
+          <p className="text-sm text-gray-600 mt-4 font-medium">
+            This feature will be available in the upcoming version
+          </p>
         </div>
       </div>
 

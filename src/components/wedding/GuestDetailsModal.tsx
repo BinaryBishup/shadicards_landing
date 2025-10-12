@@ -4,22 +4,12 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import type { Guest, Weddings } from "@/lib/supabase";
-import { User, Phone, MapPin, Mail, Save, X, Camera, Heart } from "lucide-react";
+import { User, Phone, MapPin, Mail, Save, X, Camera } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-
-interface ExtraField {
-  label: string;
-  type: 'text' | 'textarea' | 'select' | 'checkbox' | 'number' | 'email' | 'tel';
-  options?: string[];
-  required?: boolean;
-  placeholder?: string;
-}
 
 interface GuestDetailsModalProps {
   isOpen: boolean;
@@ -40,11 +30,8 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
     email: "",
     whatsapp: "",
     address: "",
-    dietary_preferences: "",
-    profile_image: "",
-    extra_information: {} as { [key: string]: any }
+    profile_image: ""
   });
-  const [extraFields, setExtraFields] = useState<ExtraField[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
@@ -85,24 +72,13 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
       setGuest(guestData);
       setWedding(weddingData);
 
-      // Parse extra fields from wedding extra_information (defines what to collect)
-      const weddingExtraInfo = weddingData.extra_information || {};
-      const fields: ExtraField[] = Array.isArray(weddingExtraInfo.fields) ? weddingExtraInfo.fields : [];
-      setExtraFields(fields);
-
-      // Parse guest's extra_information values
-      const guestExtraInfo = guestData.extra_information || {};
-
-      // Set form data with guest's extra_information values
       setFormData({
         first_name: guestData.first_name || "",
         last_name: guestData.last_name || "",
         email: guestData.email || "",
         whatsapp: guestData.whatsapp || "",
         address: guestData.address || "",
-        dietary_preferences: guestData.dietary_preferences || "",
-        profile_image: guestData.profile_image || "",
-        extra_information: guestExtraInfo
+        profile_image: guestData.profile_image || ""
       });
 
     } catch (err) {
@@ -127,9 +103,7 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
           email: formData.email,
           whatsapp: formData.whatsapp,
           address: formData.address,
-          dietary_preferences: formData.dietary_preferences,
           profile_image: formData.profile_image,
-          extra_information: formData.extra_information,
           updated_at: new Date().toISOString()
         })
         .eq("id", guestId);
@@ -196,103 +170,6 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
     }
   };
 
-  const renderExtraField = (field: ExtraField, index: number) => {
-    const value = formData.extra_information[field.label] || "";
-
-    const handleChange = (newValue: any) => {
-      setFormData(prev => ({
-        ...prev,
-        extra_information: {
-          ...prev.extra_information,
-          [field.label]: newValue
-        }
-      }));
-    };
-
-    switch (field.type) {
-      case "textarea":
-        return (
-          <Textarea
-            key={index}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={field.placeholder}
-            required={field.required}
-            rows={4}
-            className="resize-none transition-all"
-          />
-        );
-
-      case "select":
-        return (
-          <Select key={index} value={value} onValueChange={handleChange} required={field.required}>
-            <SelectTrigger className="transition-all">
-              <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
-            </SelectTrigger>
-            <SelectContent>
-              {field.options?.map((option, i) => (
-                <SelectItem key={i} value={option}>{option}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
-
-      case "checkbox":
-        return (
-          <div key={index} className="flex items-center space-x-3">
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={value || false}
-                onChange={(e) => handleChange(e.target.checked)}
-                className="peer sr-only"
-                id={`checkbox-${index}`}
-              />
-              <label
-                htmlFor={`checkbox-${index}`}
-                className="flex h-5 w-5 cursor-pointer items-center justify-center rounded border border-input ring-offset-background transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-2 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-checked:bg-rose-500 peer-checked:border-rose-500 peer-checked:text-white hover:bg-rose-50"
-              >
-                {value && (
-                  <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </label>
-            </div>
-            <label htmlFor={`checkbox-${index}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
-              {field.placeholder || `Yes, ${field.label.toLowerCase()}`}
-            </label>
-          </div>
-        );
-
-      case "number":
-        return (
-          <Input
-            key={index}
-            type="number"
-            value={value}
-            onChange={(e) => handleChange(parseInt(e.target.value) || 0)}
-            placeholder={field.placeholder}
-            required={field.required}
-            min="0"
-            className="transition-all"
-          />
-        );
-
-      default:
-        return (
-          <Input
-            key={index}
-            type={field.type}
-            value={value}
-            onChange={(e) => handleChange(e.target.value)}
-            placeholder={field.placeholder}
-            required={field.required}
-            className="transition-all"
-          />
-        );
-    }
-  };
 
   if (!isOpen) return null;
 
@@ -467,67 +344,6 @@ export default function GuestDetailsModal({ isOpen, onClose, weddingId, guestId 
                   rows={3}
                 />
               </div>
-
-              {/* Dietary Preferences */}
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-medium">
-                  <Heart className="w-4 h-4 text-rose-500" />
-                  Dietary Preferences
-                </Label>
-                <Input
-                  type="text"
-                  value={formData.dietary_preferences}
-                  onChange={(e) => setFormData({...formData, dietary_preferences: e.target.value})}
-                  placeholder="Any dietary restrictions or preferences"
-                  className="transition-all"
-                />
-              </div>
-
-              {/* Extra Fields */}
-              {extraFields.length > 0 && (
-                <div className="mt-8">
-                  {/* Decorative Divider */}
-                  <div className="relative mb-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-                    </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="bg-white px-4 text-gray-500 font-medium">Additional Details</span>
-                    </div>
-                  </div>
-
-                  <Card className="border-rose-100 shadow-sm">
-                    <CardContent className="p-6">
-                      {/* Header with Icon */}
-                      <div className="flex items-center gap-3 mb-6">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-100 to-pink-200 flex items-center justify-center">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-rose-400 to-pink-500"></div>
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-semibold text-gray-900">Additional Information</h3>
-                          <p className="text-sm text-gray-500">Help us plan the perfect celebration for you</p>
-                        </div>
-                      </div>
-
-                      {/* Fields Grid */}
-                      <div className="grid gap-6">
-                        {extraFields.map((field, index) => (
-                          <div key={index} className="group space-y-2">
-                            <Label className="flex items-center gap-2 text-sm font-medium">
-                              <div className="w-2 h-2 rounded-full bg-rose-400"></div>
-                              <span>{field.label}</span>
-                              {field.required && <span className="text-rose-500 text-base">*</span>}
-                            </Label>
-                            <div className="relative">
-                              {renderExtraField(field, index)}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
 
               {/* Submit Button */}
               <div className="flex gap-3 pt-6">

@@ -142,14 +142,10 @@ export interface Guest {
   relationship: string;
   email: string | null;
   address: string | null;
-  dietary_preferences: string | null;
   notes: string | null;
-  physical_card: boolean | null;
   preferred_language: string | null;
   title: string | null;
-  smart_card: 'none' | 'paper' | 'pvc' | 'wooden' | 'metal' | null;
   profile_image: string | null;
-  extra_information: any | null;
 }
 
 export interface Event {

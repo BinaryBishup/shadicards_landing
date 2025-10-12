@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import WhatsAppChat from "./WhatsAppChat";
 import { generateDemoMessages } from "@/lib/chatMessages";
-import { MessageCircle, ChevronRight, MapPin, Users, Languages, Clock, ChevronDown } from "lucide-react";
+import { MessageCircle, ChevronRight, MapPin, Users, Languages, Clock } from "lucide-react";
 
 export default function AutoInvitationsSection() {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -289,44 +289,13 @@ export default function AutoInvitationsSection() {
 
             </div>
 
-            {/* Right Column - Mobile Preview with Language Selector */}
+            {/* Right Column - Mobile Preview */}
             <div className="flex flex-col items-center">
               {/* WhatsApp Preview */}
-              <div className="mb-6">
-                <WhatsAppChat 
-                  messages={messages}
-                  language={language}
-                />
-              </div>
-              
-              {/* Language Selector Below Phone */}
-              <div className="w-64">
-                <div className="bg-white rounded-2xl px-4 py-3 shadow-lg border border-gray-200">
-                  <Label className="text-gray-600 text-xs font-medium mb-2 block">Demo Language</Label>
-                  <Select value={language} onValueChange={setLanguage}>
-                    <SelectTrigger className="bg-gray-50 border-gray-300 text-gray-900 h-11 text-sm px-4 w-full font-medium rounded-xl hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-rose-500 focus:border-rose-500">
-                      <div className="flex items-center justify-between w-full">
-                        <span>{languages.find(l => l.value === language)?.label || 'Select Language'}</span>
-                        <ChevronDown className="w-4 h-4 text-gray-500" />
-                      </div>
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border-gray-200 shadow-xl rounded-xl overflow-hidden">
-                      {languages.map((lang) => (
-                        <SelectItem 
-                          key={lang.value} 
-                          value={lang.value}
-                          className="text-gray-900 hover:bg-gray-50 focus:bg-gray-50 cursor-pointer py-3 px-4 transition-colors"
-                        >
-                          <div className="flex items-center justify-between w-full">
-                            <span className="font-medium">{lang.label}</span>
-                            <span className="text-gray-500 text-sm ml-3">{lang.script}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+              <WhatsAppChat
+                messages={messages}
+                language={language}
+              />
             </div>
           </div>
           
