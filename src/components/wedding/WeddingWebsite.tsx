@@ -17,9 +17,10 @@ interface WeddingWebsiteProps {
   events?: Event[];
   urlSlug: string;
   onEditProfile?: () => void;
+  isPreviewMode?: boolean;
 }
 
-export default function WeddingWebsite({ website, guest, events = [], urlSlug, onEditProfile }: WeddingWebsiteProps) {
+export default function WeddingWebsite({ website, guest, events = [], urlSlug, onEditProfile, isPreviewMode = false }: WeddingWebsiteProps) {
   // Get the template ID from the database
   console.log("🎨 TEMPLATE DEBUG - Raw template_id from database:", website.template_id);
   const templateId = getTemplateIdFromDatabase(website.template_id);
@@ -94,9 +95,15 @@ export default function WeddingWebsite({ website, guest, events = [], urlSlug, o
             {/* Right: Edit Profile Button */}
             {onEditProfile && (
               <div className="flex items-center">
-                <Button 
+                <Button
                   onClick={onEditProfile}
-                  className="bg-black hover:bg-gray-800 text-white gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4"
+                  disabled={isPreviewMode}
+                  className={`gap-1 md:gap-2 shadow-md text-xs md:text-sm px-3 md:px-4 ${
+                    isPreviewMode
+                      ? 'bg-gray-400 hover:bg-gray-400 text-gray-200 cursor-not-allowed opacity-60'
+                      : 'bg-black hover:bg-gray-800 text-white'
+                  }`}
+                  title={isPreviewMode ? "Edit Profile is locked in preview mode" : "Edit your profile"}
                 >
                   <Edit className="w-3 md:w-4 h-3 md:h-4" />
                   <span className="hidden sm:inline">Edit Profile</span>

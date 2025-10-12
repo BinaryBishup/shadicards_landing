@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default function MobileStickyCTA() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+
+  // Hide on wedding pages
+  const isWeddingPage = pathname?.startsWith("/wedding");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +25,11 @@ export default function MobileStickyCTA() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Don't render on wedding pages
+  if (isWeddingPage) {
+    return null;
+  }
 
   return (
     <div
