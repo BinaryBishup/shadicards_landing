@@ -11,6 +11,10 @@ const Template002 = dynamic(() => import('@/components/templates/template002'), 
   loading: () => React.createElement('div', null, 'Loading template...'),
 });
 
+const Template003 = dynamic(() => import('@/components/templates/template003'), {
+  loading: () => React.createElement('div', null, 'Loading template...'),
+});
+
 // Template registry
 export const templates: Record<TemplateId, TemplateConfig> = {
   template001: {
@@ -29,10 +33,10 @@ export const templates: Record<TemplateId, TemplateConfig> = {
   },
   template003: {
     id: 'template003',
-    name: 'Traditional Heritage',
-    description: 'Traditional design with cultural elements and rich colors',
+    name: 'Sukun Elegance',
+    description: 'Elegant floral design inspired by Sukun theme with soft pinks, purples, and sophisticated typography',
     thumbnail: '/templates/template003-thumbnail.jpg',
-    component: Template001, // Placeholder - will be replaced with Template003
+    component: Template003,
   },
 };
 
