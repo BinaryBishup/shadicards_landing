@@ -180,18 +180,20 @@ export function mapDatabaseToTemplateData(
 export function getTemplateIdFromDatabase(templateId: string | null): TemplateId {
   // Handle various formats: '001', 'template001', '1', etc.
   if (!templateId) return 'template001';
-  
+
   const numMatch = templateId.match(/\d+/);
   if (numMatch) {
     const num = parseInt(numMatch[0]);
-    if (num === 1 || num === 1) return 'template001';
-    if (num === 2 || num === 2) return 'template002';
-    if (num === 3 || num === 3) return 'template003';
+    if (num === 1) return 'template001';
+    if (num === 2) return 'template002';
+    if (num === 3) return 'template003';
+    if (num === 4) return 'template004';
   }
-  
+
   if (templateId.includes('001') || templateId.includes('1')) return 'template001';
   if (templateId.includes('002') || templateId.includes('2')) return 'template002';
   if (templateId.includes('003') || templateId.includes('3')) return 'template003';
-  
+  if (templateId.includes('004') || templateId.includes('4')) return 'template004';
+
   return 'template001'; // Default
 }

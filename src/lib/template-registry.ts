@@ -15,6 +15,10 @@ const Template003 = dynamic(() => import('@/components/templates/template003'), 
   loading: () => React.createElement('div', null, 'Loading template...'),
 });
 
+const Template004 = dynamic(() => import('@/components/templates/template004'), {
+  loading: () => React.createElement('div', null, 'Loading template...'),
+});
+
 // Template registry
 export const templates: Record<TemplateId, TemplateConfig> = {
   template001: {
@@ -37,6 +41,13 @@ export const templates: Record<TemplateId, TemplateConfig> = {
     description: 'Elegant floral design inspired by Sukun theme with soft pinks, purples, and sophisticated typography',
     thumbnail: '/templates/template003-thumbnail.jpg',
     component: Template003,
+  },
+  template004: {
+    id: 'template004',
+    name: 'Royal Luxury',
+    description: 'Sophisticated royal wedding template with deep burgundy and rich gold, featuring Art Deco elements and luxurious design',
+    thumbnail: '/templates/template004-thumbnail.jpg',
+    component: Template004,
   },
 };
 

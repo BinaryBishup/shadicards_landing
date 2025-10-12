@@ -133,7 +133,7 @@ export interface TemplateComponentProps {
 }
 
 // Template Registry
-export type TemplateId = 'template001' | 'template002' | 'template003';
+export type TemplateId = 'template001' | 'template002' | 'template003' | 'template004';
 
 export interface TemplateConfig {
   id: TemplateId;
