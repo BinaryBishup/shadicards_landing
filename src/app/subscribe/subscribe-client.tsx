@@ -233,6 +233,13 @@ export default function SubscribeClient({ params }: { params: SubscribeParams })
           <div className="text-[11px] text-white/35 leading-relaxed max-w-xs">
             Payment is processed securely by Razorpay on our merchant-approved domain. No card details touch Streamcorn.
           </div>
+
+          {/* Deploy marker — change this string on each iteration so we can
+              tell from a screenshot whether the live page reflects the
+              latest push or is being served by a stale Vercel deployment. */}
+          <div data-deploy="streamcorn-bridge-v1" className="text-[9px] text-white/20 tracking-widest uppercase">
+            v1
+          </div>
         </div>
       </main>
     </>
